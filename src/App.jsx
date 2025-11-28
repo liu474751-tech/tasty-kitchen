@@ -3,7 +3,7 @@ import {
   Search, ChefHat, Clock, Flame, Heart, ChevronLeft, Users,
   CheckCircle, Home, Bookmark, ArrowRight,
   Trophy, Gamepad2, Video, Upload, Lock, Unlock, Zap,
-  RefreshCw, Loader2, PlayCircle, Crown, Map, Coins, LayoutGrid, X,
+  Loader2, PlayCircle, Crown, Map, Coins, LayoutGrid, X, RefreshCw,
   Skull, AlertTriangle, ThumbsDown, Scroll, Sparkles, Ghost, Biohazard,
   Robot, Film, MessageSquare, Send
 } from 'lucide-react';
@@ -218,7 +218,7 @@ const AIVideoPlayer = ({ recipeName }) => {
           <button onClick={startGeneration} className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:scale-105 transition-transform"><Sparkles size={18} /> 生成视频</button>
         </div>
       )}
-      {status === 'generating' && (
+        {status === 'generating' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white">
           <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden mb-4"><div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-200" style={{ width: `${progress}%` }}></div></div>
           <div className="flex items-center gap-2 text-sm text-blue-300 animate-pulse"><Robot size={16} /><span>正在分析食材... 渲染烹饪步骤... {Math.floor(progress)}%</span></div>
@@ -266,7 +266,7 @@ const AIChatModal = ({ recipe, onClose }) => {
             </div>
           ))}
           {isLoading && (
-            <div className="flex justify-start"><div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-200 flex items-center gap-2 text-gray-400 text-sm"><RefreshCw size={14} className="animate-spin" /> 思考中...</div></div>
+            <div className="flex justify-start"><div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-200 flex items-center gap-2 text-gray-400 text-sm"><Loader2 size={14} className="animate-spin" /> 思考中...</div></div>
           )}
           <div ref={messagesEndRef} />
         </div>
@@ -417,7 +417,7 @@ export default function App() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const [userProfile, setUserProfile] = useState({
-    name: "快乐小厨", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", points: 1250, titles: ["难吃终结者"], monthlyUnlocks: 0,
+    name: "liu474751-tech", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", points: 1250, titles: ["难吃终结者"], monthlyUnlocks: 0,
     completedLevels: { lu: 0, chuan: 0, yue: 0, su: 0, min: 0, zhe: 0, xiang: 0, hui: 0, french: 0, italian: 0, spanish: 0, central: 0, nordic: 0 },
     unlockedExtra: []
   });
