@@ -18,10 +18,22 @@ const SESSION_KEY = 'tk_session';
 const loadUsersFromStorage = () => {
   try { const raw = localStorage.getItem(USERS_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; }
 };
+
+// convert plaintext passwords to sha256 on first load for safety.
+const isHashed = (pw) => typeof pw === 'string' && /^[0-9a-f]{64}$/.test(pw);
+async function hashPassword(pw) {
+  if (!pw) return '';
+  const enc = new TextEncoder().encode(pw);
+  const hash = await window.crypto.subtle.digest('SHA-256', enc);
+  const arr = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  return arr;
+}
 const saveUsersToStorage = (obj) => { try { localStorage.setItem(USERS_KEY, JSON.stringify(obj)); } catch (e) {} };
-const loadSession = () => { try { const raw = localStorage.getItem(SESSION_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } };
-const saveSession = (username) => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({ username })); } catch(e) {} };
+const loadSession = () => loadSessionSafe();
+const saveSession = (username) => { try { saveSessionWithExpiry(username, 7); } catch (e) {} };
 const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} };
+const saveSessionWithExpiry = (username, days = 7) => { try { const expires = Date.now() + days * 24 * 3600 * 1000; localStorage.setItem(SESSION_KEY, JSON.stringify({ username, expires })); } catch(e) {} };
+const loadSessionSafe = () => { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return null; const parsed = JSON.parse(raw); if (parsed.expires && Date.now() > parsed.expires) { localStorage.removeItem(SESSION_KEY); return null; } return parsed; } catch(e) { return null; } };
 
 const callGeminiAPI = async (prompt, systemInstruction = "") => {
   if (!apiKey) return "请先配置 API Key 才能召唤 AI 大神！(请查看代码中的注释开启配置)";
@@ -529,6 +541,25 @@ export default function App() {
     return fromStorage || { 'liu474751-tech': '200283' };
   });
 
+  // when app mounts, ensure all passwords are hashed
+  useEffect(() => {
+    const normalize = async () => {
+      let changed = false;
+      const next = { ...users };
+      for (const [u, p] of Object.entries(next)) {
+        if (!isHashed(p)) {
+          next[u] = await hashPassword(p);
+          changed = true;
+        }
+      }
+      if (changed) {
+        setUsers(next);
+        saveUsersToStorage(next);
+      }
+    };
+    normalize();
+  }, []);
+
   const [userProfile, setUserProfile] = useState({
     name: "liu474751-tech", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", points: 1250, titles: ["难吃终结者"], monthlyUnlocks: 0,
     completedLevels: { lu: 0, chuan: 0, yue: 0, su: 0, min: 0, zhe: 0, xiang: 0, hui: 0, french: 0, italian: 0, spanish: 0, central: 0, nordic: 0 },
@@ -568,8 +599,9 @@ export default function App() {
   if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
 
   // login handler
-  const onLogin = (username, password) => {
-    if (users[username] && users[username] === password) {
+  const onLogin = async (username, password) => {
+    const hashed = await hashPassword(password);
+    if (users[username] && users[username] === hashed) {
       setIsLoggedIn(true);
       setUserProfile(prev => ({ ...prev, name: username }));
       saveSession(username);
@@ -584,10 +616,11 @@ export default function App() {
     setUserProfile(prev => ({ ...prev, name: 'liu474751-tech' }));
   };
 
-  const onRegister = (username, password) => {
+  const onRegister = async (username, password) => {
     if (users[username]) return false; // already exists
+    const hashed = await hashPassword(password);
     setUsers(prev => {
-      const next = { ...prev, [username]: password };
+      const next = { ...prev, [username]: hashed };
       saveUsersToStorage(next);
       return next;
     });
