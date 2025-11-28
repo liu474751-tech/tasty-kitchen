@@ -11,6 +11,18 @@ import {
 // API key disabled by default (preview environment)
 const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
 
+// --- localStorage keys for demo persistence
+const USERS_KEY = 'tk_users';
+const SESSION_KEY = 'tk_session';
+
+const loadUsersFromStorage = () => {
+  try { const raw = localStorage.getItem(USERS_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; }
+};
+const saveUsersToStorage = (obj) => { try { localStorage.setItem(USERS_KEY, JSON.stringify(obj)); } catch (e) {} };
+const loadSession = () => { try { const raw = localStorage.getItem(SESSION_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } };
+const saveSession = (username) => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({ username })); } catch(e) {} };
+const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} };
+
 const callGeminiAPI = async (prompt, systemInstruction = "") => {
   if (!apiKey) return "请先配置 API Key 才能召唤 AI 大神！(请查看代码中的注释开启配置)";
 
@@ -466,10 +478,21 @@ const RegisterModal = ({ onClose, onRegister }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [strength, setStrength] = useState(0);
+
+  useEffect(() => {
+    let s = 0;
+    if (password.length >= 6) s += 1;
+    if (password.length >= 8) s += 1;
+    if (/[A-Z]/.test(password)) s += 1;
+    if (/[0-9]/.test(password)) s += 1;
+    setStrength(s);
+  }, [password]);
 
   const doRegister = () => {
     setError('');
     if (!username.trim() || !password.trim()) { setError('用户名/密码不能为空'); return; }
+    if (password.length < 6) { setError('密码至少6位，请设置更长的密码'); return; }
     const ok = onRegister(username.trim(), password);
     if (!ok) { setError('用户名已存在，请更换'); return; }
     onClose();
@@ -479,9 +502,14 @@ const RegisterModal = ({ onClose, onRegister }) => {
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div className="w-[360px] bg-white rounded-xl p-6 shadow-lg">
         <div className="mb-3 text-lg font-bold">注册</div>
-        <div className="space-y-3">
+          <div className="space-y-3">
           <div><label className="text-xs text-gray-500">用户名</label><input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" /></div>
-          <div><label className="text-xs text-gray-500">密码</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" /></div>
+          <div>
+            <label className="text-xs text-gray-500">密码</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" />
+            <div className="mt-1 text-xs text-gray-400">密码强度: <span className="font-medium">{strength <= 1 ? '弱' : strength === 2 ? '中' : '强'}</span></div>
+            <div className="w-full h-1 bg-gray-200 rounded mt-1 overflow-hidden"><div style={{ width: `${strength * 25}%` }} className={`h-full ${strength >= 3 ? 'bg-green-500' : strength === 2 ? 'bg-yellow-400' : 'bg-red-400'}`} /></div>
+          </div>
           {error && <div className="text-sm text-red-500">{error}</div>}
           <div className="flex gap-2"><button onClick={doRegister} className="flex-1 py-2 bg-indigo-600 text-white rounded">注册</button><button onClick={onClose} className="py-2 px-3 border rounded">取消</button></div>
         </div>
@@ -495,8 +523,11 @@ export default function App() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  // in-memory user store (username -> password)
-  const [users, setUsers] = useState(() => ({ 'liu474751-tech': '200283' }));
+  // user store (username -> password) persisted to localStorage (demo)
+  const [users, setUsers] = useState(() => {
+    const fromStorage = loadUsersFromStorage();
+    return fromStorage || { 'liu474751-tech': '200283' };
+  });
 
   const [userProfile, setUserProfile] = useState({
     name: "liu474751-tech", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", points: 1250, titles: ["难吃终结者"], monthlyUnlocks: 0,
@@ -541,16 +572,43 @@ export default function App() {
     if (users[username] && users[username] === password) {
       setIsLoggedIn(true);
       setUserProfile(prev => ({ ...prev, name: username }));
+      saveSession(username);
       return true;
     }
     return false;
   };
 
+  const onLogout = () => {
+    clearSession();
+    setIsLoggedIn(false);
+    setUserProfile(prev => ({ ...prev, name: 'liu474751-tech' }));
+  };
+
   const onRegister = (username, password) => {
     if (users[username]) return false; // already exists
-    setUsers(prev => ({ ...prev, [username]: password }));
+    setUsers(prev => {
+      const next = { ...prev, [username]: password };
+      saveUsersToStorage(next);
+      return next;
+    });
+    // Auto-login and persist session
+    setIsLoggedIn(true);
+    setUserProfile(prev => ({ ...prev, name: username }));
+    saveSession(username);
     return true;
   };
+
+  // persist users changes
+  useEffect(() => { saveUsersToStorage(users); }, [users]);
+
+  // attempt auto-login on app mount if session exists
+  useEffect(() => {
+    const session = loadSession();
+    if (session && session.username && users[session.username]) {
+      setIsLoggedIn(true);
+      setUserProfile(prev => ({ ...prev, name: session.username }));
+    }
+  }, []);
 
   if (!isLoggedIn) {
     return <LoginCard defaultUsername="liu474751-tech" defaultPassword="200283" onLogin={onLogin} onRegisterClick={() => setShowRegister(true)} />;
@@ -558,6 +616,11 @@ export default function App() {
 
   return (
     <div className="bg-white min-h-screen font-sans text-gray-900 max-w-md mx-auto shadow-2xl overflow-hidden relative flex flex-col">
+      {/* User info & logout */}
+      <div className="absolute top-4 right-4 z-40 flex items-center gap-2">
+        <div className="text-sm text-gray-700 mr-2">{userProfile.name}</div>
+        <button onClick={onLogout} className="text-xs bg-gray-100 px-2 py-1 rounded">退出</button>
+      </div>
       {activeTab !== 'home' && activeTab !== 'social' && (<div className="bg-white px-5 pt-12 pb-2 flex justify-between items-center shadow-sm z-10"><h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">{activeTab === 'challenge' ? '厨艺征途' : '美味厨房'}</h1></div>)}
       <div className="flex-1 overflow-hidden relative">{renderContent()}</div>
       <div className="bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-30 shrink-0">
