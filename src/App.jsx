@@ -412,9 +412,91 @@ const RecipeDetail = ({ recipe, onBack, onComplete }) => {
 };
 
 // --- Main App Component ---
+const LoginCard = ({ defaultUsername = 'liu474751-tech', defaultPassword = '200283', onLogin, onRegisterClick }) => {
+  const [username, setUsername] = useState(defaultUsername);
+  const [password, setPassword] = useState(defaultPassword);
+  const [error, setError] = useState('');
+  const passwordRef = useRef();
+
+  const doLogin = () => {
+    setError('');
+    if (!username.trim() || !password.trim()) {
+      setError('用户名或密码不能为空');
+      return;
+    }
+    const ok = onLogin(username.trim(), password);
+    if (!ok) {
+      setError('登录失败，用户名或密码错误');
+      setPassword('');
+      // focus password for retry
+      setTimeout(() => passwordRef.current?.focus(), 50);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-[360px] bg-white rounded-xl shadow-lg p-6">
+        <div className="text-center mb-4">
+          <div className="w-14 h-14 mx-auto mb-2"><img src="/favicon.svg" alt="logo" /></div>
+          <h2 className="font-bold text-orange-500">美味厨房</h2>
+          <div className="text-xl font-extrabold mt-2">登录</div>
+        </div>
+        <div className="space-y-3 mb-3">
+          <div>
+            <label className="text-xs text-gray-500">用户名</label>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" />
+          </div>
+          <div>
+            <label className="text-xs text-gray-500">密码</label>
+            <input ref={passwordRef} type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" />
+          </div>
+          {error && <div className="text-sm text-red-500">{error}</div>}
+          <div className="flex gap-2 items-center">
+            <button onClick={doLogin} className="flex-1 py-3 bg-orange-500 text-white rounded">登录</button>
+            <button onClick={onRegisterClick} className="py-2 px-3 border rounded text-gray-600">注册</button>
+          </div>
+          <div className="text-xs text-gray-400 mt-1">默认用户名: <span className="font-medium">liu474751-tech</span> 密码：<span className="font-medium">200283</span></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const RegisterModal = ({ onClose, onRegister }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const doRegister = () => {
+    setError('');
+    if (!username.trim() || !password.trim()) { setError('用户名/密码不能为空'); return; }
+    const ok = onRegister(username.trim(), password);
+    if (!ok) { setError('用户名已存在，请更换'); return; }
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+      <div className="w-[360px] bg-white rounded-xl p-6 shadow-lg">
+        <div className="mb-3 text-lg font-bold">注册</div>
+        <div className="space-y-3">
+          <div><label className="text-xs text-gray-500">用户名</label><input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" /></div>
+          <div><label className="text-xs text-gray-500">密码</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" /></div>
+          {error && <div className="text-sm text-red-500">{error}</div>}
+          <div className="flex gap-2"><button onClick={doRegister} className="flex-1 py-2 bg-indigo-600 text-white rounded">注册</button><button onClick={onClose} className="py-2 px-3 border rounded">取消</button></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  // in-memory user store (username -> password)
+  const [users, setUsers] = useState(() => ({ 'liu474751-tech': '200283' }));
 
   const [userProfile, setUserProfile] = useState({
     name: "liu474751-tech", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", points: 1250, titles: ["难吃终结者"], monthlyUnlocks: 0,
@@ -452,8 +534,27 @@ export default function App() {
     if (activeTab === 'social') return <SocialTab />;
     return null;
   };
-
   if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
+
+  // login handler
+  const onLogin = (username, password) => {
+    if (users[username] && users[username] === password) {
+      setIsLoggedIn(true);
+      setUserProfile(prev => ({ ...prev, name: username }));
+      return true;
+    }
+    return false;
+  };
+
+  const onRegister = (username, password) => {
+    if (users[username]) return false; // already exists
+    setUsers(prev => ({ ...prev, [username]: password }));
+    return true;
+  };
+
+  if (!isLoggedIn) {
+    return <LoginCard defaultUsername="liu474751-tech" defaultPassword="200283" onLogin={onLogin} onRegisterClick={() => setShowRegister(true)} />;
+  }
 
   return (
     <div className="bg-white min-h-screen font-sans text-gray-900 max-w-md mx-auto shadow-2xl overflow-hidden relative flex flex-col">
@@ -466,6 +567,7 @@ export default function App() {
         <button onClick={() => setActiveTab('favorites')} className={`flex flex-col items-center gap-1 ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-400'}`}><Bookmark size={24} /><span className="text-[10px]">收藏</span></button>
       </div>
       <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
+      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
     </div>
   );
 }
