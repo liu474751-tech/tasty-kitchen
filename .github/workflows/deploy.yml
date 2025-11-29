@@ -20,6 +20,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_BASE_PATH: '/tasty-kitchen/'
         run: npm run build
 
       - name: Deploy to GitHub Pages
