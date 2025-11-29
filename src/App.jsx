@@ -1,12 +1,49 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import {
-  Search, ChefHat, Clock, Flame, Heart, ChevronLeft, Users,
-  CheckCircle, Home, Bookmark, ArrowRight,
-  Trophy, Gamepad2, Video, Upload, Lock, Unlock, Zap,
-  Loader2, PlayCircle, Crown, Map, Coins, LayoutGrid, X, RefreshCw,
-  Skull, AlertTriangle, ThumbsDown, Scroll, Sparkles, Ghost, Biohazard,
-  Robot, Film, MessageSquare, Send
-} from 'lucide-react';
+// Lightweight emoji-based inline icon fallbacks (avoid ESM build issues)
+const Icon = ({ emoji, size = 16, className = '', style = {} }) => (
+  <span className={className} style={{ fontSize: `${size}px`, lineHeight: 1, display: 'inline-block', ...style }}>{emoji}</span>
+);
+const Search = (p) => <Icon emoji="🔍" {...p} />;
+const ChefHat = (p) => <Icon emoji="👨‍🍳" {...p} />;
+const Clock = (p) => <Icon emoji="⏱️" {...p} />;
+const Flame = (p) => <Icon emoji="🔥" {...p} />;
+const Heart = (p) => <Icon emoji="❤️" {...p} />;
+const ChevronLeft = (p) => <Icon emoji="◀" {...p} />;
+const Users = (p) => <Icon emoji="👥" {...p} />;
+const CheckCircle = (p) => <Icon emoji="✔️" {...p} />;
+const Home = (p) => <Icon emoji="🏠" {...p} />;
+const Bookmark = (p) => <Icon emoji="🔖" {...p} />;
+const ArrowRight = (p) => <Icon emoji="➡️" {...p} />;
+const Trophy = (p) => <Icon emoji="🏆" {...p} />;
+const Gamepad2 = (p) => <Icon emoji="🎮" {...p} />;
+const Video = (p) => <Icon emoji="🎥" {...p} />;
+const Upload = (p) => <Icon emoji="📤" {...p} />;
+const Lock = (p) => <Icon emoji="🔒" {...p} />;
+const Unlock = (p) => <Icon emoji="🔓" {...p} />;
+const Zap = (p) => <Icon emoji="⚡" {...p} />;
+const Loader2 = (p) => <Icon emoji="⏳" {...p} />;
+const PlayCircle = (p) => <Icon emoji="▶️" {...p} />;
+const Crown = (p) => <Icon emoji="👑" {...p} />;
+const Map = (p) => <Icon emoji="🗺️" {...p} />;
+const Coins = (p) => <Icon emoji="🪙" {...p} />;
+const LayoutGrid = (p) => <Icon emoji="🔳" {...p} />;
+const X = (p) => <Icon emoji="✖" {...p} />;
+const RefreshCw = (p) => <Icon emoji="🔄" {...p} />;
+const Skull = (p) => <Icon emoji="💀" {...p} />;
+const AlertTriangle = (p) => <Icon emoji="⚠️" {...p} />;
+const ThumbsDown = (p) => <Icon emoji="👎" {...p} />;
+const Scroll = (p) => <Icon emoji="📜" {...p} />;
+const Sparkles = (p) => <Icon emoji="✨" {...p} />;
+const Ghost = (p) => <Icon emoji="👻" {...p} />;
+const Biohazard = (p) => <Icon emoji="☣️" {...p} />;
+const Robot = (p) => <Icon emoji="🤖" {...p} />;
+const Film = (p) => <Icon emoji="🎞️" {...p} />;
+const MessageSquare = (p) => <Icon emoji="💬" {...p} />;
+const Send = (p) => <Icon emoji="📩" {...p} />;
+const ShieldCheck = (p) => <Icon emoji="🛡️" {...p} />;
+const Eye = (p) => <Icon emoji="👁️" {...p} />;
+const EyeOff = (p) => <Icon emoji="🙈" {...p} />;
+const User = (p) => <Icon emoji="👤" {...p} />;
 
 // API key disabled by default (preview environment)
 const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
