@@ -65,6 +65,17 @@ npm run build
 # 使用 gh-pages 工具（可选）或手动推送 /docs 或 gh-pages 分支
 ```
 
+绑定自定义域 `meishitiandi.dpdns.org`（快速指引）:
+1. 我已在 GitHub Actions workflow 中添加 `dist/CNAME`（将自动把自定义域写入部署）;
+2. 请在 Cloudflare DNS 控制台添加一条 CNAME 记录：
+	- Type: CNAME
+	- Name: meishitiandi
+	- Target / Value: liu474751-tech.github.io
+	- Proxy/Cloudflare CDN: 灰色云（DNS only，不开启代理），以便 GitHub 验证并分配证书。
+3. 等待 DNS 生效（通常 1 分钟到 1 小时），然后访问 `https://meishitiandi.dpdns.org` 即可。
+
+如果你愿意，我可以代为添加 DNS 记录（需 Cloudflare API Token），或者你也可以把上述的记录手动添加到 Cloudflare Dashboard。
+
 如果你希望我自动添加 GitHub Pages 自动部署（我已经添加 workflow），或者希望我修改 `vite.config.js` 的 `base` 值，请告诉我想托管的 URL（例如： `https://liu474751-tech.github.io/tasty-kitchen/`）以及是否已启用 Pages 的自定义域。
 
 如果你希望我继续做：
