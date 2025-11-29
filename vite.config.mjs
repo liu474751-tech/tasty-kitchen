@@ -12,7 +12,11 @@ export default defineConfig({
   optimizeDeps: {
     include: ['lucide-react']
   },
+  esbuild: {
+    target: 'es2019'
+  },
   build: {
+    target: 'es2019',
     commonjsOptions: {
       include: [/node_modules/, /lucide-react/]
     }
