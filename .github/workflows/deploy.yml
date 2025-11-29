@@ -24,6 +24,14 @@ jobs:
             npm install;
           fi
 
+      - name: Show node and npm versions
+        run: |
+          node -v; npm -v
+
+      - name: List installed packages
+        run: |
+          npm list --depth=0 || true
+
       - name: Build
         env:
           VITE_BASE_PATH: '/tasty-kitchen/'
