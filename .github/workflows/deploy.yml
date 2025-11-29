@@ -17,12 +17,22 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci;
+          else
+            npm install;
+          fi
 
       - name: Build
         env:
           VITE_BASE_PATH: '/tasty-kitchen/'
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          echo "Listing dist directory:";
+          ls -al dist || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
