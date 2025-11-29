@@ -441,20 +441,23 @@ const LoginCard = ({ defaultUsername = 'liu474751-tech', defaultPassword = '2002
   const [password, setPassword] = useState(defaultPassword);
   const [error, setError] = useState('');
   const passwordRef = useRef();
+  const [isBusy, setIsBusy] = useState(false);
 
-  const doLogin = () => {
+  const doLogin = async () => {
     setError('');
     if (!username.trim() || !password.trim()) {
       setError('用户名或密码不能为空');
       return;
     }
-    const ok = onLogin(username.trim(), password);
+    setIsBusy(true);
+    const ok = await onLogin(username.trim(), password);
     if (!ok) {
       setError('登录失败，用户名或密码错误');
       setPassword('');
       // focus password for retry
       setTimeout(() => passwordRef.current?.focus(), 50);
     }
+    setIsBusy(false);
   };
 
   return (
@@ -476,7 +479,7 @@ const LoginCard = ({ defaultUsername = 'liu474751-tech', defaultPassword = '2002
           </div>
           {error && <div className="text-sm text-red-500">{error}</div>}
           <div className="flex gap-2 items-center">
-            <button onClick={doLogin} className="flex-1 py-3 bg-orange-500 text-white rounded">登录</button>
+            <button onClick={doLogin} disabled={isBusy} className="flex-1 py-3 bg-orange-500 text-white rounded">{isBusy ? '登录中...' : '登录'}</button>
             <button onClick={onRegisterClick} className="py-2 px-3 border rounded text-gray-600">注册</button>
           </div>
           <div className="text-xs text-gray-400 mt-1">默认用户名: <span className="font-medium">liu474751-tech</span> 密码：<span className="font-medium">200283</span></div>
@@ -544,8 +547,10 @@ export default function App() {
   // when app mounts, ensure all passwords are hashed
   useEffect(() => {
     const normalize = async () => {
+      // Load directly from storage to avoid stale closure during mount
+      const stored = loadUsersFromStorage() || users;
       let changed = false;
-      const next = { ...users };
+      const next = { ...stored };
       for (const [u, p] of Object.entries(next)) {
         if (!isHashed(p)) {
           next[u] = await hashPassword(p);
@@ -573,9 +578,9 @@ export default function App() {
   const handleComplete = (recipe) => {
     setSelectedRecipe(null);
     setActiveTab('home');
-    const currentProgress = userProfile.completedLevels[recipe.cuisine] || 0;
+    const currentProgress = userProfile.completedLevels?.[recipe.cuisine] || 0;
     if (recipe.level === currentProgress + 1) {
-      setUserProfile(prev => ({ ...prev, points: prev.points + 100, completedLevels: { ...prev.completedLevels, [recipe.cuisine]: prev.completedLevels[recipe.cuisine] + 1 } }));
+      setUserProfile(prev => ({ ...prev, points: prev.points + 100, completedLevels: { ...prev.completedLevels, [recipe.cuisine]: (prev.completedLevels?.[recipe.cuisine] || 0) + 1 } }));
     }
     if (!unlockedRecipes.find(r => r.id === recipe.id)) setUnlockedRecipes([...unlockedRecipes, recipe]);
   };
@@ -584,7 +589,7 @@ export default function App() {
 
   const confirmUnlock = () => {
     const { cuisine, level, cost } = unlockModal;
-    setUserProfile(prev => ({ ...prev, points: prev.points - cost, monthlyUnlocks: prev.monthlyUnlocks + 1, completedLevels: { ...prev.completedLevels, [cuisine]: Math.max(prev.completedLevels[cuisine], level) } }));
+    setUserProfile(prev => ({ ...prev, points: prev.points - cost, monthlyUnlocks: prev.monthlyUnlocks + 1, completedLevels: { ...prev.completedLevels, [cuisine]: Math.max(prev.completedLevels?.[cuisine] ?? 0, level) } }));
     const recipe = RECIPES.find(r => r.cuisine === cuisine && r.level === level);
     if (recipe && !unlockedRecipes.find(r => r.id === recipe.id)) setUnlockedRecipes(prev => [...prev, recipe]);
     setUnlockModal({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
@@ -601,7 +606,8 @@ export default function App() {
   // login handler
   const onLogin = async (username, password) => {
     const hashed = await hashPassword(password);
-    if (users[username] && users[username] === hashed) {
+    // Accept both hashed or raw stored (in case normalization hasn't finished yet)
+    if (users[username] && (users[username] === hashed || users[username] === password)) {
       setIsLoggedIn(true);
       setUserProfile(prev => ({ ...prev, name: username }));
       saveSession(username);
