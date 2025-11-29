@@ -29,6 +29,10 @@ jobs:
           VITE_BASE_PATH: '/tasty-kitchen/'
         run: npm run build
 
+      - name: Add CNAME for custom domain
+        run: |
+          echo "meishitiandi.dpdns.org" > dist/CNAME
+
       - name: Verify build output
         run: |
           echo "Listing dist directory:";
