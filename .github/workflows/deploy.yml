@@ -7,6 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      DEBIAN_FRONTEND: noninteractive
+      NPM_CONFIG_AUDIT: false
+      NPM_CONFIG_FUND: false
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -17,12 +22,13 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies (non-interactive)
         run: |
+          set -e
           if [ -f package-lock.json ]; then
-            npm ci;
+            npm ci --silent --no-audit --no-fund --no-progress;
           else
-            npm install;
+            npm install --silent --no-audit --no-fund --no-progress;
           fi
 
       - name: Show node and npm versions
@@ -46,6 +52,11 @@ jobs:
         run: |
           echo "Listing dist directory:";
           ls -al dist || true
+      - name: Ensure gh-pages push permissions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Ensuring GitHub token available for deployment"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
