@@ -1,0 +1,11 @@
+﻿2025-11-30T04:48:46.5150335Z ##[group]Run echo "Ensuring GitHub token available for deployment"
+2025-11-30T04:48:46.5150783Z [36;1mecho "Ensuring GitHub token available for deployment"[0m
+2025-11-30T04:48:46.5178787Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.5179029Z env:
+2025-11-30T04:48:46.5179190Z   CI: true
+2025-11-30T04:48:46.5179372Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5179622Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5179835Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5180673Z   GH_TOKEN: ***
+2025-11-30T04:48:46.5180881Z ##[endgroup]
+2025-11-30T04:48:46.5226142Z Ensuring GitHub token available for deployment

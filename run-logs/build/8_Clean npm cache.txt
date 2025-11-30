@@ -1,0 +1,10 @@
+﻿2025-11-30T04:48:38.1565770Z ##[group]Run npm cache clean --force 2>&1 || true
+2025-11-30T04:48:38.1567024Z [36;1mnpm cache clean --force 2>&1 || true[0m
+2025-11-30T04:48:38.1603115Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.1603959Z env:
+2025-11-30T04:48:38.1604583Z   CI: true
+2025-11-30T04:48:38.1605282Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.1606238Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.1607071Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.1607868Z ##[endgroup]
+2025-11-30T04:48:38.2519224Z npm warn using --force Recommended protections disabled.

@@ -1,0 +1,701 @@
+﻿2025-11-30T04:48:33.5519878Z Current runner version: '2.329.0'
+2025-11-30T04:48:33.5550919Z ##[group]Runner Image Provisioner
+2025-11-30T04:48:33.5552161Z Hosted Compute Agent
+2025-11-30T04:48:33.5552906Z Version: 20251016.436
+2025-11-30T04:48:33.5553781Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-30T04:48:33.5555001Z Build Date: 2025-10-15T20:44:12Z
+2025-11-30T04:48:33.5555819Z ##[endgroup]
+2025-11-30T04:48:33.5556611Z ##[group]Operating System
+2025-11-30T04:48:33.5557429Z Ubuntu
+2025-11-30T04:48:33.5558128Z 24.04.3
+2025-11-30T04:48:33.5558909Z LTS
+2025-11-30T04:48:33.5559595Z ##[endgroup]
+2025-11-30T04:48:33.5560117Z ##[group]Runner Image
+2025-11-30T04:48:33.5560718Z Image: ubuntu-24.04
+2025-11-30T04:48:33.5561274Z Version: 20251112.124.1
+2025-11-30T04:48:33.5562326Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+2025-11-30T04:48:33.5563896Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+2025-11-30T04:48:33.5564944Z ##[endgroup]
+2025-11-30T04:48:33.5566033Z ##[group]GITHUB_TOKEN Permissions
+2025-11-30T04:48:33.5568496Z Contents: read
+2025-11-30T04:48:33.5569532Z Metadata: read
+2025-11-30T04:48:33.5570022Z Packages: read
+2025-11-30T04:48:33.5570600Z ##[endgroup]
+2025-11-30T04:48:33.5572635Z Secret source: Actions
+2025-11-30T04:48:33.5573311Z Prepare workflow directory
+2025-11-30T04:48:33.5972476Z Prepare all required actions
+2025-11-30T04:48:33.6028787Z Getting action download info
+2025-11-30T04:48:34.0887138Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-11-30T04:48:34.6586560Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-11-30T04:48:34.7732242Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-11-30T04:48:34.8594982Z Download action repository 'peaceiris/actions-gh-pages@v3' (SHA:373f7f263a76c20808c831209c920827a82a2847)
+2025-11-30T04:48:35.4737955Z Complete job name: build
+2025-11-30T04:48:35.5564902Z ##[group]Run actions/checkout@v4
+2025-11-30T04:48:35.5565815Z with:
+2025-11-30T04:48:35.5566245Z   persist-credentials: true
+2025-11-30T04:48:35.5566763Z   repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.5567522Z   token: ***
+2025-11-30T04:48:35.5567924Z   ssh-strict: true
+2025-11-30T04:48:35.5568326Z   ssh-user: git
+2025-11-30T04:48:35.5569028Z   clean: true
+2025-11-30T04:48:35.5569451Z   sparse-checkout-cone-mode: true
+2025-11-30T04:48:35.5569963Z   fetch-depth: 1
+2025-11-30T04:48:35.5570366Z   fetch-tags: false
+2025-11-30T04:48:35.5570781Z   show-progress: true
+2025-11-30T04:48:35.5571196Z   lfs: false
+2025-11-30T04:48:35.5571596Z   submodules: false
+2025-11-30T04:48:35.5572040Z   set-safe-directory: true
+2025-11-30T04:48:35.5572782Z env:
+2025-11-30T04:48:35.5573164Z   CI: true
+2025-11-30T04:48:35.5573563Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:35.5574076Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:35.5574525Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:35.5575018Z ##[endgroup]
+2025-11-30T04:48:35.6687884Z Syncing repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.6691318Z ##[group]Getting Git version info
+2025-11-30T04:48:35.6692753Z Working directory is '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:48:35.6694835Z [command]/usr/bin/git version
+2025-11-30T04:48:35.6720361Z git version 2.51.2
+2025-11-30T04:48:35.6751228Z ##[endgroup]
+2025-11-30T04:48:35.6766496Z Temporarily overriding HOME='/home/runner/work/_temp/156db7bc-ee2b-4ed7-a259-2fb6e059fd89' before making global git config changes
+2025-11-30T04:48:35.6770902Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-30T04:48:35.6781482Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:35.6818881Z Deleting the contents of '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:48:35.6823421Z ##[group]Initializing the repository
+2025-11-30T04:48:35.6827419Z [command]/usr/bin/git init /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:35.6929684Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-30T04:48:35.6931548Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-30T04:48:35.6933324Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-30T04:48:35.6934645Z hint:
+2025-11-30T04:48:35.6935511Z hint: 	git config --global init.defaultBranch <name>
+2025-11-30T04:48:35.6936578Z hint:
+2025-11-30T04:48:35.6937248Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-30T04:48:35.6938297Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-30T04:48:35.6939363Z hint:
+2025-11-30T04:48:35.6939989Z hint: 	git branch -m <name>
+2025-11-30T04:48:35.6940620Z hint:
+2025-11-30T04:48:35.6941292Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-30T04:48:35.6942539Z Initialized empty Git repository in /home/runner/work/tasty-kitchen/tasty-kitchen/.git/
+2025-11-30T04:48:35.6946285Z [command]/usr/bin/git remote add origin https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.6979266Z ##[endgroup]
+2025-11-30T04:48:35.6980059Z ##[group]Disabling automatic garbage collection
+2025-11-30T04:48:35.6983110Z [command]/usr/bin/git config --local gc.auto 0
+2025-11-30T04:48:35.7011530Z ##[endgroup]
+2025-11-30T04:48:35.7012236Z ##[group]Setting up auth
+2025-11-30T04:48:35.7018227Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-30T04:48:35.7047521Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-30T04:48:35.7370643Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-30T04:48:35.7399824Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-30T04:48:35.7622678Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-30T04:48:35.7654413Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-30T04:48:35.7886003Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-11-30T04:48:35.7920897Z ##[endgroup]
+2025-11-30T04:48:35.7921716Z ##[group]Fetching the repository
+2025-11-30T04:48:35.7929760Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +620d977fa6e18031567aad98db104ef20efc3b5e:refs/remotes/origin/main
+2025-11-30T04:48:36.1491408Z From https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:48:36.1492371Z  * [new ref]         620d977fa6e18031567aad98db104ef20efc3b5e -> origin/main
+2025-11-30T04:48:36.1522840Z ##[endgroup]
+2025-11-30T04:48:36.1523902Z ##[group]Determining the checkout info
+2025-11-30T04:48:36.1525072Z ##[endgroup]
+2025-11-30T04:48:36.1530097Z [command]/usr/bin/git sparse-checkout disable
+2025-11-30T04:48:36.1569205Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-11-30T04:48:36.1594972Z ##[group]Checking out the ref
+2025-11-30T04:48:36.1598822Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-11-30T04:48:36.1648224Z Switched to a new branch 'main'
+2025-11-30T04:48:36.1651104Z branch 'main' set up to track 'origin/main'.
+2025-11-30T04:48:36.1657534Z ##[endgroup]
+2025-11-30T04:48:36.1691668Z [command]/usr/bin/git log -1 --format=%H
+2025-11-30T04:48:36.1713414Z 620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:36.1892628Z ##[group]Run echo "=== pre-setup diagnostics ==="
+2025-11-30T04:48:36.1893362Z [36;1mecho "=== pre-setup diagnostics ==="[0m
+2025-11-30T04:48:36.1894129Z [36;1mdate || true[0m
+2025-11-30T04:48:36.1894591Z [36;1mecho "--- environment ---"; env || true[0m
+2025-11-30T04:48:36.1895196Z [36;1mecho "--- uname ---"; uname -a || true[0m
+2025-11-30T04:48:36.1895964Z [36;1mecho "--- preinstalled node/npm (if any) ---"; node -v || true; npm -v || true[0m
+2025-11-30T04:48:36.1896941Z [36;1mecho "--- connectivity to Node hosts ---"; curl -I https://nodejs.org/ || true[0m
+2025-11-30T04:48:36.1898073Z [36;1mecho "--- connectivity to raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true[0m
+2025-11-30T04:48:36.1899409Z [36;1mecho "--- DNS resolve ---"; nslookup nodejs.org || true[0m
+2025-11-30T04:48:36.1900059Z [36;1mecho "--- write to artifact file ---"[0m
+2025-11-30T04:48:36.1900601Z [36;1mmkdir -p .gha-logs || true[0m
+2025-11-30T04:48:36.1901115Z [36;1m{[0m
+2025-11-30T04:48:36.1901480Z [36;1m  date || true[0m
+2025-11-30T04:48:36.1901948Z [36;1m  echo "--- environment ---"; env || true[0m
+2025-11-30T04:48:36.1902520Z [36;1m  echo "--- uname ---"; uname -a || true[0m
+2025-11-30T04:48:36.1903154Z [36;1m  echo "--- node/npm ---"; node -v || true; npm -v || true[0m
+2025-11-30T04:48:36.1903915Z [36;1m  echo "--- curl nodejs.org ---"; curl -I https://nodejs.org/ || true[0m
+2025-11-30T04:48:36.1904900Z [36;1m  echo "--- curl raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true[0m
+2025-11-30T04:48:36.1905870Z [36;1m  echo "--- nslookup nodejs.org ---"; nslookup nodejs.org || true[0m
+2025-11-30T04:48:36.1906710Z [36;1m} > .gha-logs/pre_setup_diag.txt || true[0m
+2025-11-30T04:48:36.2007994Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:36.2008488Z env:
+2025-11-30T04:48:36.2009153Z   CI: true
+2025-11-30T04:48:36.2009535Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:36.2010030Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:36.2010498Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:36.2010911Z ##[endgroup]
+2025-11-30T04:48:36.2085150Z === pre-setup diagnostics ===
+2025-11-30T04:48:36.2095165Z Sun Nov 30 04:48:36 UTC 2025
+2025-11-30T04:48:36.2096885Z --- environment ---
+2025-11-30T04:48:36.2106192Z SHELL=/bin/bash
+2025-11-30T04:48:36.2107003Z SELENIUM_JAR_PATH=/usr/share/java/selenium-server.jar
+2025-11-30T04:48:36.2107935Z CONDA=/usr/share/miniconda
+2025-11-30T04:48:36.2109022Z GITHUB_WORKSPACE=/home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:36.2110131Z JAVA_HOME_11_X64=/usr/lib/jvm/temurin-11-jdk-amd64
+2025-11-30T04:48:36.2111087Z JAVA_HOME_25_X64=/usr/lib/jvm/temurin-25-jdk-amd64
+2025-11-30T04:48:36.2112483Z GITHUB_PATH=/home/runner/work/_temp/_runner_file_commands/add_path_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2113370Z GITHUB_ACTION=__run
+2025-11-30T04:48:36.2113806Z JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+2025-11-30T04:48:36.2114317Z GITHUB_RUN_NUMBER=41
+2025-11-30T04:48:36.2114765Z RUNNER_NAME=GitHub Actions 1000000042
+2025-11-30T04:48:36.2115265Z GRADLE_HOME=/usr/share/gradle-9.2.0
+2025-11-30T04:48:36.2115766Z GITHUB_REPOSITORY_OWNER_ID=245141154
+2025-11-30T04:48:36.2116426Z ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE=/opt/actionarchivecache
+2025-11-30T04:48:36.2117456Z XDG_CONFIG_HOME=/home/runner/.config
+2025-11-30T04:48:36.2118076Z MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
+2025-11-30T04:48:36.2119174Z DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+2025-11-30T04:48:36.2119807Z ANT_HOME=/usr/share/ant
+2025-11-30T04:48:36.2120439Z JAVA_HOME_8_X64=/usr/lib/jvm/temurin-8-jdk-amd64
+2025-11-30T04:48:36.2121006Z GITHUB_TRIGGERING_ACTOR=liu474751-tech
+2025-11-30T04:48:36.2121502Z GITHUB_REF_TYPE=branch
+2025-11-30T04:48:36.2121958Z HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=3650
+2025-11-30T04:48:36.2122553Z ANDROID_NDK=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2123141Z BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+2025-11-30T04:48:36.2124020Z ***
+2025-11-30T04:48:36.2124631Z PIPX_BIN_DIR=/opt/pipx_bin
+2025-11-30T04:48:36.2125098Z LOGNAME=runner
+2025-11-30T04:48:36.2125490Z GITHUB_REPOSITORY_ID=1105994050
+2025-11-30T04:48:36.2126201Z GITHUB_ACTIONS=true
+2025-11-30T04:48:36.2126773Z ANDROID_NDK_LATEST_HOME=/usr/local/lib/android/sdk/ndk/29.0.14206865
+2025-11-30T04:48:36.2127419Z SYSTEMD_EXEC_PID=1891
+2025-11-30T04:48:36.2127891Z GITHUB_SHA=620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:36.2129012Z GITHUB_WORKFLOW_REF=liu474751-tech/tasty-kitchen/.github/workflows/deploy.yml@refs/heads/main
+2025-11-30T04:48:36.2129968Z POWERSHELL_DISTRIBUTION_CHANNEL=GitHub-Actions-ubuntu24
+2025-11-30T04:48:36.2130584Z RUNNER_ENVIRONMENT=github-hosted
+2025-11-30T04:48:36.2131061Z DOTNET_MULTILEVEL_LOOKUP=0
+2025-11-30T04:48:36.2131636Z GITHUB_REF=refs/heads/main
+2025-11-30T04:48:36.2132059Z RUNNER_OS=Linux
+2025-11-30T04:48:36.2132455Z GITHUB_REF_PROTECTED=false
+2025-11-30T04:48:36.2132897Z HOME=/home/runner
+2025-11-30T04:48:36.2133312Z GITHUB_API_URL=https://api.github.com
+2025-11-30T04:48:36.2133824Z LANG=C.UTF-8
+2025-11-30T04:48:36.2134230Z NPM_CONFIG_AUDIT=false
+2025-11-30T04:48:36.2134702Z GOROOT_1_25_X64=/opt/hostedtoolcache/go/1.25.4/x64
+2025-11-30T04:48:36.2135391Z RUNNER_TRACKING_ID=github_0fc2a312-cbcc-41b1-866e-ffe5699900e7
+2025-11-30T04:48:36.2136123Z RUNNER_ARCH=X64
+2025-11-30T04:48:36.2136836Z MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/system.slice/hosted-compute-agent.service/memory.pressure
+2025-11-30T04:48:36.2137723Z RUNNER_TEMP=/home/runner/work/_temp
+2025-11-30T04:48:36.2138698Z GITHUB_STATE=/home/runner/work/_temp/_runner_file_commands/save_state_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2139749Z EDGEWEBDRIVER=/usr/local/share/edge_driver
+2025-11-30T04:48:36.2140325Z JAVA_HOME_21_X64=/usr/lib/jvm/temurin-21-jdk-amd64
+2025-11-30T04:48:36.2141218Z GITHUB_ENV=/home/runner/work/_temp/_runner_file_commands/set_env_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2142229Z GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json
+2025-11-30T04:48:36.2142936Z INVOCATION_ID=dff058b0f4e34b7090dc0c7457c297f7
+2025-11-30T04:48:36.2143470Z GITHUB_EVENT_NAME=push
+2025-11-30T04:48:36.2143880Z GITHUB_RUN_ID=19793995783
+2025-11-30T04:48:36.2144381Z JAVA_HOME_17_X64=/usr/lib/jvm/temurin-17-jdk-amd64
+2025-11-30T04:48:36.2145141Z ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2146186Z GITHUB_STEP_SUMMARY=/home/runner/work/_temp/_runner_file_commands/step_summary_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2147122Z HOMEBREW_NO_AUTO_UPDATE=1
+2025-11-30T04:48:36.2147652Z GITHUB_ACTOR=liu474751-tech
+2025-11-30T04:48:36.2148105Z NVM_DIR=/home/runner/.nvm
+2025-11-30T04:48:36.2148523Z SGX_AESM_ADDR=1
+2025-11-30T04:48:36.2149029Z GITHUB_RUN_ATTEMPT=1
+2025-11-30T04:48:36.2149459Z ANDROID_HOME=/usr/local/lib/android/sdk
+2025-11-30T04:48:36.2150073Z GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+2025-11-30T04:48:36.2150633Z ACCEPT_EULA=Y
+2025-11-30T04:48:36.2151105Z USER=runner
+2025-11-30T04:48:36.2151527Z GITHUB_SERVER_URL=https://github.com
+2025-11-30T04:48:36.2152028Z PIPX_HOME=/opt/pipx
+2025-11-30T04:48:36.2152501Z GECKOWEBDRIVER=/usr/local/share/gecko_driver
+2025-11-30T04:48:36.2153159Z CHROMEWEBDRIVER=/usr/local/share/chromedriver-linux64
+2025-11-30T04:48:36.2153820Z SHLVL=1
+2025-11-30T04:48:36.2154208Z ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+2025-11-30T04:48:36.2154775Z VCPKG_INSTALLATION_ROOT=/usr/local/share/vcpkg
+2025-11-30T04:48:36.2155309Z GITHUB_ACTOR_ID=245141154
+2025-11-30T04:48:36.2155761Z RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+2025-11-30T04:48:36.2156248Z ImageVersion=20251112.124.1
+2025-11-30T04:48:36.2156699Z DOTNET_NOLOGO=1
+2025-11-30T04:48:36.2157246Z GOROOT_1_23_X64=/opt/hostedtoolcache/go/1.23.12/x64
+2025-11-30T04:48:36.2157918Z GITHUB_WORKFLOW_SHA=620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:36.2158738Z GOROOT_1_24_X64=/opt/hostedtoolcache/go/1.24.10/x64
+2025-11-30T04:48:36.2159457Z GITHUB_REF_NAME=main
+2025-11-30T04:48:36.2159974Z NPM_CONFIG_FUND=false
+2025-11-30T04:48:36.2160387Z GITHUB_JOB=build
+2025-11-30T04:48:36.2160987Z XDG_RUNTIME_DIR=/run/user/1001
+2025-11-30T04:48:36.2161499Z AZURE_EXTENSION_DIR=/opt/az/azcliextensions
+2025-11-30T04:48:36.2162329Z GITHUB_REPOSITORY=liu474751-tech/tasty-kitchen
+2025-11-30T04:48:36.2162994Z ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2163682Z GOROOT_1_22_X64=/opt/hostedtoolcache/go/1.22.12/x64
+2025-11-30T04:48:36.2164246Z CHROME_BIN=/usr/bin/google-chrome
+2025-11-30T04:48:36.2164724Z GITHUB_RETENTION_DAYS=90
+2025-11-30T04:48:36.2165145Z JOURNAL_STREAM=9:10769
+2025-11-30T04:48:36.2165717Z RUNNER_WORKSPACE=/home/runner/work/tasty-kitchen
+2025-11-30T04:48:36.2166278Z GITHUB_ACTION_REPOSITORY=
+2025-11-30T04:48:36.2168098Z PATH=/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+2025-11-30T04:48:36.2170218Z GITHUB_BASE_REF=
+2025-11-30T04:48:36.2170642Z GHCUP_INSTALL_BASE_PREFIX=/usr/local
+2025-11-30T04:48:36.2171119Z CI=true
+2025-11-30T04:48:36.2171526Z SWIFT_PATH=/usr/share/swift/usr/bin
+2025-11-30T04:48:36.2172000Z ImageOS=ubuntu24
+2025-11-30T04:48:36.2172418Z GITHUB_REPOSITORY_OWNER=liu474751-tech
+2025-11-30T04:48:36.2173037Z GITHUB_HEAD_REF=
+2025-11-30T04:48:36.2173420Z GITHUB_ACTION_REF=
+2025-11-30T04:48:36.2173815Z ENABLE_RUNNER_TRACING=true
+2025-11-30T04:48:36.2174303Z GITHUB_WORKFLOW=Build and deploy to GitHub Pages
+2025-11-30T04:48:36.2174859Z DEBIAN_FRONTEND=noninteractive
+2025-11-30T04:48:36.2175805Z GITHUB_OUTPUT=/home/runner/work/_temp/_runner_file_commands/set_output_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2176719Z AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+2025-11-30T04:48:36.2177219Z _=/usr/bin/env
+2025-11-30T04:48:36.2177683Z --- uname ---
+2025-11-30T04:48:36.2178455Z Linux runnervmg1sw1 6.11.0-1018-azure #18~24.04.1-Ubuntu SMP Sat Jun 28 04:46:03 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+2025-11-30T04:48:36.2179469Z --- preinstalled node/npm (if any) ---
+2025-11-30T04:48:36.2539626Z v20.19.5
+2025-11-30T04:48:36.4380670Z 10.8.2
+2025-11-30T04:48:36.4425626Z --- connectivity to Node hosts ---
+2025-11-30T04:48:36.4494070Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.4495196Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.4495698Z 
+2025-11-30T04:48:36.4783406Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5290350Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5291534Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5292201Z HTTP/2 307 
+2025-11-30T04:48:36.5292650Z date: Sun, 30 Nov 2025 04:48:36 GMT
+2025-11-30T04:48:36.5293229Z content-type: text/plain
+2025-11-30T04:48:36.5293744Z server: cloudflare
+2025-11-30T04:48:36.5294188Z location: /en
+2025-11-30T04:48:36.5294675Z cf-ray: 9a67b6a3fdf217de-SJC
+2025-11-30T04:48:36.5295211Z cf-cache-status: DYNAMIC
+2025-11-30T04:48:36.5295796Z cache-control: public, max-age=0, must-revalidate
+2025-11-30T04:48:36.5296536Z set-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax
+2025-11-30T04:48:36.5297427Z strict-transport-security: max-age=31536000; includeSubDomains; preload
+2025-11-30T04:48:36.5298296Z x-content-type-options: nosniff
+2025-11-30T04:48:36.5303405Z x-vercel-id: sfo1::fx8cb-1764478116501-104801f1b00d
+2025-11-30T04:48:36.5303892Z 
+2025-11-30T04:48:36.5314328Z --- connectivity to raw.githubusercontent.com ---
+2025-11-30T04:48:36.5366562Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.5367747Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.5368415Z 
+2025-11-30T04:48:36.5663845Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5664972Z HTTP/2 301 
+2025-11-30T04:48:36.5666182Z content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+2025-11-30T04:48:36.5667186Z location: https://github.com/
+2025-11-30T04:48:36.5668076Z strict-transport-security: max-age=31536000
+2025-11-30T04:48:36.5669120Z x-content-type-options: nosniff
+2025-11-30T04:48:36.5669655Z x-frame-options: deny
+2025-11-30T04:48:36.5670121Z x-xss-protection: 1; mode=block
+2025-11-30T04:48:36.5670734Z x-github-request-id: A608:1C4C44:13D3CFF:190DF64:692BC4CE
+2025-11-30T04:48:36.5671397Z accept-ranges: bytes
+2025-11-30T04:48:36.5671837Z date: Sun, 30 Nov 2025 04:48:36 GMT
+2025-11-30T04:48:36.5672347Z via: 1.1 varnish
+2025-11-30T04:48:36.5672792Z x-served-by: cache-sjc1000107-SJC
+2025-11-30T04:48:36.5673350Z x-cache: HIT
+2025-11-30T04:48:36.5673749Z x-cache-hits: 0
+2025-11-30T04:48:36.5674165Z x-timer: S1764478117.563963,VS0,VE1
+2025-11-30T04:48:36.5674707Z vary: Authorization,Accept-Encoding
+2025-11-30T04:48:36.5675266Z access-control-allow-origin: *
+2025-11-30T04:48:36.5675849Z cross-origin-resource-policy: cross-origin
+2025-11-30T04:48:36.5676570Z x-fastly-request-id: afb77a2dc1eaf508ae2f6437ae7dc4ccddf4e848
+2025-11-30T04:48:36.5677279Z expires: Sun, 30 Nov 2025 04:53:36 GMT
+2025-11-30T04:48:36.5677799Z source-age: 2005
+2025-11-30T04:48:36.5678212Z content-length: 0
+2025-11-30T04:48:36.5678459Z 
+2025-11-30T04:48:36.5682073Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5682977Z --- DNS resolve ---
+2025-11-30T04:48:36.7675363Z Server:		127.0.0.53
+2025-11-30T04:48:36.7676774Z Address:	127.0.0.53#53
+2025-11-30T04:48:36.7677499Z 
+2025-11-30T04:48:36.7677878Z Non-authoritative answer:
+2025-11-30T04:48:36.7678998Z Name:	nodejs.org
+2025-11-30T04:48:36.7679737Z Address: 172.66.128.70
+2025-11-30T04:48:36.7680493Z Name:	nodejs.org
+2025-11-30T04:48:36.7681191Z Address: 104.20.1.252
+2025-11-30T04:48:36.7681922Z Name:	nodejs.org
+2025-11-30T04:48:36.7682896Z Address: 2606:4700:10::6814:1fc
+2025-11-30T04:48:36.7684042Z Name:	nodejs.org
+2025-11-30T04:48:36.7685006Z Address: 2606:4700:10::ac42:8046
+2025-11-30T04:48:36.7685719Z 
+2025-11-30T04:48:36.7686155Z --- write to artifact file ---
+2025-11-30T04:48:36.8674420Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.8675673Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.8676279Z 
+2025-11-30T04:48:36.9543465Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.9545609Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.9622626Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.9624453Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.9625545Z 
+2025-11-30T04:48:37.0012423Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:37.0014089Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:37.0345737Z ##[group]Run actions/upload-artifact@v4
+2025-11-30T04:48:37.0346829Z with:
+2025-11-30T04:48:37.0347560Z   name: pre-setup-diagnostics
+2025-11-30T04:48:37.0348739Z   path: .gha-logs/pre_setup_diag.txt
+2025-11-30T04:48:37.0349773Z   if-no-files-found: warn
+2025-11-30T04:48:37.0350649Z   compression-level: 6
+2025-11-30T04:48:37.0351479Z   overwrite: false
+2025-11-30T04:48:37.0352275Z   include-hidden-files: false
+2025-11-30T04:48:37.0353166Z env:
+2025-11-30T04:48:37.0353792Z   CI: true
+2025-11-30T04:48:37.0354491Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:37.0355468Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:37.0356370Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:37.0357193Z ##[endgroup]
+2025-11-30T04:48:37.2494699Z With the provided path, there will be 1 file uploaded
+2025-11-30T04:48:37.2499223Z Artifact name is valid!
+2025-11-30T04:48:37.2500661Z Root directory input is valid!
+2025-11-30T04:48:37.5443030Z Beginning upload of artifact content to blob storage
+2025-11-30T04:48:37.8362896Z Uploaded bytes 2970
+2025-11-30T04:48:37.9135911Z Finished uploading artifact content to blob storage!
+2025-11-30T04:48:37.9140334Z SHA256 digest of uploaded artifact zip is 1cb856fa80aade983c21430a340d51419ee59e44a80b1f85b0c09fdbff3bc952
+2025-11-30T04:48:37.9143749Z Finalizing artifact upload
+2025-11-30T04:48:38.0723859Z Artifact pre-setup-diagnostics.zip successfully finalized. Artifact ID 4715580539
+2025-11-30T04:48:38.0731069Z Artifact pre-setup-diagnostics has been successfully uploaded! Final size is 2970 bytes. Artifact ID is 4715580539
+2025-11-30T04:48:38.0736589Z Artifact download URL: https://github.com/liu474751-tech/tasty-kitchen/actions/runs/19793995783/artifacts/4715580539
+2025-11-30T04:48:38.0858178Z ##[group]Run if command -v node >/dev/null 2>&1; then
+2025-11-30T04:48:38.0859766Z [36;1mif command -v node >/dev/null 2>&1; then[0m
+2025-11-30T04:48:38.0860940Z [36;1m  ver=$(node -v | sed 's/^v//');[0m
+2025-11-30T04:48:38.0862048Z [36;1m  echo "System node version: $ver";[0m
+2025-11-30T04:48:38.0863215Z [36;1m  echo "has_node=true" >> $GITHUB_OUTPUT;[0m
+2025-11-30T04:48:38.0864282Z [36;1melse[0m
+2025-11-30T04:48:38.0865143Z [36;1m  echo "has_node=false" >> $GITHUB_OUTPUT;[0m
+2025-11-30T04:48:38.0866224Z [36;1mfi[0m
+2025-11-30T04:48:38.0902664Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.0903544Z env:
+2025-11-30T04:48:38.0904181Z   CI: true
+2025-11-30T04:48:38.0904898Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.0905863Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.0906714Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.0907525Z ##[endgroup]
+2025-11-30T04:48:38.1013058Z System node version: 20.19.5
+2025-11-30T04:48:38.1119490Z ##[group]Run echo "--- runner info ---";
+2025-11-30T04:48:38.1120551Z [36;1mecho "--- runner info ---";[0m
+2025-11-30T04:48:38.1121547Z [36;1muname -a || true;[0m
+2025-11-30T04:48:38.1122452Z [36;1mcat /etc/os-release || true;[0m
+2025-11-30T04:48:38.1123527Z [36;1mecho "--- disk usage ---"; df -h || true;[0m
+2025-11-30T04:48:38.1124910Z [36;1mecho "--- network debug (curl) ---"; curl --version || true[0m
+2025-11-30T04:48:38.1157768Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.1158797Z env:
+2025-11-30T04:48:38.1159463Z   CI: true
+2025-11-30T04:48:38.1160165Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.1161136Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.1161992Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.1162784Z ##[endgroup]
+2025-11-30T04:48:38.1223116Z --- runner info ---
+2025-11-30T04:48:38.1233284Z Linux runnervmg1sw1 6.11.0-1018-azure #18~24.04.1-Ubuntu SMP Sat Jun 28 04:46:03 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+2025-11-30T04:48:38.1242824Z PRETTY_NAME="Ubuntu 24.04.3 LTS"
+2025-11-30T04:48:38.1244251Z NAME="Ubuntu"
+2025-11-30T04:48:38.1245349Z VERSION_ID="24.04"
+2025-11-30T04:48:38.1246569Z VERSION="24.04.3 LTS (Noble Numbat)"
+2025-11-30T04:48:38.1247737Z VERSION_CODENAME=noble
+2025-11-30T04:48:38.1248524Z ID=ubuntu
+2025-11-30T04:48:38.1249406Z ID_LIKE=debian
+2025-11-30T04:48:38.1250195Z HOME_URL="https://www.ubuntu.com/"
+2025-11-30T04:48:38.1251234Z SUPPORT_URL="https://help.ubuntu.com/"
+2025-11-30T04:48:38.1252452Z BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+2025-11-30T04:48:38.1254235Z PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+2025-11-30T04:48:38.1255839Z UBUNTU_CODENAME=noble
+2025-11-30T04:48:38.1256615Z LOGO=ubuntu-logo
+2025-11-30T04:48:38.1257373Z --- disk usage ---
+2025-11-30T04:48:38.1427982Z Filesystem      Size  Used Avail Use% Mounted on
+2025-11-30T04:48:38.1430373Z /dev/root        72G   53G   19G  74% /
+2025-11-30T04:48:38.1432415Z tmpfs           7.9G   84K  7.9G   1% /dev/shm
+2025-11-30T04:48:38.1433851Z tmpfs           3.2G  1.1M  3.2G   1% /run
+2025-11-30T04:48:38.1435198Z tmpfs           5.0M     0  5.0M   0% /run/lock
+2025-11-30T04:48:38.1436555Z /dev/sda16      881M   62M  758M   8% /boot
+2025-11-30T04:48:38.1437929Z /dev/sda15      105M  6.2M   99M   6% /boot/efi
+2025-11-30T04:48:38.1439453Z /dev/sdb1        74G  4.1G   66G   6% /mnt
+2025-11-30T04:48:38.1440548Z tmpfs           1.6G   12K  1.6G   1% /run/user/1001
+2025-11-30T04:48:38.1441671Z --- network debug (curl) ---
+2025-11-30T04:48:38.1496849Z curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0 OpenSSL/3.0.13 zlib/1.3 brotli/1.1.0 zstd/1.5.5 libidn2/2.3.7 libpsl/0.21.2 (+libidn2/2.3.7) libssh/0.10.6/openssl/zlib nghttp2/1.59.0 librtmp/2.3 OpenLDAP/2.6.7
+2025-11-30T04:48:38.1500550Z Release-Date: 2023-12-06, security patched: 8.5.0-2ubuntu10.6
+2025-11-30T04:48:38.1504535Z Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp
+2025-11-30T04:48:38.1509083Z Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd
+2025-11-30T04:48:38.1565786Z ##[group]Run npm cache clean --force 2>&1 || true
+2025-11-30T04:48:38.1567030Z [36;1mnpm cache clean --force 2>&1 || true[0m
+2025-11-30T04:48:38.1603127Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.1603965Z env:
+2025-11-30T04:48:38.1604587Z   CI: true
+2025-11-30T04:48:38.1605286Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.1606242Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.1607075Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.1607873Z ##[endgroup]
+2025-11-30T04:48:38.2519286Z npm warn using --force Recommended protections disabled.
+2025-11-30T04:48:38.6063014Z ##[group]Run set -e
+2025-11-30T04:48:38.6063275Z [36;1mset -e[0m
+2025-11-30T04:48:38.6063490Z [36;1mif [ -f package-lock.json ]; then[0m
+2025-11-30T04:48:38.6063847Z [36;1m  npm ci --no-audit --no-fund --no-progress --legacy-peer-deps;[0m
+2025-11-30T04:48:38.6064186Z [36;1melse[0m
+2025-11-30T04:48:38.6064470Z [36;1m  npm install --no-audit --no-fund --no-progress --legacy-peer-deps;[0m
+2025-11-30T04:48:38.6064794Z [36;1mfi[0m
+2025-11-30T04:48:38.6099694Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.6099938Z env:
+2025-11-30T04:48:38.6100097Z   CI: true
+2025-11-30T04:48:38.6100276Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.6100521Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.6100725Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.6100944Z ##[endgroup]
+2025-11-30T04:48:43.7912017Z 
+2025-11-30T04:48:43.8073805Z added 62 packages in 5s
+2025-11-30T04:48:43.8122141Z ##[group]Run node -v; npm -v
+2025-11-30T04:48:43.8122454Z [36;1mnode -v; npm -v[0m
+2025-11-30T04:48:43.8154373Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:43.8154600Z env:
+2025-11-30T04:48:43.8154765Z   CI: true
+2025-11-30T04:48:43.8154943Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:43.8155191Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:43.8155406Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:43.8155605Z ##[endgroup]
+2025-11-30T04:48:43.8233885Z v20.19.5
+2025-11-30T04:48:43.9040878Z 10.8.2
+2025-11-30T04:48:43.9108783Z ##[group]Run npm list --depth=0 || true
+2025-11-30T04:48:43.9109148Z [36;1mnpm list --depth=0 || true[0m
+2025-11-30T04:48:43.9141383Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:43.9141609Z env:
+2025-11-30T04:48:43.9141763Z   CI: true
+2025-11-30T04:48:43.9141950Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:43.9142204Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:43.9142402Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:43.9142600Z ##[endgroup]
+2025-11-30T04:48:44.2432628Z tasty-kitchen@0.1.0 /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:44.2433648Z ├── @vitejs/plugin-react@5.1.1
+2025-11-30T04:48:44.2434125Z ├── react-dom@18.3.1
+2025-11-30T04:48:44.2434563Z ├── react@18.3.1
+2025-11-30T04:48:44.2434945Z └── vite@5.4.21
+2025-11-30T04:48:44.2435139Z 
+2025-11-30T04:48:44.2533567Z ##[group]Run set -e
+2025-11-30T04:48:44.2533881Z [36;1mset -e[0m
+2025-11-30T04:48:44.2534102Z [36;1mnpm run build 2>&1 | tee build.log[0m
+2025-11-30T04:48:44.2566220Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:44.2566458Z env:
+2025-11-30T04:48:44.2566617Z   CI: true
+2025-11-30T04:48:44.2566802Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:44.2567060Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:44.2567266Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:44.2567481Z   VITE_BASE_PATH: /tasty-kitchen/
+2025-11-30T04:48:44.2567908Z ##[endgroup]
+2025-11-30T04:48:44.3643082Z 
+2025-11-30T04:48:44.3643511Z > tasty-kitchen@0.1.0 build
+2025-11-30T04:48:44.3643915Z > vite build
+2025-11-30T04:48:44.3644098Z 
+2025-11-30T04:48:44.5561313Z [36mvite v5.4.21 [32mbuilding for production...[36m[39m
+2025-11-30T04:48:44.6051747Z transforming...
+2025-11-30T04:48:45.3110429Z [32m✓[39m 31 modules transformed.
+2025-11-30T04:48:45.4191329Z rendering chunks...
+2025-11-30T04:48:45.4248892Z computing gzip size...
+2025-11-30T04:48:45.4316871Z [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.56 kB[22m[1m[22m[2m │ gzip:  0.36 kB[22m
+2025-11-30T04:48:45.4318073Z [2mdist/[22m[2massets/[22m[35mindex-JqBOeaxt.css  [39m[1m[2m  0.48 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+2025-11-30T04:48:45.4319321Z [2mdist/[22m[2massets/[22m[36mindex-DyyHOePx.js   [39m[1m[2m184.60 kB[22m[1m[22m[2m │ gzip: 59.03 kB[22m
+2025-11-30T04:48:45.4320839Z [32m✓ built in 851ms[39m
+2025-11-30T04:48:45.4576889Z ##[group]Run actions/upload-artifact@v4
+2025-11-30T04:48:45.4577185Z with:
+2025-11-30T04:48:45.4577349Z   name: build-log
+2025-11-30T04:48:45.4577530Z   path: build.log
+2025-11-30T04:48:45.4577710Z   if-no-files-found: warn
+2025-11-30T04:48:45.4577920Z   compression-level: 6
+2025-11-30T04:48:45.4578115Z   overwrite: false
+2025-11-30T04:48:45.4578297Z   include-hidden-files: false
+2025-11-30T04:48:45.4578504Z env:
+2025-11-30T04:48:45.4578928Z   CI: true
+2025-11-30T04:48:45.4579101Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:45.4579323Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:45.4579520Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:45.4579709Z ##[endgroup]
+2025-11-30T04:48:45.6715562Z With the provided path, there will be 1 file uploaded
+2025-11-30T04:48:45.6721233Z Artifact name is valid!
+2025-11-30T04:48:45.6722723Z Root directory input is valid!
+2025-11-30T04:48:45.9396903Z Beginning upload of artifact content to blob storage
+2025-11-30T04:48:46.2327668Z Uploaded bytes 417
+2025-11-30T04:48:46.3167547Z Finished uploading artifact content to blob storage!
+2025-11-30T04:48:46.3170644Z SHA256 digest of uploaded artifact zip is d92fd9b2bf47a65a7c2d512be464a5a20d51e3f8a028efba6d9f646335c5d105
+2025-11-30T04:48:46.3172162Z Finalizing artifact upload
+2025-11-30T04:48:46.4580246Z Artifact build-log.zip successfully finalized. Artifact ID 4715580926
+2025-11-30T04:48:46.4581259Z Artifact build-log has been successfully uploaded! Final size is 417 bytes. Artifact ID is 4715580926
+2025-11-30T04:48:46.4591760Z Artifact download URL: https://github.com/liu474751-tech/tasty-kitchen/actions/runs/19793995783/artifacts/4715580926
+2025-11-30T04:48:46.4713927Z ##[group]Run if [ -f build.log ]; then echo "build.log present"; else echo "NO BUILD LOG: setup-node likely failed early" > build.log; fi
+2025-11-30T04:48:46.4714693Z [36;1mif [ -f build.log ]; then echo "build.log present"; else echo "NO BUILD LOG: setup-node likely failed early" > build.log; fi[0m
+2025-11-30T04:48:46.4746514Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.4746743Z env:
+2025-11-30T04:48:46.4746915Z   CI: true
+2025-11-30T04:48:46.4747089Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.4747324Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.4747528Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.4747724Z ##[endgroup]
+2025-11-30T04:48:46.4795909Z build.log present
+2025-11-30T04:48:46.4816474Z ##[group]Run echo "meishitiandi.dpdns.org" > dist/CNAME
+2025-11-30T04:48:46.4816853Z [36;1mecho "meishitiandi.dpdns.org" > dist/CNAME[0m
+2025-11-30T04:48:46.4845289Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.4845515Z env:
+2025-11-30T04:48:46.4845670Z   CI: true
+2025-11-30T04:48:46.4845851Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.4846088Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.4846297Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.4846493Z ##[endgroup]
+2025-11-30T04:48:46.4915306Z ##[group]Run echo "Listing repo root:";
+2025-11-30T04:48:46.4915606Z [36;1mecho "Listing repo root:";[0m
+2025-11-30T04:48:46.4915856Z [36;1mls -al || true;[0m
+2025-11-30T04:48:46.4916236Z [36;1mecho "Listing dist directory:";[0m
+2025-11-30T04:48:46.4916531Z [36;1mls -al dist || true[0m
+2025-11-30T04:48:46.4944759Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.4944977Z env:
+2025-11-30T04:48:46.4945132Z   CI: true
+2025-11-30T04:48:46.4945308Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.4945545Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.4945750Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.4945950Z ##[endgroup]
+2025-11-30T04:48:46.4991662Z Listing repo root:
+2025-11-30T04:48:46.5006234Z total 124
+2025-11-30T04:48:46.5006609Z drwxr-xr-x  8 runner runner  4096 Nov 30 04:48 .
+2025-11-30T04:48:46.5007127Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 ..
+2025-11-30T04:48:46.5007676Z -rw-r--r--  1 runner runner    94 Nov 30 04:48 .env.example
+2025-11-30T04:48:46.5008342Z drwxr-xr-x  2 runner runner  4096 Nov 30 04:48 .gha-logs
+2025-11-30T04:48:46.5009055Z drwxr-xr-x  7 runner runner  4096 Nov 30 04:48 .git
+2025-11-30T04:48:46.5009599Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 .github
+2025-11-30T04:48:46.5010174Z -rw-r--r--  1 runner runner    35 Nov 30 04:48 .gitignore
+2025-11-30T04:48:46.5010712Z -rw-r--r--  1 runner runner  4751 Nov 30 04:48 README.md
+2025-11-30T04:48:46.5011216Z -rw-r--r--  1 runner runner   580 Nov 30 04:48 build.log
+2025-11-30T04:48:46.5011726Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 dist
+2025-11-30T04:48:46.5012259Z -rw-r--r--  1 runner runner   437 Nov 30 04:48 index.html
+2025-11-30T04:48:46.5012821Z drwxr-xr-x 39 runner runner  4096 Nov 30 04:48 node_modules
+2025-11-30T04:48:46.5013541Z -rw-r--r--  1 runner runner 54482 Nov 30 04:48 package-lock.json
+2025-11-30T04:48:46.5014136Z -rw-r--r--  1 runner runner   389 Nov 30 04:48 package.json
+2025-11-30T04:48:46.5014688Z drwxr-xr-x  2 runner runner  4096 Nov 30 04:48 src
+2025-11-30T04:48:46.5015259Z -rw-r--r--  1 runner runner   401 Nov 30 04:48 vite.config.js
+2025-11-30T04:48:46.5015846Z -rw-r--r--  1 runner runner   603 Nov 30 04:48 vite.config.mjs
+2025-11-30T04:48:46.5016355Z Listing dist directory:
+2025-11-30T04:48:46.5022987Z total 20
+2025-11-30T04:48:46.5023335Z drwxr-xr-x 3 runner runner 4096 Nov 30 04:48 .
+2025-11-30T04:48:46.5023842Z drwxr-xr-x 8 runner runner 4096 Nov 30 04:48 ..
+2025-11-30T04:48:46.5024353Z -rw-r--r-- 1 runner runner   23 Nov 30 04:48 CNAME
+2025-11-30T04:48:46.5024689Z drwxr-xr-x 2 runner runner 4096 Nov 30 04:48 assets
+2025-11-30T04:48:46.5025003Z -rw-r--r-- 1 runner runner  563 Nov 30 04:48 index.html
+2025-11-30T04:48:46.5052139Z ##[group]Run if [ -f dist/index.html ]; then echo "dist/index.html exists"; else echo "ERROR: dist/index.html missing"; exit 1; fi
+2025-11-30T04:48:46.5052870Z [36;1mif [ -f dist/index.html ]; then echo "dist/index.html exists"; else echo "ERROR: dist/index.html missing"; exit 1; fi[0m
+2025-11-30T04:48:46.5080896Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.5081116Z env:
+2025-11-30T04:48:46.5081274Z   CI: true
+2025-11-30T04:48:46.5081446Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5081683Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5081902Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5082100Z ##[endgroup]
+2025-11-30T04:48:46.5126828Z dist/index.html exists
+2025-11-30T04:48:46.5150352Z ##[group]Run echo "Ensuring GitHub token available for deployment"
+2025-11-30T04:48:46.5150786Z [36;1mecho "Ensuring GitHub token available for deployment"[0m
+2025-11-30T04:48:46.5178794Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.5179031Z env:
+2025-11-30T04:48:46.5179192Z   CI: true
+2025-11-30T04:48:46.5179375Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5179624Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5179838Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5180677Z   GH_TOKEN: ***
+2025-11-30T04:48:46.5180883Z ##[endgroup]
+2025-11-30T04:48:46.5226154Z Ensuring GitHub token available for deployment
+2025-11-30T04:48:46.5285239Z ##[group]Run peaceiris/actions-gh-pages@v3
+2025-11-30T04:48:46.5285519Z with:
+2025-11-30T04:48:46.5285875Z   github_token: ***
+2025-11-30T04:48:46.5286072Z   publish_dir: ./dist
+2025-11-30T04:48:46.5286259Z   keep_files: false
+2025-11-30T04:48:46.5286614Z   publish_branch: gh-pages
+2025-11-30T04:48:46.5286835Z   allow_empty_commit: false
+2025-11-30T04:48:46.5287054Z   force_orphan: false
+2025-11-30T04:48:46.5287251Z   enable_jekyll: false
+2025-11-30T04:48:46.5287446Z   disable_nojekyll: false
+2025-11-30T04:48:46.5287651Z   exclude_assets: .github
+2025-11-30T04:48:46.5287836Z env:
+2025-11-30T04:48:46.5287991Z   CI: true
+2025-11-30T04:48:46.5288171Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5288403Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5288837Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5289036Z ##[endgroup]
+2025-11-30T04:48:46.5900051Z [INFO] Usage https://github.com/peaceiris/actions-gh-pages#readme
+2025-11-30T04:48:46.5904754Z ##[group]Dump inputs
+2025-11-30T04:48:46.5905203Z [INFO] GithubToken: true
+2025-11-30T04:48:46.5905601Z [INFO] PublishBranch: gh-pages
+2025-11-30T04:48:46.5906021Z [INFO] PublishDir: ./dist
+2025-11-30T04:48:46.5906404Z [INFO] DestinationDir: 
+2025-11-30T04:48:46.5906800Z [INFO] ExternalRepository: 
+2025-11-30T04:48:46.5907207Z [INFO] AllowEmptyCommit: false
+2025-11-30T04:48:46.5907602Z [INFO] KeepFiles: false
+2025-11-30T04:48:46.5907960Z [INFO] ForceOrphan: false
+2025-11-30T04:48:46.5908323Z [INFO] UserName: 
+2025-11-30T04:48:46.5908800Z [INFO] UserEmail: 
+2025-11-30T04:48:46.5909141Z [INFO] CommitMessage: 
+2025-11-30T04:48:46.5909509Z [INFO] FullCommitMessage: 
+2025-11-30T04:48:46.5909880Z [INFO] TagName: 
+2025-11-30T04:48:46.5910201Z [INFO] TagMessage: 
+2025-11-30T04:48:46.5910580Z [INFO] EnableJekyll (DisableNoJekyll): false
+2025-11-30T04:48:46.5911036Z [INFO] CNAME: 
+2025-11-30T04:48:46.5911362Z [INFO] ExcludeAssets .github
+2025-11-30T04:48:46.5911619Z 
+2025-11-30T04:48:46.5912002Z ##[endgroup]
+2025-11-30T04:48:46.5912543Z ##[group]Setup auth token
+2025-11-30T04:48:46.5912918Z [INFO] setup GITHUB_TOKEN
+2025-11-30T04:48:46.5914130Z ##[endgroup]
+2025-11-30T04:48:46.5914669Z ##[group]Prepare publishing assets
+2025-11-30T04:48:46.5915326Z [INFO] ForceOrphan: false
+2025-11-30T04:48:46.5963510Z [command]/usr/bin/git clone --depth=1 --single-branch --branch gh-pages ***github.com/liu474751-tech/tasty-kitchen.git /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.5999224Z Cloning into '/home/runner/actions_github_pages_1764478126591'...
+2025-11-30T04:48:46.8675476Z fatal: Remote branch gh-pages not found in upstream origin
+2025-11-30T04:48:46.8724326Z [INFO] first deployment, create new branch gh-pages
+2025-11-30T04:48:46.8724952Z [INFO] The process '/usr/bin/git' failed with exit code 128
+2025-11-30T04:48:46.8730049Z [INFO] chdir /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.8741764Z [command]/usr/bin/git init
+2025-11-30T04:48:46.8779136Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-30T04:48:46.8779994Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-30T04:48:46.8780781Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-30T04:48:46.8781343Z hint:
+2025-11-30T04:48:46.8781716Z hint: 	git config --global init.defaultBranch <name>
+2025-11-30T04:48:46.8782180Z hint:
+2025-11-30T04:48:46.8782643Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-30T04:48:46.8783156Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-30T04:48:46.8783492Z hint:
+2025-11-30T04:48:46.8783656Z hint: 	git branch -m <name>
+2025-11-30T04:48:46.8783857Z hint:
+2025-11-30T04:48:46.8784140Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-30T04:48:46.8784657Z Initialized empty Git repository in /home/runner/actions_github_pages_1764478126591/.git/
+2025-11-30T04:48:46.8799474Z [command]/usr/bin/git checkout --orphan gh-pages
+2025-11-30T04:48:46.8822021Z Switched to a new branch 'gh-pages'
+2025-11-30T04:48:46.8827815Z [INFO] prepare publishing assets
+2025-11-30T04:48:46.8828795Z [INFO] copy /home/runner/work/tasty-kitchen/tasty-kitchen/dist to /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.8953819Z cp: no such file or directory: /home/runner/work/tasty-kitchen/tasty-kitchen/dist/.*
+2025-11-30T04:48:46.8956732Z [INFO] delete excluded assets
+2025-11-30T04:48:46.8985070Z rm: no paths given
+2025-11-30T04:48:46.8987340Z [INFO] Created /home/runner/actions_github_pages_1764478126591/.nojekyll
+2025-11-30T04:48:46.8988718Z ##[endgroup]
+2025-11-30T04:48:46.8989278Z ##[group]Setup Git config
+2025-11-30T04:48:46.9000531Z [command]/usr/bin/git remote rm origin
+2025-11-30T04:48:46.9022585Z error: No such remote: 'origin'
+2025-11-30T04:48:46.9028199Z [INFO] The process '/usr/bin/git' failed with exit code 2
+2025-11-30T04:48:46.9042119Z [command]/usr/bin/git remote add origin ***github.com/liu474751-tech/tasty-kitchen.git
+2025-11-30T04:48:46.9082043Z [command]/usr/bin/git add --all
+2025-11-30T04:48:46.9163125Z [command]/usr/bin/git config user.name liu474751-tech
+2025-11-30T04:48:46.9204158Z [command]/usr/bin/git config user.email liu474751-tech@users.noreply.github.com
+2025-11-30T04:48:46.9232759Z ##[endgroup]
+2025-11-30T04:48:46.9233275Z ##[group]Create a commit
+2025-11-30T04:48:46.9246665Z [command]/usr/bin/git commit -m deploy: 620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:46.9309463Z [gh-pages (root-commit) 1260e8b] deploy: 620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:46.9309959Z  5 files changed, 57 insertions(+)
+2025-11-30T04:48:46.9310214Z  create mode 100644 .nojekyll
+2025-11-30T04:48:46.9310437Z  create mode 100644 CNAME
+2025-11-30T04:48:46.9310705Z  create mode 100644 assets/index-DyyHOePx.js
+2025-11-30T04:48:46.9311236Z  create mode 100644 assets/index-JqBOeaxt.css
+2025-11-30T04:48:46.9311730Z  create mode 100644 index.html
+2025-11-30T04:48:46.9314934Z ##[endgroup]
+2025-11-30T04:48:46.9315583Z ##[group]Push the commit or tag
+2025-11-30T04:48:46.9329181Z [command]/usr/bin/git push origin gh-pages
+2025-11-30T04:48:47.2362523Z remote: Permission to liu474751-tech/tasty-kitchen.git denied to github-actions[bot].
+2025-11-30T04:48:47.2364444Z fatal: unable to access 'https://github.com/liu474751-tech/tasty-kitchen.git/': The requested URL returned error: 403
+2025-11-30T04:48:47.2404322Z ##[error]Action failed with "The process '/usr/bin/git' failed with exit code 128"
+2025-11-30T04:48:47.2499059Z Post job cleanup.
+2025-11-30T04:48:47.3417349Z [command]/usr/bin/git version
+2025-11-30T04:48:47.3453269Z git version 2.51.2
+2025-11-30T04:48:47.3497520Z Temporarily overriding HOME='/home/runner/work/_temp/daf5610c-4fca-48b1-8003-f634cacb65a5' before making global git config changes
+2025-11-30T04:48:47.3499005Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-30T04:48:47.3504198Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:47.3541129Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-30T04:48:47.3574049Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-30T04:48:47.3797388Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-30T04:48:47.3817715Z http.https://github.com/.extraheader
+2025-11-30T04:48:47.3831242Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-11-30T04:48:47.3862134Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-30T04:48:47.4078317Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-30T04:48:47.4110198Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-30T04:48:47.4424892Z Cleaning up orphan processes

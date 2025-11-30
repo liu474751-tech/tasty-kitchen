@@ -1,0 +1,16 @@
+﻿2025-11-30T04:48:38.0858158Z ##[group]Run if command -v node >/dev/null 2>&1; then
+2025-11-30T04:48:38.0859760Z [36;1mif command -v node >/dev/null 2>&1; then[0m
+2025-11-30T04:48:38.0860935Z [36;1m  ver=$(node -v | sed 's/^v//');[0m
+2025-11-30T04:48:38.0862044Z [36;1m  echo "System node version: $ver";[0m
+2025-11-30T04:48:38.0863211Z [36;1m  echo "has_node=true" >> $GITHUB_OUTPUT;[0m
+2025-11-30T04:48:38.0864278Z [36;1melse[0m
+2025-11-30T04:48:38.0865139Z [36;1m  echo "has_node=false" >> $GITHUB_OUTPUT;[0m
+2025-11-30T04:48:38.0866221Z [36;1mfi[0m
+2025-11-30T04:48:38.0902647Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.0903539Z env:
+2025-11-30T04:48:38.0904177Z   CI: true
+2025-11-30T04:48:38.0904894Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.0905858Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.0906711Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.0907521Z ##[endgroup]
+2025-11-30T04:48:38.1013036Z System node version: 20.19.5

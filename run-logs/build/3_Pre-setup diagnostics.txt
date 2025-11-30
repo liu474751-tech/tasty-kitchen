@@ -1,0 +1,219 @@
+﻿2025-11-30T04:48:36.1892608Z ##[group]Run echo "=== pre-setup diagnostics ==="
+2025-11-30T04:48:36.1893357Z [36;1mecho "=== pre-setup diagnostics ==="[0m
+2025-11-30T04:48:36.1894120Z [36;1mdate || true[0m
+2025-11-30T04:48:36.1894588Z [36;1mecho "--- environment ---"; env || true[0m
+2025-11-30T04:48:36.1895193Z [36;1mecho "--- uname ---"; uname -a || true[0m
+2025-11-30T04:48:36.1895961Z [36;1mecho "--- preinstalled node/npm (if any) ---"; node -v || true; npm -v || true[0m
+2025-11-30T04:48:36.1896938Z [36;1mecho "--- connectivity to Node hosts ---"; curl -I https://nodejs.org/ || true[0m
+2025-11-30T04:48:36.1898069Z [36;1mecho "--- connectivity to raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true[0m
+2025-11-30T04:48:36.1899403Z [36;1mecho "--- DNS resolve ---"; nslookup nodejs.org || true[0m
+2025-11-30T04:48:36.1900056Z [36;1mecho "--- write to artifact file ---"[0m
+2025-11-30T04:48:36.1900598Z [36;1mmkdir -p .gha-logs || true[0m
+2025-11-30T04:48:36.1901074Z [36;1m{[0m
+2025-11-30T04:48:36.1901477Z [36;1m  date || true[0m
+2025-11-30T04:48:36.1901945Z [36;1m  echo "--- environment ---"; env || true[0m
+2025-11-30T04:48:36.1902517Z [36;1m  echo "--- uname ---"; uname -a || true[0m
+2025-11-30T04:48:36.1903151Z [36;1m  echo "--- node/npm ---"; node -v || true; npm -v || true[0m
+2025-11-30T04:48:36.1903912Z [36;1m  echo "--- curl nodejs.org ---"; curl -I https://nodejs.org/ || true[0m
+2025-11-30T04:48:36.1904896Z [36;1m  echo "--- curl raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true[0m
+2025-11-30T04:48:36.1905867Z [36;1m  echo "--- nslookup nodejs.org ---"; nslookup nodejs.org || true[0m
+2025-11-30T04:48:36.1906705Z [36;1m} > .gha-logs/pre_setup_diag.txt || true[0m
+2025-11-30T04:48:36.2007971Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:36.2008484Z env:
+2025-11-30T04:48:36.2009146Z   CI: true
+2025-11-30T04:48:36.2009532Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:36.2010026Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:36.2010479Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:36.2010908Z ##[endgroup]
+2025-11-30T04:48:36.2085125Z === pre-setup diagnostics ===
+2025-11-30T04:48:36.2095148Z Sun Nov 30 04:48:36 UTC 2025
+2025-11-30T04:48:36.2096873Z --- environment ---
+2025-11-30T04:48:36.2106173Z SHELL=/bin/bash
+2025-11-30T04:48:36.2106994Z SELENIUM_JAR_PATH=/usr/share/java/selenium-server.jar
+2025-11-30T04:48:36.2107930Z CONDA=/usr/share/miniconda
+2025-11-30T04:48:36.2109014Z GITHUB_WORKSPACE=/home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:36.2110126Z JAVA_HOME_11_X64=/usr/lib/jvm/temurin-11-jdk-amd64
+2025-11-30T04:48:36.2111081Z JAVA_HOME_25_X64=/usr/lib/jvm/temurin-25-jdk-amd64
+2025-11-30T04:48:36.2112478Z GITHUB_PATH=/home/runner/work/_temp/_runner_file_commands/add_path_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2113366Z GITHUB_ACTION=__run
+2025-11-30T04:48:36.2113803Z JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+2025-11-30T04:48:36.2114314Z GITHUB_RUN_NUMBER=41
+2025-11-30T04:48:36.2114749Z RUNNER_NAME=GitHub Actions 1000000042
+2025-11-30T04:48:36.2115262Z GRADLE_HOME=/usr/share/gradle-9.2.0
+2025-11-30T04:48:36.2115763Z GITHUB_REPOSITORY_OWNER_ID=245141154
+2025-11-30T04:48:36.2116420Z ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE=/opt/actionarchivecache
+2025-11-30T04:48:36.2117449Z XDG_CONFIG_HOME=/home/runner/.config
+2025-11-30T04:48:36.2118072Z MEMORY_PRESSURE_WRITE=c29tZSAyMDAwMDAgMjAwMDAwMAA=
+2025-11-30T04:48:36.2119164Z DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+2025-11-30T04:48:36.2119802Z ANT_HOME=/usr/share/ant
+2025-11-30T04:48:36.2120434Z JAVA_HOME_8_X64=/usr/lib/jvm/temurin-8-jdk-amd64
+2025-11-30T04:48:36.2121003Z GITHUB_TRIGGERING_ACTOR=liu474751-tech
+2025-11-30T04:48:36.2121498Z GITHUB_REF_TYPE=branch
+2025-11-30T04:48:36.2121955Z HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=3650
+2025-11-30T04:48:36.2122547Z ANDROID_NDK=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2123138Z BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+2025-11-30T04:48:36.2124014Z ***
+2025-11-30T04:48:36.2124398Z PIPX_BIN_DIR=/opt/pipx_bin
+2025-11-30T04:48:36.2125094Z LOGNAME=runner
+2025-11-30T04:48:36.2125487Z GITHUB_REPOSITORY_ID=1105994050
+2025-11-30T04:48:36.2126196Z GITHUB_ACTIONS=true
+2025-11-30T04:48:36.2126770Z ANDROID_NDK_LATEST_HOME=/usr/local/lib/android/sdk/ndk/29.0.14206865
+2025-11-30T04:48:36.2127416Z SYSTEMD_EXEC_PID=1891
+2025-11-30T04:48:36.2127888Z GITHUB_SHA=620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:36.2129004Z GITHUB_WORKFLOW_REF=liu474751-tech/tasty-kitchen/.github/workflows/deploy.yml@refs/heads/main
+2025-11-30T04:48:36.2129964Z POWERSHELL_DISTRIBUTION_CHANNEL=GitHub-Actions-ubuntu24
+2025-11-30T04:48:36.2130580Z RUNNER_ENVIRONMENT=github-hosted
+2025-11-30T04:48:36.2131058Z DOTNET_MULTILEVEL_LOOKUP=0
+2025-11-30T04:48:36.2131632Z GITHUB_REF=refs/heads/main
+2025-11-30T04:48:36.2132056Z RUNNER_OS=Linux
+2025-11-30T04:48:36.2132452Z GITHUB_REF_PROTECTED=false
+2025-11-30T04:48:36.2132894Z HOME=/home/runner
+2025-11-30T04:48:36.2133309Z GITHUB_API_URL=https://api.github.com
+2025-11-30T04:48:36.2133810Z LANG=C.UTF-8
+2025-11-30T04:48:36.2134227Z NPM_CONFIG_AUDIT=false
+2025-11-30T04:48:36.2134698Z GOROOT_1_25_X64=/opt/hostedtoolcache/go/1.25.4/x64
+2025-11-30T04:48:36.2135387Z RUNNER_TRACKING_ID=github_0fc2a312-cbcc-41b1-866e-ffe5699900e7
+2025-11-30T04:48:36.2136119Z RUNNER_ARCH=X64
+2025-11-30T04:48:36.2136832Z MEMORY_PRESSURE_WATCH=/sys/fs/cgroup/system.slice/hosted-compute-agent.service/memory.pressure
+2025-11-30T04:48:36.2137720Z RUNNER_TEMP=/home/runner/work/_temp
+2025-11-30T04:48:36.2138694Z GITHUB_STATE=/home/runner/work/_temp/_runner_file_commands/save_state_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2139745Z EDGEWEBDRIVER=/usr/local/share/edge_driver
+2025-11-30T04:48:36.2140322Z JAVA_HOME_21_X64=/usr/lib/jvm/temurin-21-jdk-amd64
+2025-11-30T04:48:36.2141215Z GITHUB_ENV=/home/runner/work/_temp/_runner_file_commands/set_env_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2142226Z GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json
+2025-11-30T04:48:36.2142926Z INVOCATION_ID=dff058b0f4e34b7090dc0c7457c297f7
+2025-11-30T04:48:36.2143467Z GITHUB_EVENT_NAME=push
+2025-11-30T04:48:36.2143877Z GITHUB_RUN_ID=19793995783
+2025-11-30T04:48:36.2144378Z JAVA_HOME_17_X64=/usr/lib/jvm/temurin-17-jdk-amd64
+2025-11-30T04:48:36.2145137Z ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2146182Z GITHUB_STEP_SUMMARY=/home/runner/work/_temp/_runner_file_commands/step_summary_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2147112Z HOMEBREW_NO_AUTO_UPDATE=1
+2025-11-30T04:48:36.2147649Z GITHUB_ACTOR=liu474751-tech
+2025-11-30T04:48:36.2148102Z NVM_DIR=/home/runner/.nvm
+2025-11-30T04:48:36.2148519Z SGX_AESM_ADDR=1
+2025-11-30T04:48:36.2149026Z GITHUB_RUN_ATTEMPT=1
+2025-11-30T04:48:36.2149456Z ANDROID_HOME=/usr/local/lib/android/sdk
+2025-11-30T04:48:36.2150070Z GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+2025-11-30T04:48:36.2150630Z ACCEPT_EULA=Y
+2025-11-30T04:48:36.2151101Z USER=runner
+2025-11-30T04:48:36.2151524Z GITHUB_SERVER_URL=https://github.com
+2025-11-30T04:48:36.2152019Z PIPX_HOME=/opt/pipx
+2025-11-30T04:48:36.2152497Z GECKOWEBDRIVER=/usr/local/share/gecko_driver
+2025-11-30T04:48:36.2153155Z CHROMEWEBDRIVER=/usr/local/share/chromedriver-linux64
+2025-11-30T04:48:36.2153816Z SHLVL=1
+2025-11-30T04:48:36.2154204Z ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+2025-11-30T04:48:36.2154772Z VCPKG_INSTALLATION_ROOT=/usr/local/share/vcpkg
+2025-11-30T04:48:36.2155306Z GITHUB_ACTOR_ID=245141154
+2025-11-30T04:48:36.2155758Z RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+2025-11-30T04:48:36.2156245Z ImageVersion=20251112.124.1
+2025-11-30T04:48:36.2156696Z DOTNET_NOLOGO=1
+2025-11-30T04:48:36.2157242Z GOROOT_1_23_X64=/opt/hostedtoolcache/go/1.23.12/x64
+2025-11-30T04:48:36.2157915Z GITHUB_WORKFLOW_SHA=620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:36.2158728Z GOROOT_1_24_X64=/opt/hostedtoolcache/go/1.24.10/x64
+2025-11-30T04:48:36.2159452Z GITHUB_REF_NAME=main
+2025-11-30T04:48:36.2159970Z NPM_CONFIG_FUND=false
+2025-11-30T04:48:36.2160383Z GITHUB_JOB=build
+2025-11-30T04:48:36.2160801Z XDG_RUNTIME_DIR=/run/user/1001
+2025-11-30T04:48:36.2161495Z AZURE_EXTENSION_DIR=/opt/az/azcliextensions
+2025-11-30T04:48:36.2162324Z GITHUB_REPOSITORY=liu474751-tech/tasty-kitchen
+2025-11-30T04:48:36.2162990Z ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/27.3.13750724
+2025-11-30T04:48:36.2163679Z GOROOT_1_22_X64=/opt/hostedtoolcache/go/1.22.12/x64
+2025-11-30T04:48:36.2164242Z CHROME_BIN=/usr/bin/google-chrome
+2025-11-30T04:48:36.2164721Z GITHUB_RETENTION_DAYS=90
+2025-11-30T04:48:36.2165142Z JOURNAL_STREAM=9:10769
+2025-11-30T04:48:36.2165713Z RUNNER_WORKSPACE=/home/runner/work/tasty-kitchen
+2025-11-30T04:48:36.2166276Z GITHUB_ACTION_REPOSITORY=
+2025-11-30T04:48:36.2168093Z PATH=/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+2025-11-30T04:48:36.2170212Z GITHUB_BASE_REF=
+2025-11-30T04:48:36.2170628Z GHCUP_INSTALL_BASE_PREFIX=/usr/local
+2025-11-30T04:48:36.2171116Z CI=true
+2025-11-30T04:48:36.2171517Z SWIFT_PATH=/usr/share/swift/usr/bin
+2025-11-30T04:48:36.2171996Z ImageOS=ubuntu24
+2025-11-30T04:48:36.2172415Z GITHUB_REPOSITORY_OWNER=liu474751-tech
+2025-11-30T04:48:36.2173034Z GITHUB_HEAD_REF=
+2025-11-30T04:48:36.2173417Z GITHUB_ACTION_REF=
+2025-11-30T04:48:36.2173812Z ENABLE_RUNNER_TRACING=true
+2025-11-30T04:48:36.2174299Z GITHUB_WORKFLOW=Build and deploy to GitHub Pages
+2025-11-30T04:48:36.2174855Z DEBIAN_FRONTEND=noninteractive
+2025-11-30T04:48:36.2175801Z GITHUB_OUTPUT=/home/runner/work/_temp/_runner_file_commands/set_output_e9bc2696-52c5-4ae4-8cb5-bcf5a6c520f5
+2025-11-30T04:48:36.2176716Z AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+2025-11-30T04:48:36.2177215Z _=/usr/bin/env
+2025-11-30T04:48:36.2177679Z --- uname ---
+2025-11-30T04:48:36.2178451Z Linux runnervmg1sw1 6.11.0-1018-azure #18~24.04.1-Ubuntu SMP Sat Jun 28 04:46:03 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+2025-11-30T04:48:36.2179460Z --- preinstalled node/npm (if any) ---
+2025-11-30T04:48:36.2539561Z v20.19.5
+2025-11-30T04:48:36.4380611Z 10.8.2
+2025-11-30T04:48:36.4425600Z --- connectivity to Node hosts ---
+2025-11-30T04:48:36.4494040Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.4495190Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.4495692Z 
+2025-11-30T04:48:36.4783378Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5290315Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5291528Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5292196Z HTTP/2 307 
+2025-11-30T04:48:36.5292646Z date: Sun, 30 Nov 2025 04:48:36 GMT
+2025-11-30T04:48:36.5293225Z content-type: text/plain
+2025-11-30T04:48:36.5293741Z server: cloudflare
+2025-11-30T04:48:36.5294185Z location: /en
+2025-11-30T04:48:36.5294646Z cf-ray: 9a67b6a3fdf217de-SJC
+2025-11-30T04:48:36.5295208Z cf-cache-status: DYNAMIC
+2025-11-30T04:48:36.5295792Z cache-control: public, max-age=0, must-revalidate
+2025-11-30T04:48:36.5296532Z set-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax
+2025-11-30T04:48:36.5297424Z strict-transport-security: max-age=31536000; includeSubDomains; preload
+2025-11-30T04:48:36.5298293Z x-content-type-options: nosniff
+2025-11-30T04:48:36.5303382Z x-vercel-id: sfo1::fx8cb-1764478116501-104801f1b00d
+2025-11-30T04:48:36.5303887Z 
+2025-11-30T04:48:36.5314308Z --- connectivity to raw.githubusercontent.com ---
+2025-11-30T04:48:36.5366539Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.5367736Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.5368407Z 
+2025-11-30T04:48:36.5663800Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5664964Z HTTP/2 301 
+2025-11-30T04:48:36.5665802Z content-security-policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+2025-11-30T04:48:36.5667173Z location: https://github.com/
+2025-11-30T04:48:36.5668070Z strict-transport-security: max-age=31536000
+2025-11-30T04:48:36.5669112Z x-content-type-options: nosniff
+2025-11-30T04:48:36.5669652Z x-frame-options: deny
+2025-11-30T04:48:36.5670118Z x-xss-protection: 1; mode=block
+2025-11-30T04:48:36.5670731Z x-github-request-id: A608:1C4C44:13D3CFF:190DF64:692BC4CE
+2025-11-30T04:48:36.5671394Z accept-ranges: bytes
+2025-11-30T04:48:36.5671834Z date: Sun, 30 Nov 2025 04:48:36 GMT
+2025-11-30T04:48:36.5672344Z via: 1.1 varnish
+2025-11-30T04:48:36.5672789Z x-served-by: cache-sjc1000107-SJC
+2025-11-30T04:48:36.5673348Z x-cache: HIT
+2025-11-30T04:48:36.5673740Z x-cache-hits: 0
+2025-11-30T04:48:36.5674162Z x-timer: S1764478117.563963,VS0,VE1
+2025-11-30T04:48:36.5674704Z vary: Authorization,Accept-Encoding
+2025-11-30T04:48:36.5675263Z access-control-allow-origin: *
+2025-11-30T04:48:36.5675838Z cross-origin-resource-policy: cross-origin
+2025-11-30T04:48:36.5676566Z x-fastly-request-id: afb77a2dc1eaf508ae2f6437ae7dc4ccddf4e848
+2025-11-30T04:48:36.5677276Z expires: Sun, 30 Nov 2025 04:53:36 GMT
+2025-11-30T04:48:36.5677796Z source-age: 2005
+2025-11-30T04:48:36.5678209Z content-length: 0
+2025-11-30T04:48:36.5678454Z 
+2025-11-30T04:48:36.5682051Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.5682968Z --- DNS resolve ---
+2025-11-30T04:48:36.7675290Z Server:		127.0.0.53
+2025-11-30T04:48:36.7676767Z Address:	127.0.0.53#53
+2025-11-30T04:48:36.7677492Z 
+2025-11-30T04:48:36.7677873Z Non-authoritative answer:
+2025-11-30T04:48:36.7678989Z Name:	nodejs.org
+2025-11-30T04:48:36.7679733Z Address: 172.66.128.70
+2025-11-30T04:48:36.7680489Z Name:	nodejs.org
+2025-11-30T04:48:36.7681187Z Address: 104.20.1.252
+2025-11-30T04:48:36.7681918Z Name:	nodejs.org
+2025-11-30T04:48:36.7682885Z Address: 2606:4700:10::6814:1fc
+2025-11-30T04:48:36.7684031Z Name:	nodejs.org
+2025-11-30T04:48:36.7684954Z Address: 2606:4700:10::ac42:8046
+2025-11-30T04:48:36.7685709Z 
+2025-11-30T04:48:36.7686149Z --- write to artifact file ---
+2025-11-30T04:48:36.8674346Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.8675669Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.8676273Z 
+2025-11-30T04:48:36.9543383Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.9545586Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:36.9622585Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-11-30T04:48:36.9624437Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-11-30T04:48:36.9625531Z 
+2025-11-30T04:48:37.0012301Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-11-30T04:48:37.0014036Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0

@@ -1,0 +1,24 @@
+﻿2025-11-30T04:48:44.2533560Z ##[group]Run set -e
+2025-11-30T04:48:44.2533863Z [36;1mset -e[0m
+2025-11-30T04:48:44.2534099Z [36;1mnpm run build 2>&1 | tee build.log[0m
+2025-11-30T04:48:44.2566214Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:44.2566455Z env:
+2025-11-30T04:48:44.2566615Z   CI: true
+2025-11-30T04:48:44.2566800Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:44.2567058Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:44.2567264Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:44.2567479Z   VITE_BASE_PATH: /tasty-kitchen/
+2025-11-30T04:48:44.2567905Z ##[endgroup]
+2025-11-30T04:48:44.3643034Z 
+2025-11-30T04:48:44.3643505Z > tasty-kitchen@0.1.0 build
+2025-11-30T04:48:44.3643911Z > vite build
+2025-11-30T04:48:44.3644096Z 
+2025-11-30T04:48:44.5561272Z [36mvite v5.4.21 [32mbuilding for production...[36m[39m
+2025-11-30T04:48:44.6051707Z transforming...
+2025-11-30T04:48:45.3110388Z [32m✓[39m 31 modules transformed.
+2025-11-30T04:48:45.4191279Z rendering chunks...
+2025-11-30T04:48:45.4248793Z computing gzip size...
+2025-11-30T04:48:45.4316855Z [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.56 kB[22m[1m[22m[2m │ gzip:  0.36 kB[22m
+2025-11-30T04:48:45.4318065Z [2mdist/[22m[2massets/[22m[35mindex-JqBOeaxt.css  [39m[1m[2m  0.48 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+2025-11-30T04:48:45.4319316Z [2mdist/[22m[2massets/[22m[36mindex-DyyHOePx.js   [39m[1m[2m184.60 kB[22m[1m[22m[2m │ gzip: 59.03 kB[22m
+2025-11-30T04:48:45.4320833Z [32m✓ built in 851ms[39m

@@ -1,0 +1,15 @@
+﻿2025-11-30T04:48:43.9108525Z ##[group]Run npm list --depth=0 || true
+2025-11-30T04:48:43.9109145Z [36;1mnpm list --depth=0 || true[0m
+2025-11-30T04:48:43.9141375Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:43.9141606Z env:
+2025-11-30T04:48:43.9141761Z   CI: true
+2025-11-30T04:48:43.9141948Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:43.9142202Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:43.9142401Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:43.9142598Z ##[endgroup]
+2025-11-30T04:48:44.2432583Z tasty-kitchen@0.1.0 /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:44.2433631Z ├── @vitejs/plugin-react@5.1.1
+2025-11-30T04:48:44.2434118Z ├── react-dom@18.3.1
+2025-11-30T04:48:44.2434555Z ├── react@18.3.1
+2025-11-30T04:48:44.2434939Z └── vite@5.4.21
+2025-11-30T04:48:44.2435131Z 

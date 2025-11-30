@@ -1,0 +1,176 @@
+﻿2025-11-30T04:00:03.8072810Z Current runner version: '2.329.0'
+2025-11-30T04:00:03.8099191Z ##[group]Runner Image Provisioner
+2025-11-30T04:00:03.8100117Z Hosted Compute Agent
+2025-11-30T04:00:03.8100650Z Version: 20251016.436
+2025-11-30T04:00:03.8101259Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-30T04:00:03.8101959Z Build Date: 2025-10-15T20:44:12Z
+2025-11-30T04:00:03.8102568Z ##[endgroup]
+2025-11-30T04:00:03.8103056Z ##[group]Operating System
+2025-11-30T04:00:03.8103695Z Ubuntu
+2025-11-30T04:00:03.8104188Z 24.04.3
+2025-11-30T04:00:03.8105188Z LTS
+2025-11-30T04:00:03.8105826Z ##[endgroup]
+2025-11-30T04:00:03.8106394Z ##[group]Runner Image
+2025-11-30T04:00:03.8106985Z Image: ubuntu-24.04
+2025-11-30T04:00:03.8107440Z Version: 20251112.124.1
+2025-11-30T04:00:03.8108593Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+2025-11-30T04:00:03.8110134Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+2025-11-30T04:00:03.8111123Z ##[endgroup]
+2025-11-30T04:00:03.8112211Z ##[group]GITHUB_TOKEN Permissions
+2025-11-30T04:00:03.8114547Z Contents: read
+2025-11-30T04:00:03.8115413Z Metadata: read
+2025-11-30T04:00:03.8116164Z Packages: read
+2025-11-30T04:00:03.8117065Z ##[endgroup]
+2025-11-30T04:00:03.8119910Z Secret source: Actions
+2025-11-30T04:00:03.8120905Z Prepare workflow directory
+2025-11-30T04:00:03.8733485Z Prepare all required actions
+2025-11-30T04:00:03.8793247Z Getting action download info
+2025-11-30T04:00:04.3542610Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-11-30T04:00:04.9112099Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-11-30T04:00:05.0004731Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-11-30T04:00:05.1190342Z Download action repository 'peaceiris/actions-gh-pages@v3' (SHA:373f7f263a76c20808c831209c920827a82a2847)
+2025-11-30T04:00:05.7838070Z Complete job name: build
+2025-11-30T04:00:05.8690873Z ##[group]Run actions/checkout@v4
+2025-11-30T04:00:05.8692153Z with:
+2025-11-30T04:00:05.8692923Z   persist-credentials: true
+2025-11-30T04:00:05.8693910Z   repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:00:05.8695404Z   token: ***
+2025-11-30T04:00:05.8696137Z   ssh-strict: true
+2025-11-30T04:00:05.8696862Z   ssh-user: git
+2025-11-30T04:00:05.8697573Z   clean: true
+2025-11-30T04:00:05.8698320Z   sparse-checkout-cone-mode: true
+2025-11-30T04:00:05.8699257Z   fetch-depth: 1
+2025-11-30T04:00:05.8699985Z   fetch-tags: false
+2025-11-30T04:00:05.8700737Z   show-progress: true
+2025-11-30T04:00:05.8701499Z   lfs: false
+2025-11-30T04:00:05.8702191Z   submodules: false
+2025-11-30T04:00:05.8702950Z   set-safe-directory: true
+2025-11-30T04:00:05.8704052Z env:
+2025-11-30T04:00:05.8704887Z   CI: true
+2025-11-30T04:00:05.8705592Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:00:05.8706513Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:00:05.8707332Z   NPM_CONFIG_FUND: false
+2025-11-30T04:00:05.8708180Z ##[endgroup]
+2025-11-30T04:00:05.9836032Z Syncing repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:00:05.9838901Z ##[group]Getting Git version info
+2025-11-30T04:00:05.9840318Z Working directory is '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:00:05.9842353Z [command]/usr/bin/git version
+2025-11-30T04:00:05.9892001Z git version 2.51.2
+2025-11-30T04:00:05.9919888Z ##[endgroup]
+2025-11-30T04:00:05.9936055Z Temporarily overriding HOME='/home/runner/work/_temp/8c8e162d-656e-4a94-b508-36d5977072a4' before making global git config changes
+2025-11-30T04:00:05.9940876Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-30T04:00:05.9950454Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:00:05.9987923Z Deleting the contents of '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:00:05.9991825Z ##[group]Initializing the repository
+2025-11-30T04:00:05.9997183Z [command]/usr/bin/git init /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:00:06.0104624Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-30T04:00:06.0106936Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-30T04:00:06.0109632Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-30T04:00:06.0112014Z hint:
+2025-11-30T04:00:06.0113585Z hint: 	git config --global init.defaultBranch <name>
+2025-11-30T04:00:06.0115786Z hint:
+2025-11-30T04:00:06.0117613Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-30T04:00:06.0120820Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-30T04:00:06.0123317Z hint:
+2025-11-30T04:00:06.0124730Z hint: 	git branch -m <name>
+2025-11-30T04:00:06.0126130Z hint:
+2025-11-30T04:00:06.0128058Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-30T04:00:06.0130264Z Initialized empty Git repository in /home/runner/work/tasty-kitchen/tasty-kitchen/.git/
+2025-11-30T04:00:06.0134660Z [command]/usr/bin/git remote add origin https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:00:06.0157584Z ##[endgroup]
+2025-11-30T04:00:06.0160068Z ##[group]Disabling automatic garbage collection
+2025-11-30T04:00:06.0162287Z [command]/usr/bin/git config --local gc.auto 0
+2025-11-30T04:00:06.0191997Z ##[endgroup]
+2025-11-30T04:00:06.0194502Z ##[group]Setting up auth
+2025-11-30T04:00:06.0199856Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-30T04:00:06.0233210Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-30T04:00:06.0569138Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-30T04:00:06.0600683Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-30T04:00:06.0821669Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-30T04:00:06.0852843Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-30T04:00:06.1091902Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-11-30T04:00:06.1131816Z ##[endgroup]
+2025-11-30T04:00:06.1133179Z ##[group]Fetching the repository
+2025-11-30T04:00:06.1143430Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +da4552f8486caec6c794b349dec1bdbd128542e3:refs/remotes/origin/main
+2025-11-30T04:00:06.4674984Z From https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:00:06.4676932Z  * [new ref]         da4552f8486caec6c794b349dec1bdbd128542e3 -> origin/main
+2025-11-30T04:00:06.4708454Z ##[endgroup]
+2025-11-30T04:00:06.4709251Z ##[group]Determining the checkout info
+2025-11-30T04:00:06.4712063Z ##[endgroup]
+2025-11-30T04:00:06.4718003Z [command]/usr/bin/git sparse-checkout disable
+2025-11-30T04:00:06.4759435Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-11-30T04:00:06.4786695Z ##[group]Checking out the ref
+2025-11-30T04:00:06.4791009Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-11-30T04:00:06.4842258Z Switched to a new branch 'main'
+2025-11-30T04:00:06.4845229Z branch 'main' set up to track 'origin/main'.
+2025-11-30T04:00:06.4851497Z ##[endgroup]
+2025-11-30T04:00:06.4887107Z [command]/usr/bin/git log -1 --format=%H
+2025-11-30T04:00:06.4910041Z da4552f8486caec6c794b349dec1bdbd128542e3
+2025-11-30T04:00:06.5128627Z ##[group]Run actions/setup-node@v4
+2025-11-30T04:00:06.5128970Z with:
+2025-11-30T04:00:06.5129190Z   node-version: 18
+2025-11-30T04:00:06.5129682Z   cache: npm
+2025-11-30T04:00:06.5129906Z   always-auth: false
+2025-11-30T04:00:06.5130159Z   check-latest: false
+2025-11-30T04:00:06.5130529Z   token: ***
+2025-11-30T04:00:06.5130751Z env:
+2025-11-30T04:00:06.5130948Z   CI: true
+2025-11-30T04:00:06.5131178Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:00:06.5131462Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:00:06.5131724Z   NPM_CONFIG_FUND: false
+2025-11-30T04:00:06.5131973Z ##[endgroup]
+2025-11-30T04:00:06.6998702Z Attempting to download 18...
+2025-11-30T04:00:07.4919887Z Acquiring 18.20.8 - x64 from https://github.com/actions/node-versions/releases/download/18.20.8-14110393767/node-18.20.8-linux-x64.tar.gz
+2025-11-30T04:00:07.9641180Z Extracting ...
+2025-11-30T04:00:07.9757198Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/0f822c27-d83c-45d6-87f8-a34bc1934ca5 -f /home/runner/work/_temp/98202f66-661d-4168-a303-61129536dd12
+2025-11-30T04:00:08.9686045Z Adding to the cache ...
+2025-11-30T04:00:10.5619452Z ##[group]Environment details
+2025-11-30T04:00:10.8123157Z node: v18.20.8
+2025-11-30T04:00:10.8123633Z npm: 10.8.2
+2025-11-30T04:00:10.8124157Z yarn: 1.22.22
+2025-11-30T04:00:10.8125244Z ##[endgroup]
+2025-11-30T04:00:10.8145717Z [command]/opt/hostedtoolcache/node/18.20.8/x64/bin/npm config get cache
+2025-11-30T04:00:10.9312403Z /home/runner/.npm
+2025-11-30T04:00:10.9410068Z ##[error]Dependencies lock file is not found in /home/runner/work/tasty-kitchen/tasty-kitchen. Supported file patterns: package-lock.json,npm-shrinkwrap.json,yarn.lock
+2025-11-30T04:00:10.9625736Z ##[group]Run actions/upload-artifact@v4
+2025-11-30T04:00:10.9626181Z with:
+2025-11-30T04:00:10.9626451Z   name: build-log
+2025-11-30T04:00:10.9626750Z   path: build.log
+2025-11-30T04:00:10.9627055Z   if-no-files-found: warn
+2025-11-30T04:00:10.9627429Z   compression-level: 6
+2025-11-30T04:00:10.9627776Z   overwrite: false
+2025-11-30T04:00:10.9628095Z   include-hidden-files: false
+2025-11-30T04:00:10.9628462Z env:
+2025-11-30T04:00:10.9628708Z   CI: true
+2025-11-30T04:00:10.9628993Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:00:10.9629387Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:00:10.9629724Z   NPM_CONFIG_FUND: false
+2025-11-30T04:00:10.9630046Z ##[endgroup]
+2025-11-30T04:00:11.1795114Z ##[warning]No files were found with the provided path: build.log. No artifacts will be uploaded.
+2025-11-30T04:00:11.1927662Z ##[group]Run echo "=== build.log ===";
+2025-11-30T04:00:11.1928017Z [36;1mecho "=== build.log ===";[0m
+2025-11-30T04:00:11.1928301Z [36;1mtail -n 200 build.log || true[0m
+2025-11-30T04:00:11.1963937Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:00:11.1964251Z env:
+2025-11-30T04:00:11.1964640Z   CI: true
+2025-11-30T04:00:11.1964872Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:00:11.1965134Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:00:11.1965349Z   NPM_CONFIG_FUND: false
+2025-11-30T04:00:11.1965552Z ##[endgroup]
+2025-11-30T04:00:11.2040427Z === build.log ===
+2025-11-30T04:00:11.2051305Z tail: cannot open 'build.log' for reading: No such file or directory
+2025-11-30T04:00:11.2127844Z Post job cleanup.
+2025-11-30T04:00:11.3075761Z [command]/usr/bin/git version
+2025-11-30T04:00:11.3116017Z git version 2.51.2
+2025-11-30T04:00:11.3160791Z Temporarily overriding HOME='/home/runner/work/_temp/33b11372-d3ad-43b4-95dd-c6d3e71589b2' before making global git config changes
+2025-11-30T04:00:11.3162146Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-30T04:00:11.3167579Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:00:11.3204449Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-30T04:00:11.3237620Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-30T04:00:11.3477949Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-30T04:00:11.3498383Z http.https://github.com/.extraheader
+2025-11-30T04:00:11.3512230Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-11-30T04:00:11.3543197Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-30T04:00:11.3775100Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-30T04:00:11.3809738Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-30T04:00:11.4149727Z Cleaning up orphan processes

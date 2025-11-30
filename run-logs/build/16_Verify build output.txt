@@ -1,0 +1,38 @@
+﻿2025-11-30T04:48:46.4915287Z ##[group]Run echo "Listing repo root:";
+2025-11-30T04:48:46.4915604Z [36;1mecho "Listing repo root:";[0m
+2025-11-30T04:48:46.4915853Z [36;1mls -al || true;[0m
+2025-11-30T04:48:46.4916233Z [36;1mecho "Listing dist directory:";[0m
+2025-11-30T04:48:46.4916528Z [36;1mls -al dist || true[0m
+2025-11-30T04:48:46.4944753Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.4944975Z env:
+2025-11-30T04:48:46.4945130Z   CI: true
+2025-11-30T04:48:46.4945305Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.4945543Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.4945748Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.4945949Z ##[endgroup]
+2025-11-30T04:48:46.4991648Z Listing repo root:
+2025-11-30T04:48:46.5006221Z total 124
+2025-11-30T04:48:46.5006605Z drwxr-xr-x  8 runner runner  4096 Nov 30 04:48 .
+2025-11-30T04:48:46.5007121Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 ..
+2025-11-30T04:48:46.5007670Z -rw-r--r--  1 runner runner    94 Nov 30 04:48 .env.example
+2025-11-30T04:48:46.5008295Z drwxr-xr-x  2 runner runner  4096 Nov 30 04:48 .gha-logs
+2025-11-30T04:48:46.5009050Z drwxr-xr-x  7 runner runner  4096 Nov 30 04:48 .git
+2025-11-30T04:48:46.5009594Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 .github
+2025-11-30T04:48:46.5010170Z -rw-r--r--  1 runner runner    35 Nov 30 04:48 .gitignore
+2025-11-30T04:48:46.5010707Z -rw-r--r--  1 runner runner  4751 Nov 30 04:48 README.md
+2025-11-30T04:48:46.5011212Z -rw-r--r--  1 runner runner   580 Nov 30 04:48 build.log
+2025-11-30T04:48:46.5011723Z drwxr-xr-x  3 runner runner  4096 Nov 30 04:48 dist
+2025-11-30T04:48:46.5012255Z -rw-r--r--  1 runner runner   437 Nov 30 04:48 index.html
+2025-11-30T04:48:46.5012816Z drwxr-xr-x 39 runner runner  4096 Nov 30 04:48 node_modules
+2025-11-30T04:48:46.5013537Z -rw-r--r--  1 runner runner 54482 Nov 30 04:48 package-lock.json
+2025-11-30T04:48:46.5014132Z -rw-r--r--  1 runner runner   389 Nov 30 04:48 package.json
+2025-11-30T04:48:46.5014683Z drwxr-xr-x  2 runner runner  4096 Nov 30 04:48 src
+2025-11-30T04:48:46.5015243Z -rw-r--r--  1 runner runner   401 Nov 30 04:48 vite.config.js
+2025-11-30T04:48:46.5015841Z -rw-r--r--  1 runner runner   603 Nov 30 04:48 vite.config.mjs
+2025-11-30T04:48:46.5016341Z Listing dist directory:
+2025-11-30T04:48:46.5022974Z total 20
+2025-11-30T04:48:46.5023331Z drwxr-xr-x 3 runner runner 4096 Nov 30 04:48 .
+2025-11-30T04:48:46.5023839Z drwxr-xr-x 8 runner runner 4096 Nov 30 04:48 ..
+2025-11-30T04:48:46.5024350Z -rw-r--r-- 1 runner runner   23 Nov 30 04:48 CNAME
+2025-11-30T04:48:46.5024687Z drwxr-xr-x 2 runner runner 4096 Nov 30 04:48 assets
+2025-11-30T04:48:46.5025001Z -rw-r--r-- 1 runner runner  563 Nov 30 04:48 index.html

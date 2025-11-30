@@ -1,0 +1,96 @@
+﻿2025-11-30T04:48:46.5285231Z ##[group]Run peaceiris/actions-gh-pages@v3
+2025-11-30T04:48:46.5285516Z with:
+2025-11-30T04:48:46.5285872Z   github_token: ***
+2025-11-30T04:48:46.5286070Z   publish_dir: ./dist
+2025-11-30T04:48:46.5286257Z   keep_files: false
+2025-11-30T04:48:46.5286610Z   publish_branch: gh-pages
+2025-11-30T04:48:46.5286833Z   allow_empty_commit: false
+2025-11-30T04:48:46.5287051Z   force_orphan: false
+2025-11-30T04:48:46.5287249Z   enable_jekyll: false
+2025-11-30T04:48:46.5287445Z   disable_nojekyll: false
+2025-11-30T04:48:46.5287642Z   exclude_assets: .github
+2025-11-30T04:48:46.5287834Z env:
+2025-11-30T04:48:46.5287989Z   CI: true
+2025-11-30T04:48:46.5288169Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5288401Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5288835Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5289034Z ##[endgroup]
+2025-11-30T04:48:46.5900010Z [INFO] Usage https://github.com/peaceiris/actions-gh-pages#readme
+2025-11-30T04:48:46.5904743Z ##[group]Dump inputs
+2025-11-30T04:48:46.5905129Z [INFO] GithubToken: true
+2025-11-30T04:48:46.5905597Z [INFO] PublishBranch: gh-pages
+2025-11-30T04:48:46.5906018Z [INFO] PublishDir: ./dist
+2025-11-30T04:48:46.5906402Z [INFO] DestinationDir: 
+2025-11-30T04:48:46.5906797Z [INFO] ExternalRepository: 
+2025-11-30T04:48:46.5907204Z [INFO] AllowEmptyCommit: false
+2025-11-30T04:48:46.5907600Z [INFO] KeepFiles: false
+2025-11-30T04:48:46.5907957Z [INFO] ForceOrphan: false
+2025-11-30T04:48:46.5908320Z [INFO] UserName: 
+2025-11-30T04:48:46.5908796Z [INFO] UserEmail: 
+2025-11-30T04:48:46.5909138Z [INFO] CommitMessage: 
+2025-11-30T04:48:46.5909506Z [INFO] FullCommitMessage: 
+2025-11-30T04:48:46.5909877Z [INFO] TagName: 
+2025-11-30T04:48:46.5910198Z [INFO] TagMessage: 
+2025-11-30T04:48:46.5910577Z [INFO] EnableJekyll (DisableNoJekyll): false
+2025-11-30T04:48:46.5911033Z [INFO] CNAME: 
+2025-11-30T04:48:46.5911359Z [INFO] ExcludeAssets .github
+2025-11-30T04:48:46.5911615Z 
+2025-11-30T04:48:46.5911999Z ##[endgroup]
+2025-11-30T04:48:46.5912529Z ##[group]Setup auth token
+2025-11-30T04:48:46.5912915Z [INFO] setup GITHUB_TOKEN
+2025-11-30T04:48:46.5914127Z ##[endgroup]
+2025-11-30T04:48:46.5914665Z ##[group]Prepare publishing assets
+2025-11-30T04:48:46.5915323Z [INFO] ForceOrphan: false
+2025-11-30T04:48:46.5963494Z [command]/usr/bin/git clone --depth=1 --single-branch --branch gh-pages ***github.com/liu474751-tech/tasty-kitchen.git /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.5999208Z Cloning into '/home/runner/actions_github_pages_1764478126591'...
+2025-11-30T04:48:46.8675433Z fatal: Remote branch gh-pages not found in upstream origin
+2025-11-30T04:48:46.8724294Z [INFO] first deployment, create new branch gh-pages
+2025-11-30T04:48:46.8724948Z [INFO] The process '/usr/bin/git' failed with exit code 128
+2025-11-30T04:48:46.8730032Z [INFO] chdir /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.8741753Z [command]/usr/bin/git init
+2025-11-30T04:48:46.8779089Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-30T04:48:46.8779986Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-30T04:48:46.8780770Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-30T04:48:46.8781339Z hint:
+2025-11-30T04:48:46.8781712Z hint: 	git config --global init.defaultBranch <name>
+2025-11-30T04:48:46.8782177Z hint:
+2025-11-30T04:48:46.8782637Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-30T04:48:46.8783153Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-30T04:48:46.8783484Z hint:
+2025-11-30T04:48:46.8783653Z hint: 	git branch -m <name>
+2025-11-30T04:48:46.8783855Z hint:
+2025-11-30T04:48:46.8784138Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-30T04:48:46.8784655Z Initialized empty Git repository in /home/runner/actions_github_pages_1764478126591/.git/
+2025-11-30T04:48:46.8799463Z [command]/usr/bin/git checkout --orphan gh-pages
+2025-11-30T04:48:46.8821747Z Switched to a new branch 'gh-pages'
+2025-11-30T04:48:46.8827791Z [INFO] prepare publishing assets
+2025-11-30T04:48:46.8828789Z [INFO] copy /home/runner/work/tasty-kitchen/tasty-kitchen/dist to /home/runner/actions_github_pages_1764478126591
+2025-11-30T04:48:46.8953797Z cp: no such file or directory: /home/runner/work/tasty-kitchen/tasty-kitchen/dist/.*
+2025-11-30T04:48:46.8956725Z [INFO] delete excluded assets
+2025-11-30T04:48:46.8985062Z rm: no paths given
+2025-11-30T04:48:46.8987329Z [INFO] Created /home/runner/actions_github_pages_1764478126591/.nojekyll
+2025-11-30T04:48:46.8988711Z ##[endgroup]
+2025-11-30T04:48:46.8989273Z ##[group]Setup Git config
+2025-11-30T04:48:46.9000523Z [command]/usr/bin/git remote rm origin
+2025-11-30T04:48:46.9022571Z error: No such remote: 'origin'
+2025-11-30T04:48:46.9028189Z [INFO] The process '/usr/bin/git' failed with exit code 2
+2025-11-30T04:48:46.9042111Z [command]/usr/bin/git remote add origin ***github.com/liu474751-tech/tasty-kitchen.git
+2025-11-30T04:48:46.9082005Z [command]/usr/bin/git add --all
+2025-11-30T04:48:46.9163110Z [command]/usr/bin/git config user.name liu474751-tech
+2025-11-30T04:48:46.9204139Z [command]/usr/bin/git config user.email liu474751-tech@users.noreply.github.com
+2025-11-30T04:48:46.9232745Z ##[endgroup]
+2025-11-30T04:48:46.9233271Z ##[group]Create a commit
+2025-11-30T04:48:46.9246650Z [command]/usr/bin/git commit -m deploy: 620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:46.9309450Z [gh-pages (root-commit) 1260e8b] deploy: 620d977fa6e18031567aad98db104ef20efc3b5e
+2025-11-30T04:48:46.9309955Z  5 files changed, 57 insertions(+)
+2025-11-30T04:48:46.9310211Z  create mode 100644 .nojekyll
+2025-11-30T04:48:46.9310435Z  create mode 100644 CNAME
+2025-11-30T04:48:46.9310700Z  create mode 100644 assets/index-DyyHOePx.js
+2025-11-30T04:48:46.9311228Z  create mode 100644 assets/index-JqBOeaxt.css
+2025-11-30T04:48:46.9311722Z  create mode 100644 index.html
+2025-11-30T04:48:46.9314922Z ##[endgroup]
+2025-11-30T04:48:46.9315550Z ##[group]Push the commit or tag
+2025-11-30T04:48:46.9329167Z [command]/usr/bin/git push origin gh-pages
+2025-11-30T04:48:47.2362487Z remote: Permission to liu474751-tech/tasty-kitchen.git denied to github-actions[bot].
+2025-11-30T04:48:47.2364434Z fatal: unable to access 'https://github.com/liu474751-tech/tasty-kitchen.git/': The requested URL returned error: 403
+2025-11-30T04:48:47.2404308Z ##[error]Action failed with "The process '/usr/bin/git' failed with exit code 128"

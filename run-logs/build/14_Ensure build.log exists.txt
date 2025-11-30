@@ -1,0 +1,10 @@
+﻿2025-11-30T04:48:46.4713918Z ##[group]Run if [ -f build.log ]; then echo "build.log present"; else echo "NO BUILD LOG: setup-node likely failed early" > build.log; fi
+2025-11-30T04:48:46.4714684Z [36;1mif [ -f build.log ]; then echo "build.log present"; else echo "NO BUILD LOG: setup-node likely failed early" > build.log; fi[0m
+2025-11-30T04:48:46.4746508Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.4746741Z env:
+2025-11-30T04:48:46.4746913Z   CI: true
+2025-11-30T04:48:46.4747086Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.4747322Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.4747526Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.4747722Z ##[endgroup]
+2025-11-30T04:48:46.4795895Z build.log present

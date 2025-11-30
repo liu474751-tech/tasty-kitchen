@@ -1,0 +1,43 @@
+﻿2025-11-30T04:48:38.1119474Z ##[group]Run echo "--- runner info ---";
+2025-11-30T04:48:38.1120546Z [36;1mecho "--- runner info ---";[0m
+2025-11-30T04:48:38.1121543Z [36;1muname -a || true;[0m
+2025-11-30T04:48:38.1122447Z [36;1mcat /etc/os-release || true;[0m
+2025-11-30T04:48:38.1123523Z [36;1mecho "--- disk usage ---"; df -h || true;[0m
+2025-11-30T04:48:38.1124905Z [36;1mecho "--- network debug (curl) ---"; curl --version || true[0m
+2025-11-30T04:48:38.1157758Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.1158792Z env:
+2025-11-30T04:48:38.1159459Z   CI: true
+2025-11-30T04:48:38.1160161Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.1161132Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.1161988Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.1162780Z ##[endgroup]
+2025-11-30T04:48:38.1223095Z --- runner info ---
+2025-11-30T04:48:38.1233270Z Linux runnervmg1sw1 6.11.0-1018-azure #18~24.04.1-Ubuntu SMP Sat Jun 28 04:46:03 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+2025-11-30T04:48:38.1242758Z PRETTY_NAME="Ubuntu 24.04.3 LTS"
+2025-11-30T04:48:38.1244245Z NAME="Ubuntu"
+2025-11-30T04:48:38.1245343Z VERSION_ID="24.04"
+2025-11-30T04:48:38.1246563Z VERSION="24.04.3 LTS (Noble Numbat)"
+2025-11-30T04:48:38.1247730Z VERSION_CODENAME=noble
+2025-11-30T04:48:38.1248520Z ID=ubuntu
+2025-11-30T04:48:38.1249399Z ID_LIKE=debian
+2025-11-30T04:48:38.1250184Z HOME_URL="https://www.ubuntu.com/"
+2025-11-30T04:48:38.1251230Z SUPPORT_URL="https://help.ubuntu.com/"
+2025-11-30T04:48:38.1252448Z BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+2025-11-30T04:48:38.1254230Z PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+2025-11-30T04:48:38.1255834Z UBUNTU_CODENAME=noble
+2025-11-30T04:48:38.1256612Z LOGO=ubuntu-logo
+2025-11-30T04:48:38.1257369Z --- disk usage ---
+2025-11-30T04:48:38.1427952Z Filesystem      Size  Used Avail Use% Mounted on
+2025-11-30T04:48:38.1430363Z /dev/root        72G   53G   19G  74% /
+2025-11-30T04:48:38.1432405Z tmpfs           7.9G   84K  7.9G   1% /dev/shm
+2025-11-30T04:48:38.1433819Z tmpfs           3.2G  1.1M  3.2G   1% /run
+2025-11-30T04:48:38.1435193Z tmpfs           5.0M     0  5.0M   0% /run/lock
+2025-11-30T04:48:38.1436551Z /dev/sda16      881M   62M  758M   8% /boot
+2025-11-30T04:48:38.1437926Z /dev/sda15      105M  6.2M   99M   6% /boot/efi
+2025-11-30T04:48:38.1439448Z /dev/sdb1        74G  4.1G   66G   6% /mnt
+2025-11-30T04:48:38.1440544Z tmpfs           1.6G   12K  1.6G   1% /run/user/1001
+2025-11-30T04:48:38.1441666Z --- network debug (curl) ---
+2025-11-30T04:48:38.1496831Z curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0 OpenSSL/3.0.13 zlib/1.3 brotli/1.1.0 zstd/1.5.5 libidn2/2.3.7 libpsl/0.21.2 (+libidn2/2.3.7) libssh/0.10.6/openssl/zlib nghttp2/1.59.0 librtmp/2.3 OpenLDAP/2.6.7
+2025-11-30T04:48:38.1500542Z Release-Date: 2023-12-06, security patched: 8.5.0-2ubuntu10.6
+2025-11-30T04:48:38.1504523Z Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps telnet tftp
+2025-11-30T04:48:38.1509057Z Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL threadsafe TLS-SRP UnixSockets zstd

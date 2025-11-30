@@ -137,7 +137,7 @@ jobs:
 
       - name: Add CNAME for custom domain
         run: |
-          echo "meishitiandi.dpdns.org" > dist/CNAME
+          echo "meishichufang.meishitiandi.dpdns.org" > dist/CNAME
 
       - name: Verify build output
         run: |

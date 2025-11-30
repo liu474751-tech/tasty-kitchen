@@ -1,0 +1,10 @@
+﻿2025-11-30T04:48:46.5052130Z ##[group]Run if [ -f dist/index.html ]; then echo "dist/index.html exists"; else echo "ERROR: dist/index.html missing"; exit 1; fi
+2025-11-30T04:48:46.5052861Z [36;1mif [ -f dist/index.html ]; then echo "dist/index.html exists"; else echo "ERROR: dist/index.html missing"; exit 1; fi[0m
+2025-11-30T04:48:46.5080891Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:46.5081114Z env:
+2025-11-30T04:48:46.5081266Z   CI: true
+2025-11-30T04:48:46.5081443Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:46.5081681Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:46.5081900Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:46.5082098Z ##[endgroup]
+2025-11-30T04:48:46.5126818Z dist/index.html exists

@@ -1,0 +1,76 @@
+﻿2025-11-30T04:48:35.5564870Z ##[group]Run actions/checkout@v4
+2025-11-30T04:48:35.5565802Z with:
+2025-11-30T04:48:35.5566241Z   persist-credentials: true
+2025-11-30T04:48:35.5566759Z   repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.5567518Z   token: ***
+2025-11-30T04:48:35.5567921Z   ssh-strict: true
+2025-11-30T04:48:35.5568322Z   ssh-user: git
+2025-11-30T04:48:35.5569020Z   clean: true
+2025-11-30T04:48:35.5569447Z   sparse-checkout-cone-mode: true
+2025-11-30T04:48:35.5569959Z   fetch-depth: 1
+2025-11-30T04:48:35.5570363Z   fetch-tags: false
+2025-11-30T04:48:35.5570778Z   show-progress: true
+2025-11-30T04:48:35.5571193Z   lfs: false
+2025-11-30T04:48:35.5571582Z   submodules: false
+2025-11-30T04:48:35.5572028Z   set-safe-directory: true
+2025-11-30T04:48:35.5572771Z env:
+2025-11-30T04:48:35.5573160Z   CI: true
+2025-11-30T04:48:35.5573559Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:35.5574073Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:35.5574523Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:35.5574978Z ##[endgroup]
+2025-11-30T04:48:35.6687814Z Syncing repository: liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.6691286Z ##[group]Getting Git version info
+2025-11-30T04:48:35.6692727Z Working directory is '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:48:35.6694816Z [command]/usr/bin/git version
+2025-11-30T04:48:35.6720331Z git version 2.51.2
+2025-11-30T04:48:35.6751198Z ##[endgroup]
+2025-11-30T04:48:35.6766461Z Temporarily overriding HOME='/home/runner/work/_temp/156db7bc-ee2b-4ed7-a259-2fb6e059fd89' before making global git config changes
+2025-11-30T04:48:35.6770871Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-30T04:48:35.6781450Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:35.6818848Z Deleting the contents of '/home/runner/work/tasty-kitchen/tasty-kitchen'
+2025-11-30T04:48:35.6823387Z ##[group]Initializing the repository
+2025-11-30T04:48:35.6827378Z [command]/usr/bin/git init /home/runner/work/tasty-kitchen/tasty-kitchen
+2025-11-30T04:48:35.6929639Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-11-30T04:48:35.6931523Z hint: is subject to change. To configure the initial branch name to use in all
+2025-11-30T04:48:35.6933307Z hint: of your new repositories, which will suppress this warning, call:
+2025-11-30T04:48:35.6934637Z hint:
+2025-11-30T04:48:35.6935496Z hint: 	git config --global init.defaultBranch <name>
+2025-11-30T04:48:35.6936565Z hint:
+2025-11-30T04:48:35.6937240Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-11-30T04:48:35.6938293Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-11-30T04:48:35.6939352Z hint:
+2025-11-30T04:48:35.6939977Z hint: 	git branch -m <name>
+2025-11-30T04:48:35.6940613Z hint:
+2025-11-30T04:48:35.6941289Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-11-30T04:48:35.6942515Z Initialized empty Git repository in /home/runner/work/tasty-kitchen/tasty-kitchen/.git/
+2025-11-30T04:48:35.6946260Z [command]/usr/bin/git remote add origin https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:48:35.6979243Z ##[endgroup]
+2025-11-30T04:48:35.6980054Z ##[group]Disabling automatic garbage collection
+2025-11-30T04:48:35.6983086Z [command]/usr/bin/git config --local gc.auto 0
+2025-11-30T04:48:35.7011507Z ##[endgroup]
+2025-11-30T04:48:35.7012231Z ##[group]Setting up auth
+2025-11-30T04:48:35.7018204Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-11-30T04:48:35.7047494Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-11-30T04:48:35.7370577Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-30T04:48:35.7399415Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-11-30T04:48:35.7622623Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2025-11-30T04:48:35.7654377Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2025-11-30T04:48:35.7885928Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-11-30T04:48:35.7920867Z ##[endgroup]
+2025-11-30T04:48:35.7921711Z ##[group]Fetching the repository
+2025-11-30T04:48:35.7929735Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +620d977fa6e18031567aad98db104ef20efc3b5e:refs/remotes/origin/main
+2025-11-30T04:48:36.1491333Z From https://github.com/liu474751-tech/tasty-kitchen
+2025-11-30T04:48:36.1492313Z  * [new ref]         620d977fa6e18031567aad98db104ef20efc3b5e -> origin/main
+2025-11-30T04:48:36.1522806Z ##[endgroup]
+2025-11-30T04:48:36.1523886Z ##[group]Determining the checkout info
+2025-11-30T04:48:36.1525065Z ##[endgroup]
+2025-11-30T04:48:36.1530074Z [command]/usr/bin/git sparse-checkout disable
+2025-11-30T04:48:36.1569181Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-11-30T04:48:36.1594952Z ##[group]Checking out the ref
+2025-11-30T04:48:36.1598801Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-11-30T04:48:36.1648199Z Switched to a new branch 'main'
+2025-11-30T04:48:36.1651080Z branch 'main' set up to track 'origin/main'.
+2025-11-30T04:48:36.1657512Z ##[endgroup]
+2025-11-30T04:48:36.1691642Z [command]/usr/bin/git log -1 --format=%H
+2025-11-30T04:48:36.1713389Z 620d977fa6e18031567aad98db104ef20efc3b5e

@@ -1,0 +1,32 @@
+﻿2025-11-30T04:48:33.5518530Z Current runner version: '2.329.0'
+2025-11-30T04:48:33.5550891Z ##[group]Runner Image Provisioner
+2025-11-30T04:48:33.5552154Z Hosted Compute Agent
+2025-11-30T04:48:33.5552901Z Version: 20251016.436
+2025-11-30T04:48:33.5553776Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-30T04:48:33.5554994Z Build Date: 2025-10-15T20:44:12Z
+2025-11-30T04:48:33.5555813Z ##[endgroup]
+2025-11-30T04:48:33.5556607Z ##[group]Operating System
+2025-11-30T04:48:33.5557424Z Ubuntu
+2025-11-30T04:48:33.5558124Z 24.04.3
+2025-11-30T04:48:33.5558902Z LTS
+2025-11-30T04:48:33.5559592Z ##[endgroup]
+2025-11-30T04:48:33.5560113Z ##[group]Runner Image
+2025-11-30T04:48:33.5560714Z Image: ubuntu-24.04
+2025-11-30T04:48:33.5561270Z Version: 20251112.124.1
+2025-11-30T04:48:33.5562321Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+2025-11-30T04:48:33.5563749Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+2025-11-30T04:48:33.5564940Z ##[endgroup]
+2025-11-30T04:48:33.5566029Z ##[group]GITHUB_TOKEN Permissions
+2025-11-30T04:48:33.5568475Z Contents: read
+2025-11-30T04:48:33.5569525Z Metadata: read
+2025-11-30T04:48:33.5570019Z Packages: read
+2025-11-30T04:48:33.5570597Z ##[endgroup]
+2025-11-30T04:48:33.5572617Z Secret source: Actions
+2025-11-30T04:48:33.5573306Z Prepare workflow directory
+2025-11-30T04:48:33.5972381Z Prepare all required actions
+2025-11-30T04:48:33.6028753Z Getting action download info
+2025-11-30T04:48:34.0887102Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2025-11-30T04:48:34.6586536Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-11-30T04:48:34.7732211Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2025-11-30T04:48:34.8594935Z Download action repository 'peaceiris/actions-gh-pages@v3' (SHA:373f7f263a76c20808c831209c920827a82a2847)
+2025-11-30T04:48:35.4737923Z Complete job name: build

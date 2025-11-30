@@ -1,0 +1,25 @@
+﻿2025-11-30T04:48:37.0345711Z ##[group]Run actions/upload-artifact@v4
+2025-11-30T04:48:37.0346824Z with:
+2025-11-30T04:48:37.0347556Z   name: pre-setup-diagnostics
+2025-11-30T04:48:37.0348732Z   path: .gha-logs/pre_setup_diag.txt
+2025-11-30T04:48:37.0349770Z   if-no-files-found: warn
+2025-11-30T04:48:37.0350646Z   compression-level: 6
+2025-11-30T04:48:37.0351475Z   overwrite: false
+2025-11-30T04:48:37.0352272Z   include-hidden-files: false
+2025-11-30T04:48:37.0353162Z env:
+2025-11-30T04:48:37.0353789Z   CI: true
+2025-11-30T04:48:37.0354487Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:37.0355465Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:37.0356366Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:37.0357189Z ##[endgroup]
+2025-11-30T04:48:37.2494636Z With the provided path, there will be 1 file uploaded
+2025-11-30T04:48:37.2499205Z Artifact name is valid!
+2025-11-30T04:48:37.2500648Z Root directory input is valid!
+2025-11-30T04:48:37.5442996Z Beginning upload of artifact content to blob storage
+2025-11-30T04:48:37.8362722Z Uploaded bytes 2970
+2025-11-30T04:48:37.9135856Z Finished uploading artifact content to blob storage!
+2025-11-30T04:48:37.9140302Z SHA256 digest of uploaded artifact zip is 1cb856fa80aade983c21430a340d51419ee59e44a80b1f85b0c09fdbff3bc952
+2025-11-30T04:48:37.9143728Z Finalizing artifact upload
+2025-11-30T04:48:38.0723783Z Artifact pre-setup-diagnostics.zip successfully finalized. Artifact ID 4715580539
+2025-11-30T04:48:38.0731044Z Artifact pre-setup-diagnostics has been successfully uploaded! Final size is 2970 bytes. Artifact ID is 4715580539
+2025-11-30T04:48:38.0736566Z Artifact download URL: https://github.com/liu474751-tech/tasty-kitchen/actions/runs/19793995783/artifacts/4715580539

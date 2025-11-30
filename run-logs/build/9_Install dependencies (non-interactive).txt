@@ -1,0 +1,16 @@
+﻿2025-11-30T04:48:38.6062988Z ##[group]Run set -e
+2025-11-30T04:48:38.6063270Z [36;1mset -e[0m
+2025-11-30T04:48:38.6063486Z [36;1mif [ -f package-lock.json ]; then[0m
+2025-11-30T04:48:38.6063843Z [36;1m  npm ci --no-audit --no-fund --no-progress --legacy-peer-deps;[0m
+2025-11-30T04:48:38.6064183Z [36;1melse[0m
+2025-11-30T04:48:38.6064466Z [36;1m  npm install --no-audit --no-fund --no-progress --legacy-peer-deps;[0m
+2025-11-30T04:48:38.6064790Z [36;1mfi[0m
+2025-11-30T04:48:38.6099682Z shell: /usr/bin/bash -e {0}
+2025-11-30T04:48:38.6099934Z env:
+2025-11-30T04:48:38.6100093Z   CI: true
+2025-11-30T04:48:38.6100273Z   DEBIAN_FRONTEND: noninteractive
+2025-11-30T04:48:38.6100517Z   NPM_CONFIG_AUDIT: false
+2025-11-30T04:48:38.6100722Z   NPM_CONFIG_FUND: false
+2025-11-30T04:48:38.6100940Z ##[endgroup]
+2025-11-30T04:48:43.7911964Z 
+2025-11-30T04:48:43.8073786Z added 62 packages in 5s
