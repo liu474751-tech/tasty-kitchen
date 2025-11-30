@@ -409,7 +409,33 @@ const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
     </header>
 
     <div className="flex items-center justify-between mb-4"><h3 className="font-bold text-lg text-gray-800">已获得食谱 ({unlockedRecipes.length})</h3></div>
-    <div className="grid grid-cols-2 gap-4 pb-24">{unlockedRecipes.map(recipe => (<div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 relative group active:scale-95 transition-transform"><div className="h-32 relative overflow-hidden"><img src={recipe.image} className="w-full h-full object-cover" alt={recipe.title} /></div><div className="p-3"><h4 className="font-bold text-gray-800 text-sm truncate">{recipe.title}</h4></div></div>))}</div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 py-12 bg-gray-50">
+      {unlockedRecipes.map(recipe => (
+        <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer group">
+          <div className="h-48 overflow-hidden relative">
+            <img src={recipe.image}
+                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                 alt={recipe.title} />
+            <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-orange-600 text-xs font-bold px-3 py-1 rounded-full">
+              {recipe.time}
+            </span>
+          </div>
+
+          <div className="p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors">
+              {recipe.title}
+            </h3>
+            <p className="text-gray-500 text-sm line-clamp-2 mb-4">
+              {recipe.description}
+            </p>
+            <div className="flex items-center justify-between text-sm text-gray-400">
+              <span className="flex items-center">🔥 {recipe.difficulty}</span>
+              <span className="flex items-center">⭐ 4.9</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
