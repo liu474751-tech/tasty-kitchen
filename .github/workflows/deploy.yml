@@ -53,6 +53,13 @@ jobs:
           set -e
           npm run build 2>&1 | tee build.log
 
+      - name: Upload build log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+
       - name: Add CNAME for custom domain
         run: |
           echo "meishitiandi.dpdns.org" > dist/CNAME
