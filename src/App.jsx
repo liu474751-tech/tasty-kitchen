@@ -374,7 +374,43 @@ const UnlockModal = ({ isOpen, onClose, onConfirm, cost, monthlyLeft, title, use
 
 // --- Tab components (HomeTab, ChallengeTab, SocialTab) ---
 const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
-  <div className="px-5 pt-2 animate-fade-in"><div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl p-5 text-white mb-6 shadow-xl shadow-orange-200/50"><div className="flex items-center gap-4 mb-4"><div className="w-14 h-14 rounded-full border-2 border-white/50 p-0.5 relative"><img src={userProfile.avatar} className="rounded-full w-full h-full bg-white" alt="avatar" /></div><div><h2 className="font-bold text-lg flex items-center gap-2">{userProfile.name}</h2><div className="flex items-center gap-2 text-white/80 text-xs mt-1"><span className="bg-white/20 px-1.5 py-0.5 rounded">厨圣段位</span></div></div><div className="ml-auto text-center bg-white/10 p-2 rounded-xl backdrop-blur-sm border border-white/10"><span className="block text-[10px] text-white/70 uppercase tracking-wider">Points</span><span className="font-bold text-xl">{userProfile.points}</span></div></div></div><div className="flex items-center justify-between mb-4"><h3 className="font-bold text-lg text-gray-800">已获得食谱 ({unlockedRecipes.length})</h3></div><div className="grid grid-cols-2 gap-4 pb-24">{unlockedRecipes.map(recipe => (<div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 relative group active:scale-95 transition-transform"><div className="h-32 relative overflow-hidden"><img src={recipe.image} className="w-full h-full object-cover" alt={recipe.title} /></div><div className="p-3"><h4 className="font-bold text-gray-800 text-sm truncate">{recipe.title}</h4></div></div>))}</div></div>
+  <div className="px-5 pt-2 animate-fade-in">
+    <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-sm sticky top-0 z-50">
+      <div className="text-2xl font-bold text-orange-600 flex items-center gap-2">
+        🍳 Tasty Kitchen
+      </div>
+      <div className="space-x-6 text-gray-600 font-medium">
+        <a href="#" className="hover:text-orange-500 transition">首页</a>
+        <a href="#" className="hover:text-orange-500 transition">热门食谱</a>
+        <a href="#" className="hover:text-orange-500 transition">关于我们要</a>
+      </div>
+    </nav>
+
+    <header className="relative bg-orange-50 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 flex flex-col-reverse lg:flex-row items-center">
+        <div className="w-full lg:w-1/2 text-center lg:text-left z-10">
+          <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+            探索味蕾的 <span className="text-orange-500">无限可能</span>
+          </h1>
+          <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+            汇集全球精选美食食谱，从家常菜到米其林，让每一次下厨都成为享受。
+          </p>
+          <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+            开始探索食谱
+          </button>
+        </div>
+        <div className="w-full lg:w-1/2 mb-10 lg:mb-0 relative">
+          <div className="relative rounded-full overflow-hidden border-4 border-white shadow-2xl w-64 h-64 lg:w-96 lg:h-96 mx-auto">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Delicious Food" className="object-cover w-full h-full hover:scale-110 transition duration-500" />
+          </div>
+          <div className="absolute -top-4 -right-4 bg-yellow-400 w-20 h-20 rounded-full opacity-50 blur-xl animate-pulse"></div>
+        </div>
+      </div>
+    </header>
+
+    <div className="flex items-center justify-between mb-4"><h3 className="font-bold text-lg text-gray-800">已获得食谱 ({unlockedRecipes.length})</h3></div>
+    <div className="grid grid-cols-2 gap-4 pb-24">{unlockedRecipes.map(recipe => (<div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 relative group active:scale-95 transition-transform"><div className="h-32 relative overflow-hidden"><img src={recipe.image} className="w-full h-full object-cover" alt={recipe.title} /></div><div className="p-3"><h4 className="font-bold text-gray-800 text-sm truncate">{recipe.title}</h4></div></div>))}</div>
+  </div>
 );
 
 const ChallengeTab = ({ userProfile, onStartLevel, onUnlockLevel }) => {
