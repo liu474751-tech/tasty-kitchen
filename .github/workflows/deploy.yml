@@ -29,6 +29,23 @@ jobs:
           echo "--- connectivity to Node hosts ---"; curl -I https://nodejs.org/ || true
           echo "--- connectivity to raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true
           echo "--- DNS resolve ---"; nslookup nodejs.org || true
+          echo "--- write to artifact file ---"
+          mkdir -p .gha-logs || true
+          {
+            date || true
+            echo "--- environment ---"; env || true
+            echo "--- uname ---"; uname -a || true
+            echo "--- node/npm ---"; node -v || true; npm -v || true
+            echo "--- curl nodejs.org ---"; curl -I https://nodejs.org/ || true
+            echo "--- curl raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true
+            echo "--- nslookup nodejs.org ---"; nslookup nodejs.org || true
+          } > .gha-logs/pre_setup_diag.txt || true
+
+      - name: Upload pre-setup diagnostics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-setup-diagnostics
+          path: .gha-logs/pre_setup_diag.txt
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
