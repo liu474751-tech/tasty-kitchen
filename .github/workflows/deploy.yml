@@ -19,6 +19,17 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Pre-setup diagnostics
+        run: |
+          echo "=== pre-setup diagnostics ==="
+          date || true
+          echo "--- environment ---"; env || true
+          echo "--- uname ---"; uname -a || true
+          echo "--- preinstalled node/npm (if any) ---"; node -v || true; npm -v || true
+          echo "--- connectivity to Node hosts ---"; curl -I https://nodejs.org/ || true
+          echo "--- connectivity to raw.githubusercontent.com ---"; curl -I https://raw.githubusercontent.com/ || true
+          echo "--- DNS resolve ---"; nslookup nodejs.org || true
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
