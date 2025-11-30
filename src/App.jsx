@@ -408,8 +408,26 @@ const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
       </div>
     </header>
 
+    {/* Top personal banner: 更宽的横向条带，替代原来的红色圆角卡片 */}
+    <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 rounded-full bg-white/20 p-1">
+          <img src={userProfile.avatar} className="rounded-full w-full h-full object-cover" alt="avatar" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+          <span className="bg-white/20 px-2 py-1 rounded text-sm">厨艺新星</span>
+        </div>
+      </div>
+
+      <div className="mt-4 md:mt-0 text-center md:text-right">
+        <div className="text-sm opacity-80">POINTS</div>
+        <div className="text-3xl font-bold">{userProfile.points}</div>
+      </div>
+    </div>
+
     <div className="flex items-center justify-between mb-4"><h3 className="font-bold text-lg text-gray-800">已获得食谱 ({unlockedRecipes.length})</h3></div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 py-12 bg-gray-50">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-6 px-8 py-12 bg-gray-50">
       {unlockedRecipes.map(recipe => (
         <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer group">
           <div className="h-48 overflow-hidden relative">
@@ -753,22 +771,26 @@ export default function App() {
   }
 
   return (
-    <div className="bg-white min-h-screen font-sans text-gray-900 max-w-md mx-auto shadow-2xl overflow-hidden relative flex flex-col">
-      {/* User info & logout */}
-      <div className="absolute top-4 right-4 z-40 flex items-center gap-2">
-        <div className="text-sm text-gray-700 mr-2">{userProfile.name}</div>
-        <button onClick={onLogout} className="text-xs bg-gray-100 px-2 py-1 rounded">退出</button>
+    <div className="w-full min-h-screen bg-gray-50 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="bg-white min-h-screen font-sans text-gray-900 max-w-md mx-auto shadow-2xl overflow-hidden relative flex flex-col">
+          {/* User info & logout */}
+          <div className="absolute top-4 right-4 z-40 flex items-center gap-2">
+            <div className="text-sm text-gray-700 mr-2">{userProfile.name}</div>
+            <button onClick={onLogout} className="text-xs bg-gray-100 px-2 py-1 rounded">退出</button>
+          </div>
+          {activeTab !== 'home' && activeTab !== 'social' && (<div className="bg-white px-5 pt-12 pb-2 flex justify-between items-center shadow-sm z-10"><h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">{activeTab === 'challenge' ? '厨艺征途' : '美味厨房'}</h1></div>)}
+          <div className="flex-1 overflow-hidden relative">{renderContent()}</div>
+          <div className="bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-30 shrink-0">
+            <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-orange-500' : 'text-gray-400'}`}><Home size={24} /><span className="text-[10px]">首页</span></button>
+            <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}><Map size={24} /><span className="text-[10px]">征途</span></button>
+            <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}><Users size={24} /><span className="text-[10px]">美食圈</span></button>
+            <button onClick={() => setActiveTab('favorites')} className={`flex flex-col items-center gap-1 ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-400'}`}><Bookmark size={24} /><span className="text-[10px]">收藏</span></button>
+          </div>
+          <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
+          {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
+        </div>
       </div>
-      {activeTab !== 'home' && activeTab !== 'social' && (<div className="bg-white px-5 pt-12 pb-2 flex justify-between items-center shadow-sm z-10"><h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">{activeTab === 'challenge' ? '厨艺征途' : '美味厨房'}</h1></div>)}
-      <div className="flex-1 overflow-hidden relative">{renderContent()}</div>
-      <div className="bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-30 shrink-0">
-        <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-orange-500' : 'text-gray-400'}`}><Home size={24} /><span className="text-[10px]">首页</span></button>
-        <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}><Map size={24} /><span className="text-[10px]">征途</span></button>
-        <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}><Users size={24} /><span className="text-[10px]">美食圈</span></button>
-        <button onClick={() => setActiveTab('favorites')} className={`flex flex-col items-center gap-1 ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-400'}`}><Bookmark size={24} /><span className="text-[10px]">收藏</span></button>
-      </div>
-      <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
-      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
     </div>
   );
 }
