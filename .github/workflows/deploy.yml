@@ -25,6 +25,14 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
+      - name: Runner diagnostics
+        run: |
+          echo "--- runner info ---";
+          uname -a || true;
+          cat /etc/os-release || true;
+          echo "--- disk usage ---"; df -h || true;
+          echo "--- network debug (curl) ---"; curl --version || true
+
       - name: Clean npm cache
         run: |
           npm cache clean --force 2>&1 || true
@@ -59,6 +67,10 @@ jobs:
         with:
           name: build-log
           path: build.log
+      - name: Ensure build.log exists
+        if: always()
+        run: |
+          if [ -f build.log ]; then echo "build.log present"; else echo "NO BUILD LOG: setup-node likely failed early" > build.log; fi
 
       - name: Add CNAME for custom domain
         run: |
