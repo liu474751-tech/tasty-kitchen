@@ -119,7 +119,7 @@ jobs:
 
       - name: Build (verbose)
         env:
-          VITE_BASE_PATH: '/tasty-kitchen/'
+          VITE_BASE_PATH: '/'
         run: |
           set -e
           npm run build 2>&1 | tee build.log
