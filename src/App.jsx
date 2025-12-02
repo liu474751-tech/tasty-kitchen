@@ -811,6 +811,9 @@ export default function App() {
     } else if (activeTab !== 'home') {
       // 如果不在首页，返回首页
       setActiveTab('home');
+    } else {
+      // 如果已经在首页，退出登录
+      onLogout();
     }
   };
 
@@ -969,11 +972,9 @@ export default function App() {
       {/* Mobile Header */}
       <div className="md:hidden bg-white px-5 pt-4 pb-2 flex justify-between items-center shadow-sm z-10 sticky top-0">
         <div className="flex items-center gap-3">
-          {(selectedRecipe || activeTab !== 'home') && (
-            <button onClick={handleGlobalBack} className="p-2 hover:bg-gray-100 rounded-full transition-colors -ml-2">
-              <ChevronLeft size={20} className="text-gray-600" />
-            </button>
-          )}
+          <button onClick={handleGlobalBack} className="p-2 hover:bg-gray-100 rounded-full transition-colors -ml-2">
+            <ChevronLeft size={20} className="text-gray-600" />
+          </button>
           <h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">
             {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
           </h1>
@@ -1010,16 +1011,14 @@ export default function App() {
       <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
       {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
       
-      {/* Global Floating Back Button (Desktop & when needed) */}
-      {(selectedRecipe || activeTab !== 'home') && (
-        <button 
-          onClick={handleGlobalBack}
-          className="hidden md:flex fixed bottom-8 left-8 w-14 h-14 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-full shadow-lg items-center justify-center transition-all hover:scale-110 z-50 group"
-          title={selectedRecipe ? '返回列表' : '返回首页'}
-        >
-          <ChevronLeft size={24} className="text-gray-700 group-hover:text-orange-600 transition-colors" />
-        </button>
-      )}
+      {/* Global Floating Back Button (Desktop - always visible) */}
+      <button 
+        onClick={handleGlobalBack}
+        className="hidden md:flex fixed bottom-8 left-8 w-14 h-14 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-full shadow-lg items-center justify-center transition-all hover:scale-110 z-50 group"
+        title={selectedRecipe ? '返回列表' : activeTab !== 'home' ? '返回首页' : '退出登录'}
+      >
+        <ChevronLeft size={24} className="text-gray-700 group-hover:text-orange-600 transition-colors" />
+      </button>
       
       <style>{`
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
