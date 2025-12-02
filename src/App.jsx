@@ -374,85 +374,71 @@ const UnlockModal = ({ isOpen, onClose, onConfirm, cost, monthlyLeft, title, use
 
 // --- Tab components (HomeTab, ChallengeTab, SocialTab) ---
 const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
-  <div className="px-5 pt-2 animate-fade-in">
-    <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-sm sticky top-0 z-50">
-      <div className="text-2xl font-bold text-orange-600 flex items-center gap-2">
-        🍳 Tasty Kitchen
-      </div>
-      <div className="space-x-6 text-gray-600 font-medium">
-        <a href="#" className="hover:text-orange-500 transition">首页</a>
-        <a href="#" className="hover:text-orange-500 transition">热门食谱</a>
-        <a href="#" className="hover:text-orange-500 transition">关于我们要</a>
-      </div>
-    </nav>
-
-    <header className="relative bg-orange-50 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 flex flex-col-reverse lg:flex-row items-center">
+  <div className="animate-fade-in">
+    <header className="relative bg-orange-50 overflow-hidden mb-8">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24 flex flex-col-reverse lg:flex-row items-center gap-12">
         <div className="w-full lg:w-1/2 text-center lg:text-left z-10">
-          <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
             探索味蕾的 <span className="text-orange-500">无限可能</span>
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
             汇集全球精选美食食谱，从家常菜到米其林，让每一次下厨都成为享受。
           </p>
-          <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
-            开始探索食谱
-          </button>
         </div>
-        <div className="w-full lg:w-1/2 mb-10 lg:mb-0 relative">
-          <div className="relative rounded-full overflow-hidden border-4 border-white shadow-2xl w-64 h-64 lg:w-96 lg:h-96 mx-auto">
+        <div className="w-full lg:w-1/2 relative">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full max-w-md mx-auto aspect-square">
             <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Delicious Food" className="object-cover w-full h-full hover:scale-110 transition duration-500" />
           </div>
-          <div className="absolute -top-4 -right-4 bg-yellow-400 w-20 h-20 rounded-full opacity-50 blur-xl animate-pulse"></div>
         </div>
       </div>
     </header>
 
-    {/* Top personal banner: 更宽的横向条带，替代原来的红色圆角卡片 */}
-    <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-white/20 p-1">
-          <img src={userProfile.avatar} className="rounded-full w-full h-full object-cover" alt="avatar" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold">{userProfile.name}</h2>
-          <span className="bg-white/20 px-2 py-1 rounded text-sm">厨艺新星</span>
-        </div>
-      </div>
-
-      <div className="mt-4 md:mt-0 text-center md:text-right">
-        <div className="text-sm opacity-80">POINTS</div>
-        <div className="text-3xl font-bold">{userProfile.points}</div>
-      </div>
-    </div>
-
-    <div className="flex items-center justify-between mb-4"><h3 className="font-bold text-lg text-gray-800">已获得食谱 ({unlockedRecipes.length})</h3></div>
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-6 px-8 py-12 bg-gray-50">
-      {unlockedRecipes.map(recipe => (
-        <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer group">
-          <div className="h-48 overflow-hidden relative">
-            <img src={recipe.image}
-                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                 alt={recipe.title} />
-            <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-orange-600 text-xs font-bold px-3 py-1 rounded-full">
-              {recipe.time}
-            </span>
+    <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+      {/* User Profile Banner */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+          <div className="w-16 h-16 rounded-full bg-white/20 p-1">
+            <img src={userProfile.avatar} className="rounded-full w-full h-full object-cover" alt="avatar" />
           </div>
+          <div>
+            <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+            <span className="bg-white/20 px-3 py-1 rounded-lg text-sm">厨艺新星</span>
+          </div>
+        </div>
+        <div className="text-center md:text-right">
+          <div className="text-sm opacity-80">POINTS</div>
+          <div className="text-3xl font-bold">{userProfile.points}</div>
+        </div>
+      </div>
 
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors">
-              {recipe.title}
-            </h3>
-            <p className="text-gray-500 text-sm line-clamp-2 mb-4">
-              {recipe.description}
-            </p>
-            <div className="flex items-center justify-between text-sm text-gray-400">
-              <span className="flex items-center">🔥 {recipe.difficulty}</span>
-              <span className="flex items-center">⭐ 4.9</span>
+      {/* Recipe Grid Section */}
+      <div className="mb-6">
+        <h3 className="font-bold text-2xl text-gray-800 mb-6">已获得食谱 ({unlockedRecipes.length})</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-24">
+          {unlockedRecipes.map(recipe => (
+            <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group">
+              <div className="h-48 overflow-hidden relative">
+                <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={recipe.title} />
+                <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-orange-600 text-xs font-bold px-3 py-1 rounded-full">
+                  {recipe.time}
+                </span>
+              </div>
+              <div className="p-4">
+                <h3 className="text-base font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors line-clamp-1">
+                  {recipe.title}
+                </h3>
+                <p className="text-gray-500 text-sm line-clamp-2 mb-3">
+                  {recipe.description}
+                </p>
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span className="flex items-center">🔥 {recipe.difficulty}</span>
+                  <span className="flex items-center">⭐ 4.9</span>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   </div>
 );
@@ -467,8 +453,33 @@ const ChallengeTab = ({ userProfile, onStartLevel, onUnlockLevel }) => {
   if (!selectedChapterId) {
     return (
       <div className="flex flex-col h-full bg-slate-50">
-        <div className="px-5 pt-4 bg-white pb-4 shadow-sm z-10"><div className="flex bg-gray-100 p-1 rounded-xl mb-4"><button onClick={() => setMode('chinese')} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'chinese' ? 'bg-red-500 text-white shadow-md' : 'text-gray-500'}`}><LayoutGrid size={16} /> 神州八膳雅集</button><button onClick={() => setMode('western')} className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'western' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500'}`}><Map size={16} /> 欧罗巴盛宴</button></div></div>
-        <div className="p-5 grid grid-cols-2 gap-4 pb-24 overflow-y-auto">{config.map(chapter => { const progress = userProfile.completedLevels[chapter.id] || 0; const total = chapter.range[1] - chapter.range[0] + 1; return (<div key={chapter.id} onClick={() => setSelectedChapterId(chapter.id)} className={`bg-white rounded-2xl p-4 shadow-sm border border-gray-100 active:scale-95 transition-transform relative overflow-hidden group cursor-pointer`}><div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${chapter.color}`}></div><div className="text-2xl mb-2">{chapter.icon}</div><h3 className="font-bold text-gray-800 mb-1">{chapter.name}</h3><div className="flex items-center gap-1 text-xs text-orange-500 font-bold bg-orange-50 w-fit px-2 py-1 rounded-full"><Trophy size={12} /><span>Lv.{progress} / {total}</span></div></div>); })}</div>
+        <div className="max-w-6xl mx-auto w-full px-6 pt-6">
+          <div className="bg-white rounded-2xl shadow-sm p-2 mb-6 flex gap-2">
+            <button onClick={() => setMode('chinese')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'chinese' ? 'bg-red-500 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>
+              <LayoutGrid size={18} /> 神州八膳雅集
+            </button>
+            <button onClick={() => setMode('western')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'western' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>
+              <Map size={18} /> 欧罗巴盛宴
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-24">
+            {config.map(chapter => {
+              const progress = userProfile.completedLevels[chapter.id] || 0;
+              const total = chapter.range[1] - chapter.range[0] + 1;
+              return (
+                <div key={chapter.id} onClick={() => setSelectedChapterId(chapter.id)} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md active:scale-95 transition-all cursor-pointer group relative overflow-hidden">
+                  <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${chapter.color}`}></div>
+                  <div className="text-3xl mb-3">{chapter.icon}</div>
+                  <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-orange-600 transition-colors">{chapter.name}</h3>
+                  <p className="text-xs text-gray-500 mb-3">{chapter.desc}</p>
+                  <div className="flex items-center gap-1 text-xs text-orange-500 font-bold bg-orange-50 w-fit px-3 py-1.5 rounded-full">
+                    <Trophy size={14} /><span>Lv.{progress} / {total}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   }
@@ -490,11 +501,86 @@ const SocialTab = () => {
 
   return (
     <div className="bg-gray-50 h-full flex flex-col pb-20">
-      <div className="bg-white px-5 pt-4 pb-0 sticky top-0 z-20 shadow-sm"><div className="flex gap-6 text-sm font-bold text-gray-400 overflow-x-auto hide-scrollbar"><button onClick={() => setTab('feed')} className={`pb-3 border-b-2 transition-colors whitespace-nowrap ${tab === 'feed' ? 'text-gray-900 border-orange-500' : 'border-transparent'}`}>美食圈动态</button><button onClick={() => setTab('homemade')} className={`pb-3 border-b-2 transition-colors whitespace-nowrap flex items-center gap-1 ${tab === 'homemade' ? 'text-purple-700 border-purple-500' : 'border-transparent'}`}>{tab === 'homemade' ? <Skull size={14} className="animate-pulse"/> : null} 自制美食栏</button><button onClick={() => setTab('ranking')} className={`pb-3 border-b-2 transition-colors whitespace-nowrap ${tab === 'ranking' ? 'text-gray-900 border-orange-500' : 'border-transparent'}`}>本周榜单</button></div></div>
-      <div className="flex-1 overflow-y-auto p-4">
-        {tab === 'feed' && (<div className="space-y-4">{SOCIAL_POSTS.filter(p => p.type === 'normal').map(post => <PostCard key={post.id} post={post} />)}</div>)}
-        {tab === 'homemade' && (<div className="space-y-6"><div onClick={() => setShowEvilGuide(true)} className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 rounded-xl p-4 flex items-center justify-between shadow-lg cursor-pointer border border-purple-500/30 group active:scale-95 transition-all"><div className="flex items-center gap-3"><div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-300 group-hover:animate-spin"><Sparkles size={20} /></div><div><h3 className="text-white font-bold text-sm flex items-center gap-2">邪修炼丹炉 <span className="bg-purple-600 text-[8px] px-1 rounded text-white">AI Powered</span></h3><p className="text-purple-400 text-[10px]">输入食材 · AI 生成黑暗配方</p></div></div><ChevronLeft className="text-gray-500 rotate-180" size={20} /></div><div className="flex items-center gap-2 mb-2"><Trophy size={18} className="text-yellow-500" /><h3 className="font-bold text-gray-800">本月暗黑料理 Top 10</h3></div>{laobaSpecial && (<div className="relative bg-gray-900 rounded-2xl p-5 overflow-hidden shadow-2xl shadow-purple-900/50 text-white border-2 border-purple-500/50 mb-4"><div className="absolute top-0 right-0 p-3 opacity-20"><Skull size={100} /></div><div className="relative z-10"><div className="flex items-center gap-2 mb-3"><span className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-lg"><Crown size={10} fill="currentColor" /> No.1 老八套餐</span></div><div className="flex gap-4 items-start"><div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-purple-400 shrink-0 relative"><img src={laobaSpecial.image} className="w-full h-full object-cover" alt={laobaSpecial.title} /></div><div><h3 className="font-bold text-lg leading-tight mb-1">{laobaSpecial.title}</h3><div className="flex items-center gap-2 text-xs text-gray-400 mb-2"><img src={laobaSpecial.avatar} className="w-4 h-4 rounded-full" alt="avatar" />{laobaSpecial.user}</div></div></div></div></div>)}<div className="space-y-4"><h3 className="font-bold text-gray-800 flex items-center gap-2 mt-4"><Zap size={16} className="text-blue-500" /> 其他自制投稿</h3>{otherHomemade.map(post => <PostCard key={post.id} post={post} isHomemade={true} />)}</div></div>)}
-        {tab === 'ranking' && (<div className="space-y-3"><div className="bg-orange-100 text-orange-800 text-xs p-3 rounded-lg mb-4 text-center border border-orange-200">每7天刷新榜单</div>{RANKING.map((user, idx) => <RankingCard key={idx} user={user} idx={idx} />)}</div>)}
+      <div className="max-w-6xl mx-auto w-full px-6 pt-6">
+        <div className="bg-white rounded-2xl shadow-sm mb-6 p-1 flex gap-2">
+          <button onClick={() => setTab('feed')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${tab === 'feed' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            美食圈动态
+          </button>
+          <button onClick={() => setTab('homemade')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${tab === 'homemade' ? 'bg-purple-50 text-purple-700' : 'text-gray-500 hover:bg-gray-50'}`}>
+            {tab === 'homemade' && <Skull size={16} className="animate-pulse"/>} 自制美食栏
+          </button>
+          <button onClick={() => setTab('ranking')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${tab === 'ranking' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            本周榜单
+          </button>
+        </div>
+
+        <div className="pb-24">
+          {tab === 'feed' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {SOCIAL_POSTS.filter(p => p.type === 'normal').map(post => <PostCard key={post.id} post={post} />)}
+            </div>
+          )}
+          {tab === 'homemade' && (
+            <div className="space-y-6">
+              <div onClick={() => setShowEvilGuide(true)} className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 rounded-2xl p-6 flex items-center justify-between shadow-xl cursor-pointer border border-purple-500/30 group hover:scale-[1.01] transition-all">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-300 group-hover:animate-spin">
+                    <Sparkles size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-lg flex items-center gap-2">
+                      邪修炼丹炉 <span className="bg-purple-600 text-[10px] px-2 py-0.5 rounded text-white">AI Powered</span>
+                    </h3>
+                    <p className="text-purple-400 text-sm">输入奇怪食材 · AI 生成黑暗配方</p>
+                  </div>
+                </div>
+                <ChevronLeft className="text-white rotate-180" size={24} />
+              </div>
+
+              {laobaSpecial && (
+                <div className="relative bg-gray-900 rounded-2xl p-8 overflow-hidden shadow-2xl shadow-purple-900/30 text-white border-2 border-purple-500/50">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Skull size={200} /></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-lg">
+                        <Crown size={12} fill="currentColor" /> No.1 老八套餐
+                      </span>
+                    </div>
+                    <div className="flex gap-6 items-start">
+                      <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-purple-400 shrink-0">
+                        <img src={laobaSpecial.image} className="w-full h-full object-cover" alt={laobaSpecial.title} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-2xl mb-2">{laobaSpecial.title}</h3>
+                        <div className="flex items-center gap-3 text-sm text-gray-400 mb-3">
+                          <img src={laobaSpecial.avatar} className="w-6 h-6 rounded-full" alt="avatar" />
+                          {laobaSpecial.user}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <h3 className="font-bold text-xl text-gray-800 flex items-center gap-2 mb-4">
+                  <Zap size={20} className="text-blue-500" /> 其他自制投稿
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {otherHomemade.map(post => <PostCard key={post.id} post={post} isHomemade={true} />)}
+                </div>
+              </div>
+            </div>
+          )}
+          {tab === 'ranking' && (
+            <div className="max-w-2xl mx-auto space-y-4">
+              <div className="bg-orange-100 text-orange-800 text-sm p-4 rounded-xl mb-6 text-center border border-orange-200 font-medium">
+                🔥 每7天刷新榜单，距离下一次刷新还有 2 天
+              </div>
+              {RANKING.map((user, idx) => <RankingCard key={idx} user={user} idx={idx} />)}
+            </div>
+          )}
+        </div>
       </div>
       {showEvilGuide && <EvilGuideModal onClose={() => setShowEvilGuide(false)} />}
     </div>
@@ -507,47 +593,101 @@ const RecipeDetail = ({ recipe, onBack, onComplete }) => {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-white px-5 pt-6 pb-3 sticky top-0 z-20 shadow-sm flex items-center gap-3">
-        <button onClick={onBack} className="p-1 bg-gray-100 rounded-full"><ChevronLeft size={20} /></button>
-        <div className="flex-1">
-          <div className="text-sm text-gray-500">菜谱详情</div>
-          <div className="font-bold text-lg">{recipe.title}</div>
-        </div>
-        <div className="text-xs text-gray-400">{recipe.time}</div>
-      </div>
-
-      <div className="p-5 space-y-4">
-        <div className="rounded-xl overflow-hidden shadow-lg"><img src={recipe.image} alt={recipe.title} className="w-full object-cover h-56" /></div>
-
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-base font-bold">{recipe.title}</div>
-            <div className="text-xs text-gray-400">{recipe.difficulty}</div>
-          </div>
-          <p className="text-sm text-gray-600 mb-3">{recipe.description}</p>
-
-          <div className="mb-3">
-            <div className="text-xs text-gray-500 mb-2">配料</div>
-            <ul className="text-sm text-gray-700">{recipe.ingredients?.map((it, idx) => <li key={idx}>{it.name} — {it.amount}{it.unit}</li>)}</ul>
-          </div>
-
-          <div className="mb-4">
-            <div className="text-xs text-gray-500 mb-2">步骤</div>
-            <ol className="text-sm text-gray-700 space-y-2">{recipe.steps?.map((s, i) => <li key={i}>{i + 1}. {s}</li>)}</ol>
-          </div>
-
-          <div className="flex gap-2">
-            <button onClick={() => setShowVideo(true)} className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md font-bold">查看示范视频</button>
-            <button onClick={() => setShowChat(true)} className="py-2 px-3 bg-indigo-50 text-indigo-600 rounded-md font-bold border border-indigo-100">向 AI 咨询</button>
-          </div>
+    <div className="bg-gray-100 min-h-screen flex justify-center md:py-10">
+      <div className="bg-white w-full max-w-3xl md:rounded-3xl shadow-2xl overflow-hidden">
+        <div className="relative h-72">
+          <img src={recipe.image} className="w-full h-full object-cover" alt={recipe.title} />
+          <button onClick={onBack} className="absolute top-6 left-6 p-2 bg-black/30 hover:bg-black/50 rounded-full text-white backdrop-blur-md transition-colors">
+            <ChevronLeft size={28} />
+          </button>
         </div>
 
-        <div className="fixed left-4 right-4 bottom-6 flex gap-3 z-40"> <button onClick={() => onComplete(recipe)} className="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold shadow-lg">完成并返回</button></div>
-      </div>
+        <div className="px-6 md:px-12 py-8">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">{recipe.title}</h1>
+            <span className="text-orange-500 font-bold bg-orange-50 px-4 py-1.5 rounded-full text-sm w-fit">{recipe.calories}</span>
+          </div>
 
-      {showChat && <AIChatModal recipe={recipe} onClose={() => setShowChat(false)} />}
-      {showVideo && <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6"><div className="bg-black rounded-xl overflow-hidden w-full max-w-3xl"><div className="flex items-center justify-between p-3 border-b border-black/30"><div className="text-white font-bold">示范视频</div><button onClick={() => setShowVideo(false)} className="text-gray-300 p-1"><X size={18} /></button></div><div className="p-6 bg-black"><div className="w-full aspect-video bg-gray-900"><video src="https://joy1.videvo.net/videvo_files/video/free/2019-11/large_watermarked/190301_1_25_11_preview.mp4" controls className="w-full h-full object-cover" /></div></div></div></div>}
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="text-center p-4 bg-gray-50 rounded-2xl">
+              <Clock className="mx-auto mb-1 text-gray-400" size={24} />
+              <span className="text-sm font-medium text-gray-600">{recipe.time}</span>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-2xl">
+              <Flame className="mx-auto mb-1 text-red-400" size={24} />
+              <span className="text-sm font-medium text-gray-600">{recipe.difficulty}</span>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-2xl">
+              <ChefHat className="mx-auto mb-1 text-blue-400" size={24} />
+              <span className="text-sm font-medium text-gray-600">{recipe.level === 0 ? '基础' : `Lv.${recipe.level}`}</span>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h3 className="font-bold mb-4 text-xl flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span>食材清单
+            </h3>
+            <div className="bg-gray-50 rounded-2xl p-6">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+                {recipe.ingredients?.map((ing, i) => (
+                  <li key={i} className="flex justify-between text-base border-b border-gray-200/50 pb-2 last:border-0">
+                    <span className="text-gray-600">{ing.name}</span>
+                    <span className="font-bold text-gray-800">{ing.amount}{ing.unit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h3 className="font-bold mb-4 text-xl flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span>烹饪步骤
+            </h3>
+            <ol className="space-y-4">
+              {recipe.steps?.map((s, i) => (
+                <li key={i} className="flex gap-4">
+                  <span className="w-8 h-8 shrink-0 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
+                    {i + 1}
+                  </span>
+                  <p className="text-base leading-relaxed text-gray-800 pt-1">{s}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-3 mb-6">
+            <button onClick={() => setShowVideo(true)} className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-colors shadow-md">
+              查看示范视频
+            </button>
+            <button onClick={() => setShowChat(true)} className="md:w-auto py-3 px-6 bg-indigo-50 text-indigo-600 rounded-xl font-bold border border-indigo-100 hover:bg-indigo-100 transition-colors">
+              向 AI 咨询
+            </button>
+          </div>
+
+          <button onClick={() => onComplete(recipe)} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-transform">
+            ✅ 完成烹饪并返回
+          </button>
+        </div>
+
+        {showChat && <AIChatModal recipe={recipe} onClose={() => setShowChat(false)} />}
+        {showVideo && (
+          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6">
+            <div className="bg-black rounded-xl overflow-hidden w-full max-w-3xl">
+              <div className="flex items-center justify-between p-3 border-b border-black/30">
+                <div className="text-white font-bold">示范视频</div>
+                <button onClick={() => setShowVideo(false)} className="text-gray-300 p-1 hover:text-white">
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="p-6 bg-black">
+                <div className="w-full aspect-video bg-gray-900">
+                  <video src="https://joy1.videvo.net/videvo_files/video/free/2019-11/large_watermarked/190301_1_25_11_preview.mp4" controls className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -771,26 +911,80 @@ export default function App() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="bg-white min-h-screen font-sans text-gray-900 max-w-md mx-auto shadow-2xl overflow-hidden relative flex flex-col">
-          {/* User info & logout */}
-          <div className="absolute top-4 right-4 z-40 flex items-center gap-2">
-            <div className="text-sm text-gray-700 mr-2">{userProfile.name}</div>
-            <button onClick={onLogout} className="text-xs bg-gray-100 px-2 py-1 rounded">退出</button>
+    <div className="bg-gray-50 min-h-screen font-sans text-gray-900 flex flex-col md:flex-row">
+      {/* Desktop Sidebar Navigation */}
+      <div className="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-screen sticky top-0 p-6">
+        <div className="flex items-center gap-2 text-2xl font-extrabold text-orange-600 mb-10 px-2">
+          <ChefHat size={32} /> 美味厨房
+        </div>
+        <nav className="flex-1 space-y-2">
+          <button onClick={() => setActiveTab('home')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'home' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <Home size={20} /> 首页大厅
+          </button>
+          <button onClick={() => setActiveTab('challenge')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'challenge' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <Map size={20} /> 厨艺征途
+          </button>
+          <button onClick={() => setActiveTab('social')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'social' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <Users size={20} /> 美食圈
+          </button>
+          <button onClick={() => setActiveTab('favorites')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'favorites' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <Bookmark size={20} /> 我的收藏
+          </button>
+        </nav>
+        <div className="border-t pt-4 mt-4">
+          <div className="px-4 py-2 text-sm text-gray-600 mb-2">
+            <div className="font-bold">{userProfile.name}</div>
+            <div className="text-xs text-gray-400">积分: {userProfile.points}</div>
           </div>
-          {activeTab !== 'home' && activeTab !== 'social' && (<div className="bg-white px-5 pt-12 pb-2 flex justify-between items-center shadow-sm z-10"><h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">{activeTab === 'challenge' ? '厨艺征途' : '美味厨房'}</h1></div>)}
-          <div className="flex-1 overflow-hidden relative">{renderContent()}</div>
-          <div className="bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-30 shrink-0">
-            <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-orange-500' : 'text-gray-400'}`}><Home size={24} /><span className="text-[10px]">首页</span></button>
-            <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}><Map size={24} /><span className="text-[10px]">征途</span></button>
-            <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}><Users size={24} /><span className="text-[10px]">美食圈</span></button>
-            <button onClick={() => setActiveTab('favorites')} className={`flex flex-col items-center gap-1 ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-400'}`}><Bookmark size={24} /><span className="text-[10px]">收藏</span></button>
-          </div>
-          <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
-          {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
+          <button onClick={onLogout} className="w-full flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-red-500 font-medium transition-colors rounded-lg hover:bg-red-50">
+            <span>🚪</span> 退出登录
+          </button>
         </div>
       </div>
+
+      {/* Mobile Header */}
+      <div className="md:hidden bg-white px-5 pt-4 pb-2 flex justify-between items-center shadow-sm z-10 sticky top-0">
+        <h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">
+          {activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
+        </h1>
+        <div className="flex items-center gap-2">
+          <div className="text-xs text-gray-600">{userProfile.name}</div>
+          <button onClick={onLogout} className="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">退出</button>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
+          {renderContent()}
+        </div>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-30 shrink-0">
+        <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-orange-500' : 'text-gray-400'}`}>
+          <Home size={24} /><span className="text-[10px]">首页</span>
+        </button>
+        <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}>
+          <Map size={24} /><span className="text-[10px]">征途</span>
+        </button>
+        <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}>
+          <Users size={24} /><span className="text-[10px]">美食圈</span>
+        </button>
+        <button onClick={() => setActiveTab('favorites')} className={`flex flex-col items-center gap-1 ${activeTab === 'favorites' ? 'text-orange-500' : 'text-gray-400'}`}>
+          <Bookmark size={24} /><span className="text-[10px]">收藏</span>
+        </button>
+      </div>
+
+      <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
+      {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
+      
+      <style>{`
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   );
 }
