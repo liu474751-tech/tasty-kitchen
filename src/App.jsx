@@ -44,6 +44,15 @@ const ShieldCheck = (p) => <Icon emoji="🛡️" {...p} />;
 const Eye = (p) => <Icon emoji="👁️" {...p} />;
 const EyeOff = (p) => <Icon emoji="🙈" {...p} />;
 const User = (p) => <Icon emoji="👤" {...p} />;
+const Utensils = (p) => <Icon emoji="🍴" {...p} />;
+const Download = (p) => <Icon emoji="⬇️" {...p} />;
+const Brush = (p) => <Icon emoji="🖌️" {...p} />;
+const Sliders = (p) => <Icon emoji="🎚️" {...p} />;
+const Plus = (p) => <Icon emoji="➕" {...p} />;
+const Check = (p) => <Icon emoji="✅" {...p} />;
+const Coffee = (p) => <Icon emoji="☕" {...p} />;
+const Palette = (p) => <Icon emoji="🎨" {...p} />;
+const Type = (p) => <Icon emoji="🔤" {...p} />;
 
 // API key disabled by default (preview environment)
 const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
@@ -71,6 +80,57 @@ const saveSession = (username) => { try { saveSessionWithExpiry(username, 7); } 
 const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} };
 const saveSessionWithExpiry = (username, days = 7) => { try { const expires = Date.now() + days * 24 * 3600 * 1000; localStorage.setItem(SESSION_KEY, JSON.stringify({ username, expires })); } catch(e) {} };
 const loadSessionSafe = () => { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return null; const parsed = JSON.parse(raw); if (parsed.expires && Date.now() > parsed.expires) { localStorage.removeItem(SESSION_KEY); return null; } return parsed; } catch(e) { return null; } };
+
+// --- AI Image Generation (Pollinations AI) ---
+const SMART_TRANSLATIONS = {
+  "番茄炒蛋": "Tomato Scrambled Eggs, red tomatoes and yellow fluffy eggs",
+  "番茄炒鸡蛋": "Tomato Scrambled Eggs, red tomatoes and yellow fluffy eggs",
+  "西红柿炒鸡蛋": "Tomato Scrambled Eggs, red tomatoes and yellow fluffy eggs",
+  "酸辣土豆丝": "Hot and Sour Potato Shreds, stir-fried julienned potatoes with chili peppers",
+  "红烧肉": "Red Braised Pork Belly, rich dark sauce, cube shape, shiny glaze",
+  "宫保鸡丁": "Kung Pao Chicken, diced chicken with peanuts and chili",
+  "麻婆豆腐": "Mapo Tofu, silken tofu in spicy chili sauce, sichuan style",
+  "水煮牛肉": "Sichuan Boiled Beef, spicy soup, chili oil, cilantro",
+  "白切鸡": "White Cut Chicken, cantonese style, yellow skin white meat, ginger sauce",
+  "饺子": "Chinese Dumplings, Jiaozi",
+  "火锅": "Chinese Hot Pot, spicy broth, various ingredients",
+  "兰州拉面": "Lanzhou Beef Noodles, clear soup, white radish, chili oil"
+};
+
+const STYLES = [
+  { id: 'none', name: '自然原色', prompt: 'natural lighting, authentic food photography, 4k' },
+  { id: 'michelin', name: '米其林摆盘', prompt: 'michelin star plating, fine dining, elegant, artistic sauce dots, small portion, haute cuisine, expensive look, minimal background' },
+  { id: 'street', name: '街头烟火气', prompt: 'street food stall, steam rising, night market atmosphere, vibrant neon colors, bokeh background, busy vibes' },
+  { id: 'ad', name: '广告大片', prompt: 'commercial food photography, studio lighting, high contrast, splashing, water droplets, fresh ingredients, macro details, 8k' },
+  { id: 'anime', name: '宫崎骏动漫', prompt: 'studio ghibli style, anime food, hand drawn, warm vibrant colors, delicious looking, cozy atmosphere, 2D' },
+  { id: 'china', name: '舌尖上的中国', prompt: 'traditional chinese painting style, elegant porcelain, steam, chopsticks, cinematic lighting, documentary style' },
+];
+
+const generateFreeImage = async (prompt, stylePrompt) => {
+  const seed = Math.floor(Math.random() * 100000);
+  let translatedPrompt = prompt;
+  
+  for (const [key, value] of Object.entries(SMART_TRANSLATIONS)) {
+    if (prompt.includes(key)) {
+       translatedPrompt = `${value} (${prompt})`;
+       break;
+    }
+  }
+
+  const baseEnhancement = "food photography, appetizing, delicious, masterpiece, best quality, 8k resolution, highly detailed texture";
+  const finalPrompt = stylePrompt 
+    ? `${translatedPrompt}, ${stylePrompt}, ${baseEnhancement}` 
+    : `${translatedPrompt}, ${baseEnhancement}`;
+  
+  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true&model=flux`;
+  
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(imageUrl);
+    img.onerror = () => reject(new Error("AI 画师连接失败，请重试")); 
+    img.src = imageUrl;
+  });
+};
 
 const callGeminiAPI = async (prompt, systemInstruction = "") => {
   if (!apiKey) return "请先配置 API Key 才能召唤 AI 大神！(请查看代码中的注释开启配置)";
@@ -587,6 +647,210 @@ const SocialTab = () => {
   );
 };
 
+// --- Deploy Modal Component ---
+const DeployModal = ({ isOpen, onClose, recipes, onDeploy, currentPrompt }) => {
+  if (!isOpen) return null;
+
+  const sortedRecipes = useMemo(() => {
+      const matches = [];
+      const others = [];
+      recipes.forEach(r => {
+          if (currentPrompt && currentPrompt.includes(r.title)) {
+              matches.push(r);
+          } else {
+              others.push(r);
+          }
+      });
+      return [...matches, ...others];
+  }, [recipes, currentPrompt]);
+
+  return (
+    <div className="fixed inset-0 bg-black/80 z-[120] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+        <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 className="font-bold text-lg flex items-center gap-2"><Zap size={18} className="text-orange-500"/> 部署到食材</h3>
+                <button onClick={onClose}><X size={20} className="text-gray-400"/></button>
+            </div>
+            <div className="p-2 bg-blue-50 text-blue-600 text-xs px-4">
+                选择一道菜，将刚刚生成的图片设为它的封面。
+            </div>
+            <div className="flex-1 overflow-y-auto p-2">
+                {sortedRecipes.map(recipe => (
+                    <div 
+                        key={recipe.id}
+                        onClick={() => onDeploy(recipe.id)}
+                        className="flex items-center gap-3 p-3 hover:bg-orange-50 rounded-xl cursor-pointer transition-colors border-b border-gray-50 last:border-0 group"
+                    >
+                        <img src={recipe.image} className="w-12 h-12 rounded-lg object-cover bg-gray-200" alt={recipe.title} />
+                        <div className="flex-1">
+                            <div className="font-bold text-gray-800 group-hover:text-orange-600">{recipe.title}</div>
+                            <div className="text-xs text-gray-400">{recipe.category === 'chinese' ? '中餐' : '西餐'} · Lv.{recipe.level}</div>
+                        </div>
+                        <div className="text-gray-300 group-hover:text-orange-500"><ArrowRight size={18}/></div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+  );
+};
+
+// --- Canvas Editor Component ---
+const CanvasEditor = ({ initialImage, onClose }) => {
+  const canvasRef = useRef(null);
+  const [ctx, setCtx] = useState(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [tool, setTool] = useState('brush'); 
+  const [color, setColor] = useState('#ffffff'); 
+  const [brushSize, setBrushSize] = useState(5);
+  const [textInput, setTextInput] = useState('');
+  const [showTextInput, setShowTextInput] = useState(false);
+  const [textPos, setTextPos] = useState({ x: 50, y: 50 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    setCtx(context);
+    const img = new Image();
+    img.src = initialImage;
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const maxW = 800;
+      const scale = img.width > maxW ? maxW / img.width : 1;
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+  }, [initialImage]);
+
+  const startDrawing = (e) => { if (tool !== 'brush') return; const { offsetX, offsetY } = e.nativeEvent; ctx.beginPath(); ctx.moveTo(offsetX, offsetY); setIsDrawing(true); };
+  const draw = (e) => { if (!isDrawing || tool !== 'brush') return; const { offsetX, offsetY } = e.nativeEvent; ctx.lineTo(offsetX, offsetY); ctx.strokeStyle = color; ctx.lineWidth = brushSize; ctx.lineCap = 'round'; ctx.stroke(); };
+  const stopDrawing = () => { if (isDrawing) { ctx.closePath(); setIsDrawing(false); } };
+  const addText = () => { if (!textInput) return; ctx.font = `bold ${brushSize * 5}px "Microsoft YaHei", Arial`; ctx.fillStyle = color; ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = 4; ctx.fillText(textInput, textPos.x, textPos.y); ctx.shadowBlur = 0; setShowTextInput(false); setTextInput(''); };
+  const downloadImage = () => { const link = document.createElement('a'); link.download = `food-${Date.now()}.png`; link.href = canvasRef.current.toDataURL(); link.click(); };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex flex-col animate-fade-in" style={{ backgroundColor: '#111827', color: 'white' }}>
+      <div className="h-16 flex items-center justify-between px-6 border-b border-gray-700" style={{ backgroundColor: '#1f2937' }}>
+        <div className="flex items-center gap-4"><button onClick={onClose} className="p-2 hover:bg-gray-700 rounded-full"><X size={24} /></button><h2 className="font-bold text-lg">图片精修</h2></div>
+        <button onClick={downloadImage} className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2"><Download size={18} /> 保存</button>
+      </div>
+      <div className="flex-1 flex overflow-hidden">
+        <div className="w-20 flex flex-col items-center py-6 gap-6 border-r border-gray-700" style={{ backgroundColor: '#1f2937' }}>
+            <button onClick={() => setTool('brush')} className={`p-3 rounded-xl transition-all ${tool === 'brush' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}><Brush size={24} /><span className="text-[10px] block mt-1">画笔</span></button>
+            <button onClick={() => setShowTextInput(true)} className={`p-3 rounded-xl transition-all ${tool === 'text' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}><Type size={24} /><span className="text-[10px] block mt-1">加字</span></button>
+            <div className="flex flex-col gap-3 mt-4">{['#ffffff', '#000000', '#ef4444', '#f97316', '#eab308', '#84cc16'].map(c => (<button key={c} onClick={() => setColor(c)} className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${color === c ? 'border-white' : 'border-transparent'}`} style={{ backgroundColor: c }} />))}</div>
+        </div>
+        <div className="flex-1 flex items-center justify-center relative overflow-auto p-8" style={{ backgroundColor: '#0f172a' }}>
+            <canvas ref={canvasRef} onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing} className="shadow-2xl cursor-crosshair" />
+            {showTextInput && (<div className="absolute top-10 left-1/2 -translate-x-1/2 p-4 rounded-xl shadow-xl border border-gray-700 flex gap-2 animate-fade-in" style={{ backgroundColor: '#1f2937' }}><input type="text" value={textInput} onChange={(e) => setTextInput(e.target.value)} placeholder="输入中文菜名..." className="text-white px-3 py-2 rounded-lg outline-none border border-gray-600 focus:border-orange-500" style={{ backgroundColor: '#374151' }} autoFocus /><button onClick={addText} className="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg"><Check size={20}/></button></div>)}
+        </div>
+        <div className="w-64 border-l border-gray-700 p-6" style={{ backgroundColor: '#1f2937' }}>
+            <label className="text-gray-400 text-sm font-bold mb-3 block flex items-center gap-2"><Sliders size={16}/> 大小调整</label>
+            <input type="range" min="1" max="80" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+            <div className="text-right text-gray-500 text-xs mt-2">{brushSize}px</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- AI Kitchen Tab Component ---
+const AIKitchenTab = ({ recipes, onUpdateRecipe }) => {
+  const [prompt, setPrompt] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('none');
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [editingImage, setEditingImage] = useState(null);
+  const [showDeployModal, setShowDeployModal] = useState(false);
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) return;
+    setIsLoading(true);
+    try {
+      const styleConfig = STYLES.find(s => s.id === selectedStyle);
+      const stylePrompt = styleConfig ? styleConfig.prompt : "";
+      const resultUrl = await generateFreeImage(prompt, stylePrompt);
+      setGeneratedImage(resultUrl);
+    } catch (error) {
+      alert(`出锅失败: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeploy = (recipeId) => {
+      if (generatedImage) {
+          onUpdateRecipe(recipeId, generatedImage);
+          setShowDeployModal(false);
+          alert("部署成功！该菜品的封面已更新。");
+      }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setEditingImage(e.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="px-5 pt-6 h-full flex flex-col">
+      {editingImage && <CanvasEditor initialImage={editingImage} onClose={() => setEditingImage(null)} />}
+      {showDeployModal && <DeployModal isOpen={true} onClose={() => setShowDeployModal(false)} recipes={recipes} onDeploy={handleDeploy} currentPrompt={prompt} />}
+
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white mb-6 shadow-lg">
+          <h2 className="text-2xl font-bold flex items-center gap-2"><ChefHat size={28} /> AI 智能厨房</h2>
+          <p className="text-white/90 text-sm mt-2">输入菜名生成图片，满意后点击"应用"，直接更新到您的食谱封面！</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1 pb-24">
+          <div className="flex flex-col gap-6">
+             <div className="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm space-y-6">
+                <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">想吃点什么？</label>
+                    <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="例如：番茄炒蛋，色泽红润，汤汁浓郁..." className="w-full p-4 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 outline-none focus:border-orange-500 h-32 resize-none text-base" />
+                </div>
+                <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Flame size={16} className="text-orange-500"/> 选择风格</label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {STYLES.map(style => (
+                            <button key={style.id} onClick={() => setSelectedStyle(style.id)} className={`py-2 px-3 rounded-lg text-xs font-medium border transition-all text-left truncate ${selectedStyle === style.id ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}>{style.name}</button>
+                        ))}
+                    </div>
+                </div>
+                <div className="flex gap-3">
+                    <button onClick={handleGenerate} disabled={isLoading || !prompt} className="flex-1 py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-50 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                        {isLoading ? <Loader2 className="animate-spin" /> : <Utensils />} {isLoading ? 'AI 正在烹饪...' : '立即出餐'}
+                    </button>
+                    <label className="px-4 py-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer transition-colors text-gray-600 flex items-center justify-center"><Upload size={20} /><input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} /></label>
+                </div>
+             </div>
+          </div>
+
+          <div className="flex flex-col h-full min-h-[400px]">
+              <div className={`flex-1 rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 overflow-hidden relative flex items-center justify-center shadow-inner group ${isLoading ? 'animate-pulse' : ''}`}>
+                  {generatedImage ? (
+                      <>
+                          <img src={generatedImage} className="w-full h-full object-contain" alt="Generated" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
+                              <button onClick={() => setEditingImage(generatedImage)} className="bg-white text-black px-5 py-2 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2 text-sm"><Brush size={16} /> 修图</button>
+                              <button onClick={() => setShowDeployModal(true)} className="bg-orange-500 text-white px-5 py-2 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2 text-sm shadow-lg"><Zap size={16} fill="currentColor" /> 应用</button>
+                              <a href={generatedImage} download="food.png" className="bg-black/50 text-white px-4 py-2 rounded-full font-bold hover:bg-black/70 transition-colors flex items-center justify-center"><Download size={18} /></a>
+                          </div>
+                      </>
+                  ) : (
+                      <div className="text-center text-gray-400"><Coffee size={64} className="mx-auto mb-4 opacity-50" /><p>等待上菜...</p></div>
+                  )}
+              </div>
+          </div>
+      </div>
+    </div>
+  );
+};
+
 // --- RecipeDetail component (added/used by App) ---
 const RecipeDetail = ({ recipe, onBack, onComplete }) => {
   const [showChat, setShowChat] = useState(false);
@@ -879,10 +1143,15 @@ export default function App() {
     setUnlockModal({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
   };
 
+  const handleUpdateRecipeImage = (recipeId, newImageUrl) => {
+    setUnlockedRecipes(prev => prev.map(r => r.id === recipeId ? { ...r, image: newImageUrl } : r));
+  };
+
   const renderContent = () => {
     if (activeTab === 'home') return <HomeTab unlockedRecipes={unlockedRecipes} onRecipeClick={setSelectedRecipe} userProfile={userProfile} />;
     if (activeTab === 'challenge') return <ChallengeTab userProfile={userProfile} onStartLevel={handleStartLevel} onUnlockLevel={onUnlockLevelClick} />;
     if (activeTab === 'social') return <SocialTab />;
+    if (activeTab === 'ai-kitchen') return <AIKitchenTab recipes={unlockedRecipes} onUpdateRecipe={handleUpdateRecipeImage} />;
     return null;
   };
   if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
@@ -954,6 +1223,9 @@ export default function App() {
           <button onClick={() => setActiveTab('social')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'social' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Users size={20} /> 美食圈
           </button>
+          <button onClick={() => setActiveTab('ai-kitchen')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'ai-kitchen' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <Robot size={20} /> AI 厨房
+          </button>
           <button onClick={() => setActiveTab('favorites')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'favorites' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Bookmark size={20} /> 我的收藏
           </button>
@@ -976,7 +1248,7 @@ export default function App() {
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
           <h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">
-            {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
+            {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'ai-kitchen' ? 'AI 智能厨房' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -999,6 +1271,9 @@ export default function App() {
         </button>
         <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Map size={24} /><span className="text-[10px]">征途</span>
+        </button>
+        <button onClick={() => setActiveTab('ai-kitchen')} className={`flex flex-col items-center gap-1 ${activeTab === 'ai-kitchen' ? 'text-orange-500' : 'text-gray-400'}`}>
+          <Robot size={24} /><span className="text-[10px]">AI厨房</span>
         </button>
         <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Users size={24} /><span className="text-[10px]">美食圈</span>
