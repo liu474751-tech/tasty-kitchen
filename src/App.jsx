@@ -718,8 +718,8 @@ const LoginCard = ({ defaultUsername = 'liu474751-tech', defaultPassword = '2002
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-[360px] bg-white rounded-xl shadow-lg p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6">
         <div className="text-center mb-4">
           <div className="w-14 h-14 mx-auto mb-2"><img src="/favicon.svg" alt="logo" /></div>
           <h2 className="font-bold text-orange-500">美味厨房</h2>
@@ -771,8 +771,8 @@ const RegisterModal = ({ onClose, onRegister }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div className="w-[360px] bg-white rounded-xl p-6 shadow-lg">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-xl p-6 shadow-lg">
         <div className="mb-3 text-lg font-bold">注册</div>
           <div className="space-y-3">
           <div><label className="text-xs text-gray-500">用户名</label><input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mt-1 p-3 bg-gray-100 rounded" /></div>
