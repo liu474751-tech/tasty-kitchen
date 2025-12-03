@@ -5,13 +5,13 @@ import {
   Trophy, Video, Upload, Lock, Unlock, Zap,
   RefreshCw, PlayCircle, Crown, Map, Coins, LayoutGrid, X,
   Skull, AlertTriangle, ThumbsDown, Scroll, Sparkles, Ghost, Biohazard,
-  Bot, Film, MessageSquare, Send, Loader2, ShieldCheck, User, LogOut,
+  Robot, Film, MessageSquare, Send, Loader2, ShieldCheck, User, LogOut,
   Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
   Utensils
 } from 'lucide-react';
 
-// API key disabled by default (preview environment)
-const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
+// ✅ 正确的本地开发配置：从 `.env.local` 或系统环境读取 VITE_GEMINI_API_KEY
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 // --- localStorage keys for demo persistence
 const USERS_KEY = 'tk_users';
@@ -30,60 +30,6 @@ async function hashPassword(pw) {
   const arr = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
   return arr;
 }
-const saveUsersToStorage = (obj) => { try { localStorage.setItem(USERS_KEY, JSON.stringify(obj)); } catch (e) {} };
-const loadSession = () => loadSessionSafe();
-const saveSession = (username) => { try { saveSessionWithExpiry(username, 7); } catch (e) {} };
-const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} };
-const saveSessionWithExpiry = (username, days = 7) => { try { const expires = Date.now() + days * 24 * 3600 * 1000; localStorage.setItem(SESSION_KEY, JSON.stringify({ username, expires })); } catch(e) {} };
-const loadSessionSafe = () => { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return null; const parsed = JSON.parse(raw); if (parsed.expires && Date.now() > parsed.expires) { localStorage.removeItem(SESSION_KEY); return null; } return parsed; } catch(e) { return null; } };
-
-const callGeminiAPI = async (prompt, systemInstruction = "") => {
-  if (!apiKey) return "请先配置 API Key 才能召唤 AI 大神！(请查看代码中的注释开启配置)";
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
-        }),
-      }
-    );
-
-    if (!response.ok) throw new Error(`API call failed: ${response.status}`);
-
-    const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    return typeof text === 'string' ? text : "AI 似乎正在闭关修炼，暂时无法回应...";
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "连接灵网失败，请稍后重试。";
-  }
-};
-
-// --- Static data (copied from user content) ---
-const CUISINE_CONFIG = {
-  chinese: [
-    { id: 'lu', name: '齐鲁鼎食', desc: '北方菜系之首', range: [1, 125], color: 'from-blue-500 to-cyan-600', icon: '🥘' },
-    { id: 'chuan', name: '川蜀薪火', desc: '麻辣鲜香', range: [126, 250], color: 'from-red-500 to-orange-600', icon: '🌶️' },
-    { id: 'yue', name: '粤港珍馐', desc: '清淡鲜嫩', range: [251, 375], color: 'from-emerald-400 to-green-600', icon: '🥟' },
-    { id: 'su', name: '淮扬雅馔', desc: '风格雅丽', range: [376, 500], color: 'from-teal-400 to-teal-600', icon: '🍲' },
-    { id: 'min', name: '闽海佳筵', desc: '山珍海味', range: [501, 625], color: 'from-indigo-400 to-blue-600', icon: '🦞' },
-    { id: 'zhe', name: '浙杭玉食', desc: '清鲜爽脆', range: [626, 750], color: 'from-cyan-400 to-blue-500', icon: '🍤' },
-    { id: 'xiang', name: '潇湘珍味', desc: '酸辣浓郁', range: [751, 875], color: 'from-red-600 to-red-800', icon: '🥓' },
-    { id: 'hui', name: '徽州琼筵', desc: '重油重色', range: [876, 1000], color: 'from-stone-500 to-stone-700', icon: '🍯' },
-  ],
-  western: [
-    { id: 'french', name: '法式优雅', desc: '宫廷技艺', range: [1, 60], color: 'from-blue-600 to-red-500', icon: '🍷' },
-    { id: 'italian', name: '意国风情', desc: '地中海味', range: [61, 120], color: 'from-green-500 to-red-500', icon: '🍝' },
-    { id: 'spanish', name: '伊比利亚', desc: '热情海鲜', range: [121, 180], color: 'from-yellow-500 to-red-600', icon: '🥘' },
-    { id: 'central', name: '中欧/英伦', desc: '肉食狂欢', range: [181, 240], color: 'from-gray-600 to-blue-700', icon: '🥩' },
-    { id: 'nordic', name: '北欧/东欧', desc: '腌渍艺术', range: [241, 300], color: 'from-blue-300 to-blue-500', icon: '🐟' },
-  ]
-};
 
 const RECIPES = [
   { id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0, time: '10 分钟', difficulty: '入门', calories: '180 千卡', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800', description: '国民家常菜。', ingredients: [{name: '鸡蛋', amount: 3, unit: '个'}], steps: ['炒鸡蛋', '炒番茄', '混合'] },
@@ -98,86 +44,6 @@ const RECIPES = [
   { id: 999, title: '开水白菜', category: 'hidden', cuisine: 'chuan', level: 999, time: '180 分钟', difficulty: '极难', calories: '100 千卡', image: 'https://images.unsplash.com/photo-1626805828156-3243f7e69c5e?auto=format&fit=crop&q=80&w=800', description: '传说级菜谱。', ingredients: [{ name: '娃娃菜', amount: 1, unit: '颗' }], steps: ['吊高汤', '淋汤'] }
 ];
 
-// 兼容：保留全局引用，避免旧的静态 bundle 抛错
-if (typeof window !== 'undefined') window.RECIPES = RECIPES;
-    time: '15 分钟', difficulty: '入门', calories: '120 千卡',
-    image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800',
-    description: '清脆爽口，酸辣开胃，刀工入门必练。',
-    ingredients: [{ name: '土豆', amount: 2, unit: '个' }, { name: '干辣椒', amount: 8, unit: '个' }, { name: '白醋', amount: 2, unit: '勺' }],
-    steps: ['切配：土豆切丝泡水洗去淀粉。', '爆香：炸香花椒捞出，爆香辣椒蒜末。', '快炒：大火炒土豆丝，淋白醋。', '调味：加盐鸡精翻炒出锅。']
-  },
-  {
-    id: 3, title: '拍黄瓜', category: 'chinese', cuisine: 'xiang', level: 0,
-    time: '5 分钟', difficulty: '入门', calories: '40 千卡',
-    image: 'https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&q=80&w=800',
-    description: '经典凉菜，蒜香浓郁，夏天必备。',
-    ingredients: [{ name: '黄瓜', amount: 2, unit: '根' }, { name: '大蒜', amount: 5, unit: '瓣' }, { name: '辣椒油', amount: 1, unit: '勺' }],
-    steps: ['暴力拍打：黄瓜拍碎切块。', '调汁：蒜末、生抽、醋、糖、辣椒油。', '拌匀：料汁淋在黄瓜上拌匀。']
-  },
-  {
-    id: 4, title: '田园蔬菜沙拉', category: 'western', cuisine: 'french', level: 0,
-    time: '8 分钟', difficulty: '入门', calories: '110 千卡',
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
-    description: '轻食首选，营养丰富。',
-    ingredients: [{ name: '生菜', amount: 100, unit: '克' }, { name: '小番茄', amount: 6, unit: '个' }],
-    steps: ['蔬菜洗净撕小块。', '调制油醋汁：橄榄油、黑醋、蜂蜜。', '拌匀食用。']
-  },
-  {
-    id: 5, title: '经典土豆泥', category: 'western', cuisine: 'central', level: 0,
-    time: '20 分钟', difficulty: '入门', calories: '220 千卡',
-    image: 'https://images.unsplash.com/photo-1618449845529-25553156166b?auto=format&fit=crop&q=80&w=800',
-    description: '绵软细腻，奶香浓郁。',
-    ingredients: [{ name: '土豆', amount: 2, unit: '个' }, { name: '牛奶', amount: 100, unit: 'ml' }, { name: '黄油', amount: 20, unit: '克' }],
-    steps: ['蒸熟土豆压成泥。', '小火加热牛奶黄油。', '分次加入土豆泥搅拌顺滑，加盐调味。']
-  },
-  {
-    id: 6, title: '黄油煎吐司', category: 'western', cuisine: 'italian', level: 0,
-    time: '5 分钟', difficulty: '入门', calories: '250 千卡',
-    image: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&q=80&w=800',
-    description: '外酥里嫩，快手早餐。',
-    ingredients: [{ name: '吐司', amount: 2, unit: '片' }, { name: '黄油', amount: 15, unit: '克' }],
-    steps: ['锅中融化黄油。', '小火慢煎吐司两面至金黄。', '淋上蜂蜜食用。']
-  },
-  {
-    id: 105, title: '九转大肠', category: 'chinese', cuisine: 'lu', level: 5,
-    time: '60 分钟', difficulty: '困难', calories: '500 千卡',
-    image: 'https://images.unsplash.com/photo-1626202378942-e1c944eb9726?auto=format&fit=crop&q=80&w=800',
-    description: '鲁菜代表作，酸甜苦辣咸五味俱全。', ingredients: [{ name: '大肠', amount: 500, unit: '克' }], steps: ['煮大肠', '炸至金黄', '红烧收汁']
-  },
-  {
-    id: 201, title: '麻婆豆腐', category: 'chinese', cuisine: 'chuan', level: 1,
-    time: '20 分钟', difficulty: '中等', calories: '300 千卡',
-    image: 'https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800',
-    description: '川菜之魂，麻辣鲜香。', ingredients: [{ name: '豆腐', amount: 1, unit: '盒' }], steps: ['炒红油', '烧豆腐']
-  },
-  {
-    id: 210, title: '水煮牛肉', category: 'chinese', cuisine: 'chuan', level: 10,
-    time: '40 分钟', difficulty: '中等', calories: '450 千卡',
-    image: 'https://images.unsplash.com/photo-1546272989-40c92939c6c2?auto=format&fit=crop&q=80&w=800',
-    description: '麻辣味厚，滑嫩适口。', ingredients: [{ name: '牛肉', amount: 300, unit: '克' }], steps: ['腌肉', '炒底料', '淋热油']
-  },
-  {
-    id: 301, title: '白切鸡', category: 'chinese', cuisine: 'yue', level: 1,
-    time: '50 分钟', difficulty: '中等', calories: '250 千卡',
-    image: 'https://images.unsplash.com/photo-1605494236893-68f7b703e1c6?auto=format&fit=crop&q=80&w=800',
-    description: '皮黄肉白，肥嫩鲜美。', ingredients: [{ name: '三黄鸡', amount: 1, unit: '只' }], steps: ['三提三放', '冰水浸泡']
-  },
-  {
-    id: 9001, title: '法式洋葱汤', category: 'western', cuisine: 'french', level: 1,
-    time: '50 分钟', difficulty: '中等', calories: '300 千卡',
-    image: 'https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&q=80&w=800',
-    description: '法餐经典前菜。', ingredients: [{ name: '洋葱', amount: 3, unit: '个' }], steps: ['炒洋葱', '焗烤']
-  },
-  {
-    id: 999, title: '开水白菜', category: 'hidden', cuisine: 'chuan', level: 999,
-    time: '180 分钟', difficulty: '极难', calories: '100 千卡',
-    image: 'https://images.unsplash.com/photo-1626805828156-3243f7e69c5e?auto=format&fit=crop&q=80&w=800',
-    description: '传说级菜谱。', ingredients: [{ name: '娃娃菜', amount: 1, unit: '颗' }], steps: ['吊高汤', '淋汤']
-  }
-];
-
-// 兼容：有些预打包/静态资产期望在全局作用域可访问 `RECIPES`。
-// 将其挂到 window，避免老旧 bundle 报 "RECIPES is not defined"。
 if (typeof window !== 'undefined') window.RECIPES = RECIPES;
 
 const SOCIAL_POSTS = [
