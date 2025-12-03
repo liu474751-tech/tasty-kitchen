@@ -44,15 +44,6 @@ const ShieldCheck = (p) => <Icon emoji="🛡️" {...p} />;
 const Eye = (p) => <Icon emoji="👁️" {...p} />;
 const EyeOff = (p) => <Icon emoji="🙈" {...p} />;
 const User = (p) => <Icon emoji="👤" {...p} />;
-const Utensils = (p) => <Icon emoji="🍴" {...p} />;
-const Download = (p) => <Icon emoji="⬇️" {...p} />;
-const Brush = (p) => <Icon emoji="🖌️" {...p} />;
-const Sliders = (p) => <Icon emoji="🎚️" {...p} />;
-const Plus = (p) => <Icon emoji="➕" {...p} />;
-const Check = (p) => <Icon emoji="✅" {...p} />;
-const Coffee = (p) => <Icon emoji="☕" {...p} />;
-const Palette = (p) => <Icon emoji="🎨" {...p} />;
-const Type = (p) => <Icon emoji="🔤" {...p} />;
 
 // API key disabled by default (preview environment)
 const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
@@ -74,6 +65,383 @@ async function hashPassword(pw) {
   const arr = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
   return arr;
 }
+const saveUsersToStorage = (obj) => { try { localStorage.setItem(USERS_KEY, JSON.stringify(obj)); } catch (e) {} };
+const loadSession = () => loadSessionSafe();
+const saveSession = (username) => { try { saveSessionWithExpiry(username, 7); } catch (e) {} };
+const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} };
+const saveSessionWithExpiry = (username, days = 7) => { try { const expires = Date.now() + days * 24 * 3600 * 1000; localStorage.setItem(SESSION_KEY, JSON.stringify({ username, expires })); } catch(e) {} };
+const loadSessionSafe = () => { try { const raw = localStorage.getItem(SESSION_KEY); if (!raw) return null; const parsed = JSON.parse(raw); if (parsed.expires && Date.now() > parsed.expires) { localStorage.removeItem(SESSION_KEY); return null; } return parsed; } catch(e) { return null; } };
+
+const callGeminiAPI = async (prompt, systemInstruction = "") => {
+  if (!apiKey) return "请先配置 API Key 才能召唤 AI 大神！(请查看代码中的注释开启配置)";
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
+        }),
+      }
+    );
+
+    if (!response.ok) throw new Error(`API call failed: ${response.status}`);
+
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return typeof text === 'string' ? text : "AI 似乎正在闭关修炼，暂时无法回应...";
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    return "连接灵网失败，请稍后重试。";
+  }
+};
+
+// --- Static data (copied from user content) ---
+const CUISINE_CONFIG = {
+  chinese: [
+    { id: 'lu', name: '齐鲁鼎食', desc: '北方菜系之首', range: [1, 125], color: 'from-blue-500 to-cyan-600', icon: '🥘' },
+    { id: 'chuan', name: '川蜀薪火', desc: '麻辣鲜香', range: [126, 250], color: 'from-red-500 to-orange-600', icon: '🌶️' },
+    { id: 'yue', name: '粤港珍馐', desc: '清淡鲜嫩', range: [251, 375], color: 'from-emerald-400 to-green-600', icon: '🥟' },
+    { id: 'su', name: '淮扬雅馔', desc: '风格雅丽', range: [376, 500], color: 'from-teal-400 to-teal-600', icon: '🍲' },
+    { id: 'min', name: '闽海佳筵', desc: '山珍海味', range: [501, 625], color: 'from-indigo-400 to-blue-600', icon: '🦞' },
+    { id: 'zhe', name: '浙杭玉食', desc: '清鲜爽脆', range: [626, 750], color: 'from-cyan-400 to-blue-500', icon: '🍤' },
+    { id: 'xiang', name: '潇湘珍味', desc: '酸辣浓郁', range: [751, 875], color: 'from-red-600 to-red-800', icon: '🥓' },
+    { id: 'hui', name: '徽州琼筵', desc: '重油重色', range: [876, 1000], color: 'from-stone-500 to-stone-700', icon: '🍯' },
+  ],
+  western: [
+    { id: 'french', name: '法式优雅', desc: '宫廷技艺', range: [1, 60], color: 'from-blue-600 to-red-500', icon: '🍷' },
+    { id: 'italian', name: '意国风情', desc: '地中海味', range: [61, 120], color: 'from-green-500 to-red-500', icon: '🍝' },
+    { id: 'spanish', name: '伊比利亚', desc: '热情海鲜', range: [121, 180], color: 'from-yellow-500 to-red-600', icon: '🥘' },
+    { id: 'central', name: '中欧/英伦', desc: '肉食狂欢', range: [181, 240], color: 'from-gray-600 to-blue-700', icon: '🥩' },
+    { id: 'nordic', name: '北欧/东欧', desc: '腌渍艺术', range: [241, 300], color: 'from-blue-300 to-blue-500', icon: '🐟' },
+  ]
+};
+
+const RECIPES = [
+  {
+    id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0,
+    time: '10 分钟', difficulty: '入门', calories: '180 千卡',
+    image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800',
+    description: '国民家常菜，酸甜可口，下饭神器。',
+    ingredients: [{ name: '鸡蛋', amount: 3, unit: '个' }, { name: '番茄', amount: 2, unit: '个' }, { name: '葱', amount: 1, unit: '根' }, { name: '盐', amount: 1, unit: '勺' }],
+    steps: ['准备工作：西红柿洗净切块，鸡蛋打散。', '炒鸡蛋：热锅凉油，炒熟鸡蛋盛出。', '炒番茄：爆香葱花，炒西红柿出汁。', '混合：倒入鸡蛋，加糖盐翻炒均匀。', '出锅：撒葱花装盘。']
+  },
+  {
+    id: 2, title: '酸辣土豆丝', category: 'chinese', cuisine: 'chuan', level: 0,
+    time: '15 分钟', difficulty: '入门', calories: '120 千卡',
+    image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800',
+    description: '清脆爽口，酸辣开胃，刀工入门必练。',
+    ingredients: [{ name: '土豆', amount: 2, unit: '个' }, { name: '干辣椒', amount: 8, unit: '个' }, { name: '白醋', amount: 2, unit: '勺' }],
+    steps: ['切配：土豆切丝泡水洗去淀粉。', '爆香：炸香花椒捞出，爆香辣椒蒜末。', '快炒：大火炒土豆丝，淋白醋。', '调味：加盐鸡精翻炒出锅。']
+  },
+  {
+    id: 3, title: '拍黄瓜', category: 'chinese', cuisine: 'xiang', level: 0,
+    time: '5 分钟', difficulty: '入门', calories: '40 千卡',
+    image: 'https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&q=80&w=800',
+    description: '经典凉菜，蒜香浓郁，夏天必备。',
+    ingredients: [{ name: '黄瓜', amount: 2, unit: '根' }, { name: '大蒜', amount: 5, unit: '瓣' }, { name: '辣椒油', amount: 1, unit: '勺' }],
+    steps: ['暴力拍打：黄瓜拍碎切块。', '调汁：蒜末、生抽、醋、糖、辣椒油。', '拌匀：料汁淋在黄瓜上拌匀。']
+  },
+  {
+    id: 4, title: '田园蔬菜沙拉', category: 'western', cuisine: 'french', level: 0,
+    time: '8 分钟', difficulty: '入门', calories: '110 千卡',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+    description: '轻食首选，营养丰富。',
+    ingredients: [{ name: '生菜', amount: 100, unit: '克' }, { name: '小番茄', amount: 6, unit: '个' }],
+    steps: ['蔬菜洗净撕小块。', '调制油醋汁：橄榄油、黑醋、蜂蜜。', '拌匀食用。']
+  },
+  {
+    id: 5, title: '经典土豆泥', category: 'western', cuisine: 'central', level: 0,
+    time: '20 分钟', difficulty: '入门', calories: '220 千卡',
+    image: 'https://images.unsplash.com/photo-1618449845529-25553156166b?auto=format&fit=crop&q=80&w=800',
+    description: '绵软细腻，奶香浓郁。',
+    ingredients: [{ name: '土豆', amount: 2, unit: '个' }, { name: '牛奶', amount: 100, unit: 'ml' }, { name: '黄油', amount: 20, unit: '克' }],
+    steps: ['蒸熟土豆压成泥。', '小火加热牛奶黄油。', '分次加入土豆泥搅拌顺滑，加盐调味。']
+  },
+  {
+    id: 6, title: '黄油煎吐司', category: 'western', cuisine: 'italian', level: 0,
+    time: '5 分钟', difficulty: '入门', calories: '250 千卡',
+    image: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&q=80&w=800',
+    description: '外酥里嫩，快手早餐。',
+    ingredients: [{ name: '吐司', amount: 2, unit: '片' }, { name: '黄油', amount: 15, unit: '克' }],
+    steps: ['锅中融化黄油。', '小火慢煎吐司两面至金黄。', '淋上蜂蜜食用。']
+  },
+  {
+    id: 105, title: '九转大肠', category: 'chinese', cuisine: 'lu', level: 5,
+    time: '60 分钟', difficulty: '困难', calories: '500 千卡',
+    image: 'https://images.unsplash.com/photo-1626202378942-e1c944eb9726?auto=format&fit=crop&q=80&w=800',
+    description: '鲁菜代表作，酸甜苦辣咸五味俱全。', ingredients: [{ name: '大肠', amount: 500, unit: '克' }], steps: ['煮大肠', '炸至金黄', '红烧收汁']
+  },
+  {
+    id: 201, title: '麻婆豆腐', category: 'chinese', cuisine: 'chuan', level: 1,
+    time: '20 分钟', difficulty: '中等', calories: '300 千卡',
+    image: 'https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800',
+    description: '川菜之魂，麻辣鲜香。', ingredients: [{ name: '豆腐', amount: 1, unit: '盒' }], steps: ['炒红油', '烧豆腐']
+  },
+  {
+    id: 210, title: '水煮牛肉', category: 'chinese', cuisine: 'chuan', level: 10,
+    time: '40 分钟', difficulty: '中等', calories: '450 千卡',
+    image: 'https://images.unsplash.com/photo-1546272989-40c92939c6c2?auto=format&fit=crop&q=80&w=800',
+    description: '麻辣味厚，滑嫩适口。', ingredients: [{ name: '牛肉', amount: 300, unit: '克' }], steps: ['腌肉', '炒底料', '淋热油']
+  },
+  {
+    id: 301, title: '白切鸡', category: 'chinese', cuisine: 'yue', level: 1,
+    time: '50 分钟', difficulty: '中等', calories: '250 千卡',
+    image: 'https://images.unsplash.com/photo-1605494236893-68f7b703e1c6?auto=format&fit=crop&q=80&w=800',
+    description: '皮黄肉白，肥嫩鲜美。', ingredients: [{ name: '三黄鸡', amount: 1, unit: '只' }], steps: ['三提三放', '冰水浸泡']
+  },
+  {
+    id: 9001, title: '法式洋葱汤', category: 'western', cuisine: 'french', level: 1,
+    time: '50 分钟', difficulty: '中等', calories: '300 千卡',
+    image: 'https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&q=80&w=800',
+    description: '法餐经典前菜。', ingredients: [{ name: '洋葱', amount: 3, unit: '个' }], steps: ['炒洋葱', '焗烤']
+  },
+  {
+    id: 999, title: '开水白菜', category: 'hidden', cuisine: 'chuan', level: 999,
+    time: '180 分钟', difficulty: '极难', calories: '100 千卡',
+    image: 'https://images.unsplash.com/photo-1626805828156-3243f7e69c5e?auto=format&fit=crop&q=80&w=800',
+    description: '传说级菜谱。', ingredients: [{ name: '娃娃菜', amount: 1, unit: '颗' }], steps: ['吊高汤', '淋汤']
+  }
+];
+
+const SOCIAL_POSTS = [
+  { id: 1, type: "normal", user: "厨神小当家", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Leo", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800", title: "终于做出了完美的披萨！", views: 1200000, likes: 85600, timestamp: "2小时前", tags: ["美味", "教程"] },
+  { id: 2, type: "normal", user: "深夜食堂", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Bella", image: "https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800", title: "这道红烧肉太费饭了", views: 150000, likes: 12000, timestamp: "5小时前", tags: ["家常菜"] },
+  { id: 3, type: "homemade", user: "厨房炼金术士", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Salem", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800", title: "自制鲱鱼罐头炒榴莲", views: 2000000, likes: 150000, timestamp: "1天前", tags: ["难吃", "生化武器", "黑暗料理"] },
+  { id: 4, type: "homemade", user: "炸厨房小组长", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Felix", image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800", title: "荧光蓝可乐鸡翅", views: 50000, likes: 3000, timestamp: "3小时前", tags: ["难吃", "颜色诡异"] },
+  { id: 5, type: "homemade", user: "萌新小白", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Sola", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&q=80&w=800", title: "第一次做蛋糕（好像糊了）", views: 200, likes: 10, timestamp: "刚刚", tags: ["失败", "自制"] },
+  { id: 11, type: "homemade", user: "暗黑料理界", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Dark", image: "https://images.unsplash.com/photo-1541795792062-3945a84517bd?auto=format&fit=crop&q=80&w=800", title: "板蓝根泡面", views: 90000, likes: 12000, timestamp: "2天前", tags: ["难吃", "养生"] },
+  { id: 12, type: "homemade", user: "乱炖之王", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=King2", image: "https://images.unsplash.com/photo-1574484284008-86d47dc6b90d?auto=format&fit=crop&q=80&w=800", title: "苦瓜炒奥利奥", views: 85000, likes: 11000, timestamp: "3天前", tags: ["难吃", "甜苦"] },
+  { id: 13, type: "homemade", user: "爆破鬼才", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Bomb", image: "https://images.unsplash.com/photo-1576618148400-f54bed99fcf8?auto=format&fit=crop&q=80&w=800", title: "微波炉炸蛋", views: 80000, likes: 9000, timestamp: "4天前", tags: ["危险", "难吃"] },
+  { id: 14, type: "homemade", user: "水果杀手", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Fruit", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80&w=800", title: "西瓜炒肉", views: 70000, likes: 8000, timestamp: "5天前", tags: ["难吃", "水果"] },
+  { id: 15, type: "homemade", user: "辣椒侠", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Spicy", image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&q=80&w=800", title: "魔鬼辣冰淇淋", views: 60000, likes: 7000, timestamp: "6天前", tags: ["难吃", "辣"] },
+  { id: 16, type: "homemade", user: "混搭狂人", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Mix", image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=800", title: "草莓麻婆豆腐", views: 55000, likes: 6500, timestamp: "1周前", tags: ["难吃", "川菜"] },
+  { id: 17, type: "homemade", user: "实验员01", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Exp", image: "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&q=80&w=800", title: "水泥封心馒头", views: 40000, likes: 5000, timestamp: "1周前", tags: ["难吃", "硬"] },
+];
+
+const RANKING = [
+  { rank: 1, name: "味蕾魔术师", title: "厨圣", score: 9999, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=King" },
+  { rank: 2, name: "炒勺狂魔", title: "厨神", score: 8888, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Queen" },
+  { rank: 3, name: "刀工第一人", title: "厨王", score: 7777, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Jack" },
+];
+
+// ----- Helper / Components -----
+const PostCard = ({ post, isHomemade, isLaoba }) => {
+  const showLaobaBadge = isHomemade && isLaoba;
+  return (
+    <div className={`bg-white rounded-2xl p-4 shadow-sm border ${showLaobaBadge ? 'border-purple-200 bg-purple-50/50' : 'border-gray-100'}`}>
+      <div className="flex items-center gap-3 mb-3">
+        <img src={post.avatar} className="w-10 h-10 rounded-full bg-gray-100" alt="avatar" />
+        <div>
+          <div className="font-bold text-sm text-gray-900 flex items-center gap-2">{post.user}</div>
+          <div className="text-xs text-gray-400">{post.timestamp}</div>
+        </div>
+        {showLaobaBadge && <div className="ml-auto bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold flex items-center gap-1"><Skull size={12} /> 老八套餐</div>}
+      </div>
+      <h3 className="text-base font-bold mb-2 text-gray-800">{post.title} {post.tags && post.tags.map(tag => <span key={tag} className="ml-2 text-[10px] font-normal bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">#{tag}</span>)}</h3>
+      <div className="relative h-48 rounded-xl overflow-hidden mb-3 bg-black"><img src={post.image} className="w-full h-full object-cover opacity-90" alt="post" /><div className="absolute inset-0 flex items-center justify-center"><PlayCircle size={48} className="text-white/80 fill-black/20" /></div></div>
+      <div className="flex justify-between items-center text-xs text-gray-500 px-1"><div className="flex items-center gap-1"><Video size={14} />{(post.views / 10000 >= 1) ? (post.views / 10000).toFixed(1) + '万' : post.views} 播放</div><div className="flex items-center gap-4"><div className="flex items-center gap-1 hover:text-red-500 transition-colors cursor-pointer"><Heart size={14} /> {post.likes}</div>{isHomemade && post.tags?.includes('难吃') && <div className="flex items-center gap-1 text-purple-500 font-bold" title="这很难吃"><ThumbsDown size={14} /> 难吃认证</div>}</div></div>
+    </div>
+  );
+}
+
+const RankingCard = ({ user, idx }) => {
+  const colors = ["bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-500 text-yellow-900", "bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 text-white", "bg-gradient-to-r from-orange-200 via-orange-400 to-orange-500 text-white"];
+  const color = colors[idx] || colors[2];
+  return (
+    <div className="bg-white rounded-xl p-4 shadow-sm flex items-center gap-4 relative overflow-hidden">
+      <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${color}`}></div>
+      <div className="font-bold text-xl w-6 text-center italic text-gray-300">#{user.rank}</div>
+      <div className="w-12 h-12 rounded-full border-2 border-gray-100 p-0.5"><img src={user.avatar} className="w-full h-full rounded-full" alt="avatar" /></div>
+      <div className="flex-1"><h4 className="font-bold text-gray-800">{user.name}</h4><p className="text-xs text-gray-400">积分: {user.score}</p></div>
+      <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${color}`}>{user.title}</div>
+    </div>
+  );
+}
+
+const AIVideoPlayer = ({ recipeName }) => {
+  const [status, setStatus] = useState('idle');
+  const [progress, setProgress] = useState(0);
+  const startGeneration = () => {
+    setStatus('generating'); let p = 0;
+    const interval = setInterval(() => { p += Math.random() * 10; if (p >= 100) { p = 100; clearInterval(interval); setStatus('playing'); } setProgress(p); }, 200);
+  };
+  return (
+    <div className="bg-black rounded-xl overflow-hidden relative w-full aspect-video shadow-lg mb-6 group">
+      {status === 'idle' && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white p-6 text-center">
+          <Robot size={48} className="text-blue-400 mb-4 animate-bounce" />
+          <h3 className="text-xl font-bold mb-2">AI 智能演示</h3>
+          <p className="text-gray-400 text-sm mb-6">点击生成 "{recipeName}" 的烹饪全流程视频</p>
+          <button onClick={startGeneration} className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:scale-105 transition-transform"><Sparkles size={18} /> 生成视频</button>
+        </div>
+      )}
+        {status === 'generating' && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white">
+          <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden mb-4"><div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-200" style={{ width: `${progress}%` }}></div></div>
+          <div className="flex items-center gap-2 text-sm text-blue-300 animate-pulse"><Robot size={16} /><span>正在分析食材... 渲染烹饪步骤... {Math.floor(progress)}%</span></div>
+        </div>
+      )}
+      {status === 'playing' && (
+        <div className="absolute inset-0 bg-black">
+          <video src="https://joy1.videvo.net/videvo_files/video/free/2019-11/large_watermarked/190301_1_25_11_preview.mp4" className="w-full h-full object-cover opacity-80" autoPlay loop muted playsInline />
+          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+            <div>
+              <div className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-md inline-flex items-center gap-1 mb-1"><Robot size={10} /> AI Generated</div>
+              <div className="text-white text-sm font-bold drop-shadow-md">正在播放: {recipeName} 教学</div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AIChatModal = ({ recipe, onClose }) => {
+  const [messages, setMessages] = useState([{ role: 'model', text: `你好！我是你的 AI 膳食顾问。关于“${recipe.title}”这道菜，你有什么想问的吗？` }]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+  const handleSend = async () => {
+    if (!input.trim()) return;
+    const userMsg = input; setInput(''); setMessages(prev => [...prev, { role: 'user', text: userMsg }]); setIsLoading(true);
+    const prompt = `用户正在制作：${recipe.title}。用户问题：${userMsg}。请简短、专业地回答。`;
+    const responseText = await callGeminiAPI(prompt, "你是一位专业的烹饪顾问。");
+    setMessages(prev => [...prev, { role: 'model', text: responseText }]); setIsLoading(false);
+  };
+  return (
+    <div className="fixed inset-0 bg-black/50 z-[60] flex flex-col justify-end animate-fade-in">
+      <div className="bg-white rounded-t-2xl h-[80vh] flex flex-col shadow-2xl">
+        <div className="p-4 border-b flex justify-between items-center">
+          <div className="flex items-center gap-2 text-indigo-600 font-bold"><Sparkles size={20} /> AI 膳食顾问</div>
+          <button onClick={onClose}><X size={24} className="text-gray-400" /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-none shadow-sm'}`}>{msg.text}</div>
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex justify-start"><div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-200 flex items-center gap-2 text-gray-400 text-sm"><Loader2 size={14} className="animate-spin" /> 思考中...</div></div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="p-4 border-t bg-white pb-safe">
+          <div className="flex gap-2">
+            <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="问点什么..." className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+            <button onClick={handleSend} disabled={isLoading || !input.trim()} className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed"><Send size={18} /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EvilGuideModal = ({ onClose }) => {
+  const [ingredientsInput, setIngredientsInput] = useState('');
+  const [generatedRecipe, setGeneratedRecipe] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const handleGenerateEvilRecipe = async () => {
+    if (!ingredientsInput.trim()) return;
+    setIsGenerating(true);
+    const prompt = `你是一位“黑暗料理界”的邪修大厨。用户提供了食材：${ingredientsInput}。请构思一道黑暗料理，并返回JSON格式包含title和desc字段。`;
+    const resultText = await callGeminiAPI(prompt);
+    let recipeData = { title: "炼丹失败", desc: resultText };
+    try {
+      const jsonMatch = resultText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) recipeData = JSON.parse(jsonMatch[0]);
+    } catch (e) { console.error("JSON parse error", e); }
+    setGeneratedRecipe(recipeData); setIsGenerating(false);
+  };
+  const tips = [{ icon: <Biohazard size={20} className="text-green-500" />, title: "视觉冲击", desc: "善用非自然食材颜色。" }, { icon: <Ghost size={20} className="text-purple-500" />, title: "味觉黑洞", desc: "打破甜咸次元壁！" }];
+  return (
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-5 backdrop-blur-sm animate-fade-in"><div className="bg-gray-900 border-2 border-purple-500 rounded-2xl w-full max-w-sm p-6 relative overflow-hidden flex flex-col max-h-[85vh]"><button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white z-20"><X size={24} /></button><div className="text-center mb-6 relative z-10 flex-shrink-0"><div className="w-16 h-16 bg-purple-900/50 text-purple-400 border border-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(168,85,247,0.5)]"><Scroll size={32} /></div><h2 className="text-2xl font-bold text-white tracking-widest">邪修炼丹炉</h2></div><div className="flex-1 overflow-y-auto relative z-10 space-y-4">{!generatedRecipe ? (<><div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700"><label className="text-xs text-gray-400 block mb-2">输入奇怪食材:</label><textarea value={ingredientsInput} onChange={(e) => setIngredientsInput(e.target.value)} className="w-full bg-gray-900 text-white p-3 rounded-lg border border-gray-600 focus:outline-none text-sm h-24 resize-none" placeholder="在此输入..." /></div><button onClick={handleGenerateEvilRecipe} disabled={isGenerating || !ingredientsInput.trim()} className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 disabled:opacity-50">{isGenerating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}{isGenerating ? "炼制中..." : "开始炼丹"}</button></>) : (<div className="bg-gray-800/80 p-5 rounded-xl border border-purple-500/50 text-center"><h3 className="text-xl font-bold text-purple-300 mb-3">{generatedRecipe.title}</h3><p className="text-gray-300 text-sm leading-relaxed mb-6 text-left">{typeof generatedRecipe.desc === 'string' ? generatedRecipe.desc : JSON.stringify(generatedRecipe.desc)}</p><button onClick={() => { setGeneratedRecipe(null); setIngredientsInput(''); }} className="text-xs text-gray-500 hover:text-white underline">再练一炉</button></div>)}<div className="pt-4 border-t border-gray-800"><h4 className="text-gray-500 text-xs font-bold mb-2">修习心法：</h4><div className="space-y-2">{tips.map((t, i) => <p key={i} className="text-[10px] text-gray-400">• {t.title}: {t.desc}</p>)}</div></div></div></div></div>
+  );
+};
+
+const UnlockModal = ({ isOpen, onClose, onConfirm, cost, monthlyLeft, title, userPoints }) => {
+  if (!isOpen) return null;
+  const canAfford = userPoints >= cost;
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-5 backdrop-blur-sm animate-fade-in"><div className="bg-white rounded-2xl w-full max-w-sm p-6 relative"><button onClick={onClose} className="absolute top-4 right-4 text-gray-400"><X size={20} /></button><div className="text-center mb-4"><div className="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3"><Lock size={24} /></div><h2 className="text-xl font-bold text-gray-800">解锁菜谱</h2><p className="text-indigo-600 font-medium mt-1">{title}</p></div><div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-3"><div className="flex justify-between items-center text-sm"><span className="text-gray-500">所需积分</span><span className="font-bold text-gray-800 flex items-center gap-1"><Coins size={14} className="text-yellow-500" /> -{cost}</span></div></div>{!canAfford ? (<button disabled className="w-full py-3 bg-gray-200 text-gray-400 font-bold rounded-xl cursor-not-allowed">积分不足</button>) : (<button onClick={onConfirm} className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 active:scale-95 transition-transform flex items-center justify-center gap-2"><Unlock size={18} /> 确认兑换</button>)}</div></div>
+  );
+};
+
+// --- Tab components (HomeTab, ChallengeTab, SocialTab) ---
+const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
+  <div className="animate-fade-in">
+    <header className="relative bg-orange-50 overflow-hidden mb-8">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24 flex flex-col-reverse lg:flex-row items-center gap-12">
+        <div className="w-full lg:w-1/2 text-center lg:text-left z-10">
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+            探索味蕾的 <span className="text-orange-500">无限可能</span>
+          </h1>
+          <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+            汇集全球精选美食食谱，从家常菜到米其林，让每一次下厨都成为享受。
+          </p>
+        </div>
+        <div className="w-full lg:w-1/2 relative">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full max-w-md mx-auto aspect-square">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Delicious Food" className="object-cover w-full h-full hover:scale-110 transition duration-500" />
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+      {/* User Profile Banner */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+          <div className="w-16 h-16 rounded-full bg-white/20 p-1">
+            <img src={userProfile.avatar} className="rounded-full w-full h-full object-cover" alt="avatar" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+            <span className="bg-white/20 px-3 py-1 rounded-lg text-sm">厨艺新星</span>
+          </div>
+        </div>
+        <div className="text-center md:text-right">
+          <div className="text-sm opacity-80">POINTS</div>
+          <div className="text-3xl font-bold">{userProfile.points}</div>
+        </div>
+      </div>
+
+      {/* Recipe Grid Section */}
+      <div className="mb-6">
+        <h3 className="font-bold text-2xl text-gray-800 mb-6">已获得食谱 ({unlockedRecipes.length})</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-24">
+          {unlockedRecipes.map(recipe => (
+            <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group">
+              <div className="h-48 overflow-hidden relative">
+                <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={recipe.title} />
+                <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-orange-600 text-xs font-bold px-3 py-1 rounded-full">
+                  {recipe.time}
+                </span>
+              </div>
+              <div className="p-4">
+                <h3 className="text-base font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors line-clamp-1">
+                  {recipe.title}
+                </h3>
+                <p className="text-gray-500 text-sm line-clamp-2 mb-3">
+                  {recipe.description}
+                </p>
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span className="flex items-center">🔥 {recipe.difficulty}</span>
+                  <span className="flex items-center">⭐ 4.9</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const ChallengeTab = ({ userProfile, onStartLevel, onUnlockLevel }) => {
   const [mode, setMode] = useState('chinese');
@@ -215,210 +583,6 @@ const SocialTab = () => {
         </div>
       </div>
       {showEvilGuide && <EvilGuideModal onClose={() => setShowEvilGuide(false)} />}
-    </div>
-  );
-};
-
-// --- Deploy Modal Component ---
-const DeployModal = ({ isOpen, onClose, recipes, onDeploy, currentPrompt }) => {
-  if (!isOpen) return null;
-
-  const sortedRecipes = useMemo(() => {
-      const matches = [];
-      const others = [];
-      recipes.forEach(r => {
-          if (currentPrompt && currentPrompt.includes(r.title)) {
-              matches.push(r);
-          } else {
-              others.push(r);
-          }
-      });
-      return [...matches, ...others];
-  }, [recipes, currentPrompt]);
-
-  return (
-    <div className="fixed inset-0 bg-black/80 z-[120] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-        <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden flex flex-col max-h-[80vh]">
-            <div className="p-4 border-b flex justify-between items-center bg-gray-50">
-                <h3 className="font-bold text-lg flex items-center gap-2"><Zap size={18} className="text-orange-500"/> 部署到食材</h3>
-                <button onClick={onClose}><X size={20} className="text-gray-400"/></button>
-            </div>
-            <div className="p-2 bg-blue-50 text-blue-600 text-xs px-4">
-                选择一道菜，将刚刚生成的图片设为它的封面。
-            </div>
-            <div className="flex-1 overflow-y-auto p-2">
-                {sortedRecipes.map(recipe => (
-                    <div 
-                        key={recipe.id}
-                        onClick={() => onDeploy(recipe.id)}
-                        className="flex items-center gap-3 p-3 hover:bg-orange-50 rounded-xl cursor-pointer transition-colors border-b border-gray-50 last:border-0 group"
-                    >
-                        <img src={recipe.image} className="w-12 h-12 rounded-lg object-cover bg-gray-200" alt={recipe.title} />
-                        <div className="flex-1">
-                            <div className="font-bold text-gray-800 group-hover:text-orange-600">{recipe.title}</div>
-                            <div className="text-xs text-gray-400">{recipe.category === 'chinese' ? '中餐' : '西餐'} · Lv.{recipe.level}</div>
-                        </div>
-                        <div className="text-gray-300 group-hover:text-orange-500"><ArrowRight size={18}/></div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    </div>
-  );
-};
-
-// --- Canvas Editor Component ---
-const CanvasEditor = ({ initialImage, onClose }) => {
-  const canvasRef = useRef(null);
-  const [ctx, setCtx] = useState(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [tool, setTool] = useState('brush'); 
-  const [color, setColor] = useState('#ffffff'); 
-  const [brushSize, setBrushSize] = useState(5);
-  const [textInput, setTextInput] = useState('');
-  const [showTextInput, setShowTextInput] = useState(false);
-  const [textPos, setTextPos] = useState({ x: 50, y: 50 });
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    setCtx(context);
-    const img = new Image();
-    img.src = initialImage;
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      const maxW = 800;
-      const scale = img.width > maxW ? maxW / img.width : 1;
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-  }, [initialImage]);
-
-  const startDrawing = (e) => { if (tool !== 'brush') return; const { offsetX, offsetY } = e.nativeEvent; ctx.beginPath(); ctx.moveTo(offsetX, offsetY); setIsDrawing(true); };
-  const draw = (e) => { if (!isDrawing || tool !== 'brush') return; const { offsetX, offsetY } = e.nativeEvent; ctx.lineTo(offsetX, offsetY); ctx.strokeStyle = color; ctx.lineWidth = brushSize; ctx.lineCap = 'round'; ctx.stroke(); };
-  const stopDrawing = () => { if (isDrawing) { ctx.closePath(); setIsDrawing(false); } };
-  const addText = () => { if (!textInput) return; ctx.font = `bold ${brushSize * 5}px "Microsoft YaHei", Arial`; ctx.fillStyle = color; ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = 4; ctx.fillText(textInput, textPos.x, textPos.y); ctx.shadowBlur = 0; setShowTextInput(false); setTextInput(''); };
-  const downloadImage = () => { const link = document.createElement('a'); link.download = `food-${Date.now()}.png`; link.href = canvasRef.current.toDataURL(); link.click(); };
-
-  return (
-    <div className="fixed inset-0 z-[100] flex flex-col animate-fade-in" style={{ backgroundColor: '#111827', color: 'white' }}>
-      <div className="h-16 flex items-center justify-between px-6 border-b border-gray-700" style={{ backgroundColor: '#1f2937' }}>
-        <div className="flex items-center gap-4"><button onClick={onClose} className="p-2 hover:bg-gray-700 rounded-full"><X size={24} /></button><h2 className="font-bold text-lg">图片精修</h2></div>
-        <button onClick={downloadImage} className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2"><Download size={18} /> 保存</button>
-      </div>
-      <div className="flex-1 flex overflow-hidden">
-        <div className="w-20 flex flex-col items-center py-6 gap-6 border-r border-gray-700" style={{ backgroundColor: '#1f2937' }}>
-            <button onClick={() => setTool('brush')} className={`p-3 rounded-xl transition-all ${tool === 'brush' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}><Brush size={24} /><span className="text-[10px] block mt-1">画笔</span></button>
-            <button onClick={() => setShowTextInput(true)} className={`p-3 rounded-xl transition-all ${tool === 'text' ? 'bg-orange-600 text-white' : 'text-gray-400 hover:bg-gray-700'}`}><Type size={24} /><span className="text-[10px] block mt-1">加字</span></button>
-            <div className="flex flex-col gap-3 mt-4">{['#ffffff', '#000000', '#ef4444', '#f97316', '#eab308', '#84cc16'].map(c => (<button key={c} onClick={() => setColor(c)} className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${color === c ? 'border-white' : 'border-transparent'}`} style={{ backgroundColor: c }} />))}</div>
-        </div>
-        <div className="flex-1 flex items-center justify-center relative overflow-auto p-8" style={{ backgroundColor: '#0f172a' }}>
-            <canvas ref={canvasRef} onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing} className="shadow-2xl cursor-crosshair" />
-            {showTextInput && (<div className="absolute top-10 left-1/2 -translate-x-1/2 p-4 rounded-xl shadow-xl border border-gray-700 flex gap-2 animate-fade-in" style={{ backgroundColor: '#1f2937' }}><input type="text" value={textInput} onChange={(e) => setTextInput(e.target.value)} placeholder="输入中文菜名..." className="text-white px-3 py-2 rounded-lg outline-none border border-gray-600 focus:border-orange-500" style={{ backgroundColor: '#374151' }} autoFocus /><button onClick={addText} className="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg"><Check size={20}/></button></div>)}
-        </div>
-        <div className="w-64 border-l border-gray-700 p-6" style={{ backgroundColor: '#1f2937' }}>
-            <label className="text-gray-400 text-sm font-bold mb-3 block flex items-center gap-2"><Sliders size={16}/> 大小调整</label>
-            <input type="range" min="1" max="80" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
-            <div className="text-right text-gray-500 text-xs mt-2">{brushSize}px</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- AI Kitchen Tab Component ---
-const AIKitchenTab = ({ recipes, onUpdateRecipe }) => {
-  const [prompt, setPrompt] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState('none');
-  const [generatedImage, setGeneratedImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [editingImage, setEditingImage] = useState(null);
-  const [showDeployModal, setShowDeployModal] = useState(false);
-
-  const handleGenerate = async () => {
-    if (!prompt.trim()) return;
-    setIsLoading(true);
-    try {
-      const styleConfig = STYLES.find(s => s.id === selectedStyle);
-      const stylePrompt = styleConfig ? styleConfig.prompt : "";
-      const resultUrl = await generateFreeImage(prompt, stylePrompt);
-      setGeneratedImage(resultUrl);
-    } catch (error) {
-      alert(`出锅失败: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeploy = (recipeId) => {
-      if (generatedImage) {
-          onUpdateRecipe(recipeId, generatedImage);
-          setShowDeployModal(false);
-          alert("部署成功！该菜品的封面已更新。");
-      }
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setEditingImage(e.target.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  return (
-    <div className="px-5 pt-6 h-full flex flex-col">
-      {editingImage && <CanvasEditor initialImage={editingImage} onClose={() => setEditingImage(null)} />}
-      {showDeployModal && <DeployModal isOpen={true} onClose={() => setShowDeployModal(false)} recipes={recipes} onDeploy={handleDeploy} currentPrompt={prompt} />}
-
-      <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white mb-6 shadow-lg">
-          <h2 className="text-2xl font-bold flex items-center gap-2"><ChefHat size={28} /> AI 智能厨房</h2>
-          <p className="text-white/90 text-sm mt-2">输入菜名生成图片，满意后点击"应用"，直接更新到您的食谱封面！</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1 pb-24">
-          <div className="flex flex-col gap-6">
-             <div className="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm space-y-6">
-                <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">想吃点什么？</label>
-                    <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="例如：番茄炒蛋，色泽红润，汤汁浓郁..." className="w-full p-4 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 outline-none focus:border-orange-500 h-32 resize-none text-base" />
-                </div>
-                <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Flame size={16} className="text-orange-500"/> 选择风格</label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {STYLES.map(style => (
-                            <button key={style.id} onClick={() => setSelectedStyle(style.id)} className={`py-2 px-3 rounded-lg text-xs font-medium border transition-all text-left truncate ${selectedStyle === style.id ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}>{style.name}</button>
-                        ))}
-                    </div>
-                </div>
-                <div className="flex gap-3">
-                    <button onClick={handleGenerate} disabled={isLoading || !prompt} className="flex-1 py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 disabled:opacity-50 bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                        {isLoading ? <Loader2 className="animate-spin" /> : <Utensils />} {isLoading ? 'AI 正在烹饪...' : '立即出餐'}
-                    </button>
-                    <label className="px-4 py-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer transition-colors text-gray-600 flex items-center justify-center"><Upload size={20} /><input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} /></label>
-                </div>
-             </div>
-          </div>
-
-          <div className="flex flex-col h-full min-h-[400px]">
-              <div className={`flex-1 rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 overflow-hidden relative flex items-center justify-center shadow-inner group ${isLoading ? 'animate-pulse' : ''}`}>
-                  {generatedImage ? (
-                      <>
-                          <img src={generatedImage} className="w-full h-full object-contain" alt="Generated" />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
-                              <button onClick={() => setEditingImage(generatedImage)} className="bg-white text-black px-5 py-2 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2 text-sm"><Brush size={16} /> 修图</button>
-                              <button onClick={() => setShowDeployModal(true)} className="bg-orange-500 text-white px-5 py-2 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2 text-sm shadow-lg"><Zap size={16} fill="currentColor" /> 应用</button>
-                              <a href={generatedImage} download="food.png" className="bg-black/50 text-white px-4 py-2 rounded-full font-bold hover:bg-black/70 transition-colors flex items-center justify-center"><Download size={18} /></a>
-                          </div>
-                      </>
-                  ) : (
-                      <div className="text-center text-gray-400"><Coffee size={64} className="mx-auto mb-4 opacity-50" /><p>等待上菜...</p></div>
-                  )}
-              </div>
-          </div>
-      </div>
     </div>
   );
 };
@@ -715,15 +879,10 @@ export default function App() {
     setUnlockModal({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
   };
 
-  const handleUpdateRecipeImage = (recipeId, newImageUrl) => {
-    setUnlockedRecipes(prev => prev.map(r => r.id === recipeId ? { ...r, image: newImageUrl } : r));
-  };
-
   const renderContent = () => {
     if (activeTab === 'home') return <HomeTab unlockedRecipes={unlockedRecipes} onRecipeClick={setSelectedRecipe} userProfile={userProfile} />;
     if (activeTab === 'challenge') return <ChallengeTab userProfile={userProfile} onStartLevel={handleStartLevel} onUnlockLevel={onUnlockLevelClick} />;
     if (activeTab === 'social') return <SocialTab />;
-    if (activeTab === 'ai-kitchen') return <AIKitchenTab recipes={unlockedRecipes} onUpdateRecipe={handleUpdateRecipeImage} />;
     return null;
   };
   if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
@@ -795,9 +954,6 @@ export default function App() {
           <button onClick={() => setActiveTab('social')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'social' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Users size={20} /> 美食圈
           </button>
-          <button onClick={() => setActiveTab('ai-kitchen')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'ai-kitchen' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
-            <Robot size={20} /> AI 厨房
-          </button>
           <button onClick={() => setActiveTab('favorites')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'favorites' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Bookmark size={20} /> 我的收藏
           </button>
@@ -820,7 +976,7 @@ export default function App() {
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
           <h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">
-            {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'ai-kitchen' ? 'AI 智能厨房' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
+            {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -843,9 +999,6 @@ export default function App() {
         </button>
         <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Map size={24} /><span className="text-[10px]">征途</span>
-        </button>
-        <button onClick={() => setActiveTab('ai-kitchen')} className={`flex flex-col items-center gap-1 ${activeTab === 'ai-kitchen' ? 'text-orange-500' : 'text-gray-400'}`}>
-          <Robot size={24} /><span className="text-[10px]">AI厨房</span>
         </button>
         <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Users size={24} /><span className="text-[10px]">美食圈</span>
