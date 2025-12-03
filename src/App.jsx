@@ -207,6 +207,10 @@ const RECIPES = [
   }
 ];
 
+// 兼容：有些预打包/静态资产期望在全局作用域可访问 `RECIPES`。
+// 将其挂到 window，避免老旧 bundle 报 "RECIPES is not defined"。
+if (typeof window !== 'undefined') window.RECIPES = RECIPES;
+
 const SOCIAL_POSTS = [
   { id: 1, type: "normal", user: "厨神小当家", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Leo", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800", title: "终于做出了完美的披萨！", views: 1200000, likes: 85600, timestamp: "2小时前", tags: ["美味", "教程"] },
   { id: 2, type: "normal", user: "深夜食堂", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Bella", image: "https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800", title: "这道红烧肉太费饭了", views: 150000, likes: 12000, timestamp: "5小时前", tags: ["家常菜"] },
