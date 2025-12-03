@@ -10,8 +10,8 @@ import {
   Utensils
 } from 'lucide-react';
 
-// ✅ 正确的本地开发配置：从 `.env.local` 或系统环境读取 VITE_GEMINI_API_KEY
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+// ✅ 您的 VSC 本地运行配置应用：
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 // --- localStorage keys for demo persistence
 const USERS_KEY = 'tk_users';
