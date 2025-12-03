@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasty Kitchen</title>
+    <!-- Google Fonts: Noto Serif SC + Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CDN for quick dev styling (optional) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Provide RECIPES global for legacy bundle expectations -->
+    <script>
+      window.RECIPES = [
+        { id: 1, title: '番茄炒蛋', level: 0, image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800', ingredients: [{ name: '鸡蛋', amount: 3, unit: '个' }], steps: ['炒鸡蛋', '炒番茄', '混合'] },
+        { id: 2, title: '酸辣土豆丝', level: 0, image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800', ingredients: [{ name: '土豆', amount: 2, unit: '个' }], steps: ['切丝', '爆香', '快炒'] }
+      ];
+    </script>
+
+    <script type="module" crossorigin src="./assets/index-BQFLi5wb.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-JqBOeaxt.css">
+  </head>
+  <body class="bg-gray-50">
+    <div class="min-h-screen flex">
+      <!-- 左侧导航栏（仅修改此新增文件） -->
+      <aside class="w-56 bg-white border-r hidden md:flex flex-col p-4">
+        <div class="text-xl font-bold mb-4">美味厨房</div>
+        <nav class="flex-1 space-y-2">
+          <a href="/" class="block px-3 py-2 rounded hover:bg-gray-100">首页</a>
+          <a href="/?tab=ai-kitchen" class="block px-3 py-2 rounded hover:bg-gray-100">AI 智能厨房</a>
+          <a href="/" class="block px-3 py-2 rounded hover:bg-gray-100">美食圈</a>
+        </nav>
+      </aside>
+
+      <!-- React 挂载点 -->
+      <main class="flex-1">
+        <div id="root"></div>
+      </main>
+    </div>
+
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"ec100c5d921f4d27b2a68361ee8329f8","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
