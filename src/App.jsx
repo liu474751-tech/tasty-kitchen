@@ -1,49 +1,14 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-// Lightweight emoji-based inline icon fallbacks (avoid ESM build issues)
-const Icon = ({ emoji, size = 16, className = '', style = {} }) => (
-  <span className={className} style={{ fontSize: `${size}px`, lineHeight: 1, display: 'inline-block', ...style }}>{emoji}</span>
-);
-const Search = (p) => <Icon emoji="🔍" {...p} />;
-const ChefHat = (p) => <Icon emoji="👨‍🍳" {...p} />;
-const Clock = (p) => <Icon emoji="⏱️" {...p} />;
-const Flame = (p) => <Icon emoji="🔥" {...p} />;
-const Heart = (p) => <Icon emoji="❤️" {...p} />;
-const ChevronLeft = (p) => <Icon emoji="◀" {...p} />;
-const Users = (p) => <Icon emoji="👥" {...p} />;
-const CheckCircle = (p) => <Icon emoji="✔️" {...p} />;
-const Home = (p) => <Icon emoji="🏠" {...p} />;
-const Bookmark = (p) => <Icon emoji="🔖" {...p} />;
-const ArrowRight = (p) => <Icon emoji="➡️" {...p} />;
-const Trophy = (p) => <Icon emoji="🏆" {...p} />;
-const Gamepad2 = (p) => <Icon emoji="🎮" {...p} />;
-const Video = (p) => <Icon emoji="🎥" {...p} />;
-const Upload = (p) => <Icon emoji="📤" {...p} />;
-const Lock = (p) => <Icon emoji="🔒" {...p} />;
-const Unlock = (p) => <Icon emoji="🔓" {...p} />;
-const Zap = (p) => <Icon emoji="⚡" {...p} />;
-const Loader2 = (p) => <Icon emoji="⏳" {...p} />;
-const PlayCircle = (p) => <Icon emoji="▶️" {...p} />;
-const Crown = (p) => <Icon emoji="👑" {...p} />;
-const Map = (p) => <Icon emoji="🗺️" {...p} />;
-const Coins = (p) => <Icon emoji="🪙" {...p} />;
-const LayoutGrid = (p) => <Icon emoji="🔳" {...p} />;
-const X = (p) => <Icon emoji="✖" {...p} />;
-const RefreshCw = (p) => <Icon emoji="🔄" {...p} />;
-const Skull = (p) => <Icon emoji="💀" {...p} />;
-const AlertTriangle = (p) => <Icon emoji="⚠️" {...p} />;
-const ThumbsDown = (p) => <Icon emoji="👎" {...p} />;
-const Scroll = (p) => <Icon emoji="📜" {...p} />;
-const Sparkles = (p) => <Icon emoji="✨" {...p} />;
-const Ghost = (p) => <Icon emoji="👻" {...p} />;
-const Biohazard = (p) => <Icon emoji="☣️" {...p} />;
-const Robot = (p) => <Icon emoji="🤖" {...p} />;
-const Film = (p) => <Icon emoji="🎞️" {...p} />;
-const MessageSquare = (p) => <Icon emoji="💬" {...p} />;
-const Send = (p) => <Icon emoji="📩" {...p} />;
-const ShieldCheck = (p) => <Icon emoji="🛡️" {...p} />;
-const Eye = (p) => <Icon emoji="👁️" {...p} />;
-const EyeOff = (p) => <Icon emoji="🙈" {...p} />;
-const User = (p) => <Icon emoji="👤" {...p} />;
+import { 
+  ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
+  CheckCircle, Home, Bookmark, ArrowRight,
+  Trophy, Video, Upload, Lock, Unlock, Zap,
+  RefreshCw, PlayCircle, Crown, Map, Coins, LayoutGrid, X,
+  Skull, AlertTriangle, ThumbsDown, Scroll, Sparkles, Ghost, Biohazard,
+  Bot, Film, MessageSquare, Send, Loader2, ShieldCheck, User, LogOut,
+  Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
+  Utensils
+} from 'lucide-react';
 
 // API key disabled by default (preview environment)
 const apiKey = ""; // import.meta.env.VITE_GEMINI_API_KEY || "";
@@ -121,16 +86,20 @@ const CUISINE_CONFIG = {
 };
 
 const RECIPES = [
-  {
-    id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0,
-    time: '10 分钟', difficulty: '入门', calories: '180 千卡',
-    image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800',
-    description: '国民家常菜，酸甜可口，下饭神器。',
-    ingredients: [{ name: '鸡蛋', amount: 3, unit: '个' }, { name: '番茄', amount: 2, unit: '个' }, { name: '葱', amount: 1, unit: '根' }, { name: '盐', amount: 1, unit: '勺' }],
-    steps: ['准备工作：西红柿洗净切块，鸡蛋打散。', '炒鸡蛋：热锅凉油，炒熟鸡蛋盛出。', '炒番茄：爆香葱花，炒西红柿出汁。', '混合：倒入鸡蛋，加糖盐翻炒均匀。', '出锅：撒葱花装盘。']
-  },
-  {
-    id: 2, title: '酸辣土豆丝', category: 'chinese', cuisine: 'chuan', level: 0,
+  { id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0, time: '10 分钟', difficulty: '入门', calories: '180 千卡', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800', description: '国民家常菜。', ingredients: [{name: '鸡蛋', amount: 3, unit: '个'}], steps: ['炒鸡蛋', '炒番茄', '混合'] },
+  { id: 2, title: '酸辣土豆丝', category: 'chinese', cuisine: 'chuan', level: 0, time: '15 分钟', difficulty: '入门', calories: '120 千卡', image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800', description: '清脆爽口。', ingredients: [{name: '土豆', amount: 2, unit: '个'}], steps: ['切丝', '爆香', '快炒'] },
+  { id: 3, title: '拍黄瓜', category: 'chinese', cuisine: 'xiang', level: 0, time: '5 分钟', difficulty: '入门', calories: '40 千卡', image: 'https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&q=80&w=800', description: '经典凉菜。', ingredients: [{name: '黄瓜', amount: 2, unit: '根'}], steps: ['拍碎', '调汁', '拌匀'] },
+  { id: 4, title: '田园蔬菜沙拉', category: 'western', cuisine: 'french', level: 0, time: '8 分钟', difficulty: '入门', calories: '110 千卡', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800', description: '轻食首选。', ingredients: [{name: '生菜', amount: 100, unit: '克'}], steps: ['洗净', '调汁', '拌匀'] },
+  { id: 5, title: '经典土豆泥', category: 'western', cuisine: 'central', level: 0, time: '20 分钟', difficulty: '入门', calories: '220 千卡', image: 'https://images.unsplash.com/photo-1618449845529-25553156166b?auto=format&fit=crop&q=80&w=800', description: '绵软细腻。', ingredients: [{name: '土豆', amount: 2, unit: '个'}], steps: ['蒸熟', '压泥', '调味'] },
+  { id: 6, title: '黄油煎吐司', category: 'western', cuisine: 'italian', level: 0, time: '5 分钟', difficulty: '入门', calories: '250 千卡', image: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&q=80&w=800', description: '外酥里嫩。', ingredients: [{name: '吐司', amount: 2, unit: '片'}], steps: ['融油', '慢煎', '淋蜜'] },
+  { id: 105, title: '九转大肠', category: 'chinese', cuisine: 'lu', level: 5, time: '60 分钟', difficulty: '困难', calories: '500 千卡', image: 'https://images.unsplash.com/photo-1626202378942-e1c944eb9726?auto=format&fit=crop&q=80&w=800', description: '鲁菜代表作。', ingredients: [{ name: '大肠', amount: 500, unit: '克' }], steps: ['煮大肠', '炸至金黄', '红烧收汁'] },
+  { id: 201, title: '麻婆豆腐', category: 'chinese', cuisine: 'chuan', level: 1, time: '20 分钟', difficulty: '中等', calories: '300 千卡', image: 'https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800', description: '川菜之魂。', ingredients: [{ name: '豆腐', amount: 1, unit: '盒' }], steps: ['炒红油', '烧豆腐'] },
+  { id: 210, title: '水煮牛肉', category: 'chinese', cuisine: 'chuan', level: 10, time: '40 分钟', difficulty: '中等', calories: '450 千卡', image: 'https://images.unsplash.com/photo-1546272989-40c92939c6c2?auto=format&fit=crop&q=80&w=800', description: '麻辣味厚。', ingredients: [{ name: '牛肉', amount: 300, unit: '克' }], steps: ['腌肉', '炒底料', '淋热油'] },
+  { id: 999, title: '开水白菜', category: 'hidden', cuisine: 'chuan', level: 999, time: '180 分钟', difficulty: '极难', calories: '100 千卡', image: 'https://images.unsplash.com/photo-1626805828156-3243f7e69c5e?auto=format&fit=crop&q=80&w=800', description: '传说级菜谱。', ingredients: [{ name: '娃娃菜', amount: 1, unit: '颗' }], steps: ['吊高汤', '淋汤'] }
+];
+
+// 兼容：保留全局引用，避免旧的静态 bundle 抛错
+if (typeof window !== 'undefined') window.RECIPES = RECIPES;
     time: '15 分钟', difficulty: '入门', calories: '120 千卡',
     image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800',
     description: '清脆爽口，酸辣开胃，刀工入门必练。',
