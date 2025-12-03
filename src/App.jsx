@@ -13,6 +13,76 @@ import {
 // ✅ 您的 VSC 本地运行配置应用：
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
 
+// Gemini API 调用函数 (支持本地开发和生产环境代理)
+async function callGeminiAPI(prompt, systemInstruction = "") {
+  // 生产环境：使用后端代理（安全）
+  const USE_PROXY = import.meta.env.PROD || !apiKey;
+  const PROXY_URL = import.meta.env.VITE_API_PROXY_URL || 'http://localhost:3001';
+
+  if (USE_PROXY) {
+    try {
+      const response = await fetch(`${PROXY_URL}/api/gemini/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt, systemInstruction })
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'API 调用失败');
+      }
+
+      return data.text;
+    } catch (error) {
+      console.error('调用 Gemini 代理失败:', error);
+      return '抱歉，AI 服务暂时不可用。请稍后再试。';
+    }
+  }
+
+  // 本地开发：直接调用 Gemini API
+  try {
+    const requestBody = {
+      contents: [
+        {
+          parts: [{ text: prompt }]
+        }
+      ]
+    };
+
+    if (systemInstruction) {
+      requestBody.systemInstruction = {
+        parts: [{ text: systemInstruction }]
+      };
+    }
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API 错误: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    return generatedText;
+  } catch (error) {
+    console.error('Gemini API 调用失败:', error);
+    return '抱歉，AI 服务暂时不可用。请检查网络连接或稍后再试。';
+  }
+}
+
 // --- localStorage keys for demo persistence
 const USERS_KEY = 'tk_users';
 const SESSION_KEY = 'tk_session';
