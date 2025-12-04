@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { 
   ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
   CheckCircle, Home, Bookmark, ArrowRight,
@@ -10,7 +9,6 @@ import {
   Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
   Utensils
 } from 'lucide-react';
-import { RECIPES } from './data/recipes.js';
 
 // ✅ 您的 VSC 本地运行配置应用：
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
