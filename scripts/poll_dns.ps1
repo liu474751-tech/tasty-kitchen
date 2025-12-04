@@ -1,7 +1,9 @@
-$log = "e:\tasty-kitchen\tasty-kitchen\run-logs\dns_poll.log"
+$log = "$PSScriptRoot\..\run-logs\dns_poll.log"
 New-Item -Path (Split-Path $log) -ItemType Directory -Force | Out-Null
 "=== DNS poll started at $(Get-Date -Format o) ===" | Out-File $log -Append
-while ($true) {
+$count = 0
+$maxCount = 10 # 循环 10 次
+while ($count -lt $maxCount) {
   $ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
   "---- $ts ----" | Out-File $log -Append
   try {
@@ -27,4 +29,7 @@ while ($true) {
     "github.io web error: $($_.Exception.Message)" | Out-File $log -Append
   }
   Start-Sleep -Seconds 120
+  $count++
 }
+"=== DNS poll finished at $(Get-Date -Format o) ===" | Out-File $log -Append
+

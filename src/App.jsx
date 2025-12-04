@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { 
   ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
   CheckCircle, Home, Bookmark, ArrowRight,
@@ -9,6 +10,7 @@ import {
   Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
   Utensils
 } from 'lucide-react';
+import { RECIPES } from './data/recipes.js';
 
 // ✅ 您的 VSC 本地运行配置应用：
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
@@ -91,6 +93,22 @@ const loadUsersFromStorage = () => {
   try { const raw = localStorage.getItem(USERS_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; }
 };
 
+const saveUsersToStorage = (users) => {
+  try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); } catch(e) { console.error('Failed to save users:', e); }
+};
+
+const loadSession = () => {
+  try { const raw = localStorage.getItem(SESSION_KEY); return raw ? JSON.parse(raw) : null; } catch(e) { return null; }
+};
+
+const saveSession = (username) => {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify({ username })); } catch(e) { console.error('Failed to save session:', e); }
+};
+
+const clearSession = () => {
+  try { localStorage.removeItem(SESSION_KEY); } catch(e) { console.error('Failed to clear session:', e); }
+};
+
 // convert plaintext passwords to sha256 on first load for safety.
 const isHashed = (pw) => typeof pw === 'string' && /^[0-9a-f]{64}$/.test(pw);
 async function hashPassword(pw) {
@@ -136,6 +154,27 @@ const RANKING = [
   { rank: 2, name: "炒勺狂魔", title: "厨神", score: 8888, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Queen" },
   { rank: 3, name: "刀工第一人", title: "厨王", score: 7777, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Jack" },
 ];
+
+// 菜系配置
+const CUISINE_CONFIG = {
+  chinese: [
+    { id: 'lu', name: '鲁菜', icon: '🏔️', desc: '北方代表，咸鲜为主', color: 'from-blue-500 to-cyan-600', range: [1, 10] },
+    { id: 'chuan', name: '川菜', icon: '🌶️', desc: '麻辣鲜香，百菜百味', color: 'from-red-500 to-orange-600', range: [1, 10] },
+    { id: 'yue', name: '粤菜', icon: '🦐', desc: '清淡鲜美，注重原味', color: 'from-green-500 to-emerald-600', range: [1, 10] },
+    { id: 'su', name: '苏菜', icon: '🐟', desc: '鲜甜细腻，刀工精细', color: 'from-purple-500 to-pink-600', range: [1, 10] },
+    { id: 'min', name: '闽菜', icon: '🦀', desc: '海鲜为主，清鲜淡爽', color: 'from-blue-400 to-teal-500', range: [1, 10] },
+    { id: 'zhe', name: '浙菜', icon: '🦆', desc: '鲜嫩软滑，清香爽口', color: 'from-yellow-500 to-orange-500', range: [1, 10] },
+    { id: 'xiang', name: '湘菜', icon: '🔥', desc: '香辣浓鲜，油重色浓', color: 'from-red-600 to-rose-700', range: [1, 10] },
+    { id: 'hui', name: '徽菜', icon: '🥘', desc: '重油重色，咸鲜微甜', color: 'from-amber-600 to-brown-700', range: [1, 10] }
+  ],
+  western: [
+    { id: 'french', name: '法式料理', icon: '🥖', desc: '精致优雅，讲究酱汁', color: 'from-indigo-500 to-purple-600', range: [1, 10] },
+    { id: 'italian', name: '意大利菜', icon: '🍝', desc: '简单美味，橄榄油香', color: 'from-green-600 to-lime-700', range: [1, 10] },
+    { id: 'spanish', name: '西班牙菜', icon: '🥘', desc: '热情奔放，香料丰富', color: 'from-yellow-600 to-red-600', range: [1, 10] },
+    { id: 'central', name: '中欧料理', icon: '🥨', desc: '扎实丰盛，烹调多样', color: 'from-gray-600 to-slate-700', range: [1, 10] },
+    { id: 'nordic', name: '北欧料理', icon: '🐟', desc: '清新自然，注重本味', color: 'from-sky-500 to-blue-600', range: [1, 10] }
+  ]
+};
 
 // ----- Helper / Components -----
 const PostCard = ({ post, isHomemade, isLaoba }) => {
