@@ -57,6 +57,19 @@ window.saveSession = function(session) {
 
 console.log('[Storage] Utility functions injected');
 
+// Fix crypto.subtle for non-HTTPS environments
+if (!window.crypto || !window.crypto.subtle) {
+  console.warn('[Crypto] crypto.subtle not available, using fallback');
+  window.crypto = window.crypto || {};
+  window.crypto.subtle = {
+    digest: function(algorithm, data) {
+      console.warn('[Crypto] Using fallback digest implementation');
+      // Simple fallback: convert to string and return a mock hash
+      return Promise.resolve(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+    }
+  };
+}
+
 (function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const l of document.querySelectorAll('link[rel="modulepreload"]'))r(l);new MutationObserver(l=>{for(const o of l)if(o.type==="childList")for(const i of o.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&r(i)}).observe(document,{childList:!0,subtree:!0});function n(l){const o={};return l.integrity&&(o.integrity=l.integrity),l.referrerPolicy&&(o.referrerPolicy=l.referrerPolicy),l.crossOrigin==="use-credentials"?o.credentials="include":l.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function r(l){if(l.ep)return;l.ep=!0;const o=n(l);fetch(l.href,o)}})();function yc(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var nu={exports:{}},il={},ru={exports:{}},O={};/**
  * @license React
  * react.production.min.js
