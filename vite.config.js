@@ -9,7 +9,8 @@ export default defineConfig({
   build: {
     // 防止因语法过新导致的构建报错
     target: 'es2019',
-    outDir: 'dist',
+    outDir: 'docs',  // 输出到 docs 目录用于 GitHub Pages
+    emptyOutDir: true,
     assetsDir: 'assets',
   }
 })
