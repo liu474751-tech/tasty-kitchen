@@ -4,14 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tasty Kitchen</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
     <!-- Google Fonts: Noto Serif SC + Nunito -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Tailwind CDN for quick dev styling (optional) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module" crossorigin src="/assets/index-BQFLi5wb.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-JqBOeaxt.css">
+
+    <!-- Critical: Define RECIPES globally BEFORE any module scripts -->
+    <script>
+      // Must use var for true global scope, not const/let which are block-scoped
+      var RECIPES = [
+        { id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0, time: '10 分钟', difficulty: '入门', calories: '180 千卡', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800', description: '国民家常菜。', ingredients: [{name: '鸡蛋', amount: 3, unit: '个'}], steps: ['炒鸡蛋', '炒番茄', '混合'] },
+        { id: 2, title: '酸辣土豆丝', category: 'chinese', cuisine: 'chuan', level: 0, time: '15 分钟', difficulty: '入门', calories: '120 千卡', image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800', description: '清脆爽口。', ingredients: [{name: '土豆', amount: 2, unit: '个'}], steps: ['切丝', '爆香', '快炒'] },
+        { id: 3, title: '拍黄瓜', category: 'chinese', cuisine: 'xiang', level: 0, time: '5 分钟', difficulty: '入门', calories: '40 千卡', image: 'https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&q=80&w=800', description: '经典凉菜。', ingredients: [{name: '黄瓜', amount: 2, unit: '根'}], steps: ['拍碎', '调汁', '拌匀'] },
+        { id: 4, title: '田园蔬菜沙拉', category: 'western', cuisine: 'french', level: 0, time: '8 分钟', difficulty: '入门', calories: '110 千卡', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800', description: '轻食首选。', ingredients: [{name: '生菜', amount: 100, unit: '克'}], steps: ['洗净', '调汁', '拌匀'] },
+        { id: 5, title: '经典土豆泥', category: 'western', cuisine: 'central', level: 0, time: '20 分钟', difficulty: '入门', calories: '220 千卡', image: 'https://images.unsplash.com/photo-1618449845529-25553156166b?auto=format&fit=crop&q=80&w=800', description: '绵软细腻。', ingredients: [{name: '土豆', amount: 2, unit: '个'}], steps: ['蒸熟', '压泥', '调味'] },
+        { id: 6, title: '黄油煎吐司', category: 'western', cuisine: 'italian', level: 0, time: '5 分钟', difficulty: '入门', calories: '250 千卡', image: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&q=80&w=800', description: '外酥里嫩。', ingredients: [{name: '吐司', amount: 2, unit: '片'}], steps: ['融油', '慢煎', '淋蜜'] },
+        { id: 105, title: '九转大肠', category: 'chinese', cuisine: 'lu', level: 5, time: '60 分钟', difficulty: '困难', calories: '500 千卡', image: 'https://images.unsplash.com/photo-1626202378942-e1c944eb9726?auto=format&fit=crop&q=80&w=800', description: '鲁菜代表作。', ingredients: [{ name: '大肠', amount: 500, unit: '克' }], steps: ['煮大肠', '炸至金黄', '红烧收汁'] },
+        { id: 201, title: '麻婆豆腐', category: 'chinese', cuisine: 'chuan', level: 1, time: '20 分钟', difficulty: '中等', calories: '300 千卡', image: 'https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?auto=format&fit=crop&q=80&w=800', description: '川菜之魂。', ingredients: [{ name: '豆腐', amount: 1, unit: '盒' }], steps: ['炒红油', '烧豆腐'] },
+        { id: 210, title: '水煮牛肉', category: 'chinese', cuisine: 'chuan', level: 10, time: '40 分钟', difficulty: '中等', calories: '450 千卡', image: 'https://images.unsplash.com/photo-1546272989-40c92939c6c2?auto=format&fit=crop&q=80&w=800', description: '麻辣味厚。', ingredients: [{ name: '牛肉', amount: 300, unit: '克' }], steps: ['腌肉', '炒底料', '淋热油'] },
+        { id: 999, title: '开水白菜', category: 'hidden', cuisine: 'chuan', level: 999, time: '180 分钟', difficulty: '极难', calories: '100 千卡', image: 'https://images.unsplash.com/photo-1626805828156-3243f7e69c5e?auto=format&fit=crop&q=80&w=800', description: '传说级菜谱。', ingredients: [{ name: '娃娃菜', amount: 1, unit: '颗' }], steps: ['吊高汤', '淋汤'] }
+      ];
+      
+      // Ensure it's accessible from window object
+      window.RECIPES = RECIPES;
+      
+      // Debug log to verify it's loaded
+      console.log('[RECIPES] Loaded successfully:', RECIPES.length, 'recipes');
+    </script>
+
+
+    <script type="module" crossorigin src="/tasty-kitchen/assets/index-BQFLi5wb.js"></script>
+    <link rel="stylesheet" crossorigin href="/tasty-kitchen/assets/index-JqBOeaxt.css">
   </head>
   <body class="bg-gray-50">
-    <div id="root"></div>
-  </body>
+    <div class="min-h-screen flex">
+      <!-- 左侧导航栏（仅修改此新增文件） -->
+      <aside class="w-56 bg-white border-r hidden md:flex flex-col p-4">
+        <div class="text-xl font-bold mb-4">美味厨房</div>
+        <nav class="flex-1 space-y-2">
+          <a href="/" class="block px-3 py-2 rounded hover:bg-gray-100">首页</a>
+          <a href="/?tab=ai-kitchen" class="block px-3 py-2 rounded hover:bg-gray-100">AI 智能厨房</a>
+          <a href="/" class="block px-3 py-2 rounded hover:bg-gray-100">美食圈</a>
+        </nav>
+      </aside>
+
+      <!-- React 挂载点 -->
+      <main class="flex-1">
+        <div id="root"></div>
+      </main>
+    </div>
+
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"ec100c5d921f4d27b2a68361ee8329f8","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
 </html>
