@@ -137,22 +137,22 @@ jobs:
 
       - name: Add CNAME for custom domain
         run: |
-          echo "meishichufang.meishitiandi.dpdns.org" > dist/CNAME
+          echo "meishichufang.meishitiandi.dpdns.org" > docs/CNAME
 
       - name: Verify build output
         run: |
           echo "Listing repo root:";
           ls -al || true;
-          echo "Listing dist directory:";
-          ls -al dist || true
+          echo "Listing docs directory:";
+          ls -al docs || true
       - name: Show build log on failure
         if: failure()
         run: |
           echo "=== build.log ===";
           tail -n 200 build.log || true
-      - name: Verify dist index
+      - name: Verify docs index
         run: |
-          if [ -f dist/index.html ]; then echo "dist/index.html exists"; else echo "ERROR: dist/index.html missing"; exit 1; fi
+          if [ -f docs/index.html ]; then echo "docs/index.html exists"; else echo "ERROR: docs/index.html missing"; exit 1; fi
       - name: Ensure gh-pages push permissions
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -163,5 +163,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./docs
           keep_files: false
