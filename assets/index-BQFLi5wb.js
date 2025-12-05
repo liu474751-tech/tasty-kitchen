@@ -13,6 +13,50 @@ window.RECIPES = [
 ];
 console.log('[RECIPES] Injected at bundle start:', window.RECIPES.length, 'recipes');
 
+// Define storage utility functions globally
+window.USERS_KEY = 'tasty_kitchen_users';
+window.SESSION_KEY = 'tasty_kitchen_session';
+
+window.loadUsersFromStorage = function() {
+  try { 
+    var raw = localStorage.getItem(window.USERS_KEY); 
+    return raw ? JSON.parse(raw) : null; 
+  } catch(e) { 
+    console.error('Failed to load users:', e);
+    return null; 
+  }
+};
+
+window.saveUsersToStorage = function(users) {
+  try { 
+    localStorage.setItem(window.USERS_KEY, JSON.stringify(users)); 
+    console.log('[Storage] Users saved successfully');
+  } catch(e) { 
+    console.error('Failed to save users:', e); 
+  }
+};
+
+window.loadSession = function() {
+  try { 
+    var raw = localStorage.getItem(window.SESSION_KEY); 
+    return raw ? JSON.parse(raw) : null; 
+  } catch(e) { 
+    console.error('Failed to load session:', e);
+    return null; 
+  }
+};
+
+window.saveSession = function(session) {
+  try { 
+    localStorage.setItem(window.SESSION_KEY, JSON.stringify(session)); 
+    console.log('[Storage] Session saved successfully');
+  } catch(e) { 
+    console.error('Failed to save session:', e); 
+  }
+};
+
+console.log('[Storage] Utility functions injected');
+
 (function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const l of document.querySelectorAll('link[rel="modulepreload"]'))r(l);new MutationObserver(l=>{for(const o of l)if(o.type==="childList")for(const i of o.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&r(i)}).observe(document,{childList:!0,subtree:!0});function n(l){const o={};return l.integrity&&(o.integrity=l.integrity),l.referrerPolicy&&(o.referrerPolicy=l.referrerPolicy),l.crossOrigin==="use-credentials"?o.credentials="include":l.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function r(l){if(l.ep)return;l.ep=!0;const o=n(l);fetch(l.href,o)}})();function yc(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var nu={exports:{}},il={},ru={exports:{}},O={};/**
  * @license React
  * react.production.min.js
