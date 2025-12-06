@@ -57,6 +57,23 @@ window.saveSession = function(session) {
 
 console.log('[Storage] Utility functions injected');
 
+// Initialize default user if no users exist
+(function initializeDefaultUser() {
+  try {
+    var existingUsers = window.loadUsersFromStorage();
+    if (!existingUsers || Object.keys(existingUsers).length === 0) {
+      console.log('[Init] No users found, creating default user');
+      var defaultUsers = { 'liu474751-tech': '200283' };
+      window.saveUsersToStorage(defaultUsers);
+      console.log('[Init] Default user created: liu474751-tech');
+    } else {
+      console.log('[Init] Existing users found:', Object.keys(existingUsers).length);
+    }
+  } catch(e) {
+    console.error('[Init] Failed to initialize default user:', e);
+  }
+})();
+
 // Fix crypto.subtle for non-HTTPS environments
 if (!window.crypto || !window.crypto.subtle) {
   console.warn('[Crypto] crypto.subtle not available, using fallback');
