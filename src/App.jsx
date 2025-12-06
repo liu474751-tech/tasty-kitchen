@@ -1,4 +1,5 @@
-﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
+﻿// Build: 2025-12-06 验证组件完整性
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
   CheckCircle, Home, Bookmark, ArrowRight,
