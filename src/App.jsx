@@ -1,21 +1,18 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
   CheckCircle, Home, Bookmark, ArrowRight,
   Trophy, Video, Upload, Lock, Unlock, Zap,
   RefreshCw, PlayCircle, Crown, Map, Coins, LayoutGrid, X,
-  Skull, AlertTriangle, ThumbsDown, Scroll, Sparkles, Ghost, Biohazard,
-  Robot, Film, MessageSquare, Send, Loader2, ShieldCheck, User, LogOut,
+  Skull, AlertTriangle, ThumbsDown, Scroll, Ghost, Biohazard,
+  Film, Loader2, ShieldCheck, User, LogOut,
   Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
   Utensils
 } from 'lucide-react';
 
-// ✅ 您的 VSC 本地运行配置应用：
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
-
-// Gemini API 调用函数 (支持本地开发和生产环境代理)
+// Gemini API 调用函数 (仅用于邪修炼丹炉)
 async function callGeminiAPI(prompt, systemInstruction = "") {
-  // 生产环境：使用后端代理（安全）
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
   const USE_PROXY = import.meta.env.PROD || !apiKey;
   const PROXY_URL = import.meta.env.VITE_API_PROXY_URL || 'http://localhost:3001';
 
@@ -23,18 +20,11 @@ async function callGeminiAPI(prompt, systemInstruction = "") {
     try {
       const response = await fetch(`${PROXY_URL}/api/gemini/generate`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, systemInstruction })
       });
-
       const data = await response.json();
-      
-      if (!data.success) {
-        throw new Error(data.error || 'API 调用失败');
-      }
-
+      if (!data.success) throw new Error(data.error || 'API 调用失败');
       return data.text;
     } catch (error) {
       console.error('调用 Gemini 代理失败:', error);
@@ -42,44 +32,27 @@ async function callGeminiAPI(prompt, systemInstruction = "") {
     }
   }
 
-  // 本地开发：直接调用 Gemini API
   try {
     const requestBody = {
-      contents: [
-        {
-          parts: [{ text: prompt }]
-        }
-      ]
+      contents: [{ parts: [{ text: prompt }] }]
     };
-
     if (systemInstruction) {
-      requestBody.systemInstruction = {
-        parts: [{ text: systemInstruction }]
-      };
+      requestBody.systemInstruction = { parts: [{ text: systemInstruction }] };
     }
-
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
       }
     );
-
-    if (!response.ok) {
-      throw new Error(`API 错误: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`API 错误: ${response.status}`);
     const data = await response.json();
-    const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    
-    return generatedText;
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } catch (error) {
     console.error('Gemini API 调用失败:', error);
-    return '抱歉，AI 服务暂时不可用。请检查网络连接或稍后再试。';
+    return '抱歉，AI 服务暂时不可用。';
   }
 }
 
@@ -208,85 +181,6 @@ const RankingCard = ({ user, idx }) => {
   );
 }
 
-const AIVideoPlayer = ({ recipeName }) => {
-  const [status, setStatus] = useState('idle');
-  const [progress, setProgress] = useState(0);
-  const startGeneration = () => {
-    setStatus('generating'); let p = 0;
-    const interval = setInterval(() => { p += Math.random() * 10; if (p >= 100) { p = 100; clearInterval(interval); setStatus('playing'); } setProgress(p); }, 200);
-  };
-  return (
-    <div className="bg-black rounded-xl overflow-hidden relative w-full aspect-video shadow-lg mb-6 group">
-      {status === 'idle' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white p-6 text-center">
-          <Robot size={48} className="text-blue-400 mb-4 animate-bounce" />
-          <h3 className="text-xl font-bold mb-2">AI 智能演示</h3>
-          <p className="text-gray-400 text-sm mb-6">点击生成 "{recipeName}" 的烹饪全流程视频</p>
-          <button onClick={startGeneration} className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:scale-105 transition-transform"><Sparkles size={18} /> 生成视频</button>
-        </div>
-      )}
-        {status === 'generating' && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 text-white">
-          <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden mb-4"><div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-200" style={{ width: `${progress}%` }}></div></div>
-          <div className="flex items-center gap-2 text-sm text-blue-300 animate-pulse"><Robot size={16} /><span>正在分析食材... 渲染烹饪步骤... {Math.floor(progress)}%</span></div>
-        </div>
-      )}
-      {status === 'playing' && (
-        <div className="absolute inset-0 bg-black">
-          <video src="https://joy1.videvo.net/videvo_files/video/free/2019-11/large_watermarked/190301_1_25_11_preview.mp4" className="w-full h-full object-cover opacity-80" autoPlay loop muted playsInline />
-          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-            <div>
-              <div className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-md inline-flex items-center gap-1 mb-1"><Robot size={10} /> AI Generated</div>
-              <div className="text-white text-sm font-bold drop-shadow-md">正在播放: {recipeName} 教学</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const AIChatModal = ({ recipe, onClose }) => {
-  const [messages, setMessages] = useState([{ role: 'model', text: `你好！我是你的 AI 膳食顾问。关于“${recipe.title}”这道菜，你有什么想问的吗？` }]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null);
-  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    const userMsg = input; setInput(''); setMessages(prev => [...prev, { role: 'user', text: userMsg }]); setIsLoading(true);
-    const prompt = `用户正在制作：${recipe.title}。用户问题：${userMsg}。请简短、专业地回答。`;
-    const responseText = await callGeminiAPI(prompt, "你是一位专业的烹饪顾问。");
-    setMessages(prev => [...prev, { role: 'model', text: responseText }]); setIsLoading(false);
-  };
-  return (
-    <div className="fixed inset-0 bg-black/50 z-[60] flex flex-col justify-end animate-fade-in">
-      <div className="bg-white rounded-t-2xl h-[80vh] flex flex-col shadow-2xl">
-        <div className="p-4 border-b flex justify-between items-center">
-          <div className="flex items-center gap-2 text-indigo-600 font-bold"><Sparkles size={20} /> AI 膳食顾问</div>
-          <button onClick={onClose}><X size={24} className="text-gray-400" /></button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-none shadow-sm'}`}>{msg.text}</div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start"><div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-200 flex items-center gap-2 text-gray-400 text-sm"><Loader2 size={14} className="animate-spin" /> 思考中...</div></div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="p-4 border-t bg-white pb-safe">
-          <div className="flex gap-2">
-            <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="问点什么..." className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
-            <button onClick={handleSend} disabled={isLoading || !input.trim()} className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed"><Send size={18} /></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const EvilGuideModal = ({ onClose }) => {
   const [ingredientsInput, setIngredientsInput] = useState('');
@@ -535,7 +429,6 @@ const SocialTab = () => {
 
 // --- RecipeDetail component (added/used by App) ---
 const RecipeDetail = ({ recipe, onBack, onComplete }) => {
-  const [showChat, setShowChat] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
 
   return (
@@ -605,17 +498,12 @@ const RecipeDetail = ({ recipe, onBack, onComplete }) => {
             <button onClick={() => setShowVideo(true)} className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-colors shadow-md">
               查看示范视频
             </button>
-            <button onClick={() => setShowChat(true)} className="md:w-auto py-3 px-6 bg-indigo-50 text-indigo-600 rounded-xl font-bold border border-indigo-100 hover:bg-indigo-100 transition-colors">
-              向 AI 咨询
-            </button>
           </div>
 
           <button onClick={() => onComplete(recipe)} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-transform">
             ✅ 完成烹饪并返回
           </button>
         </div>
-
-        {showChat && <AIChatModal recipe={recipe} onClose={() => setShowChat(false)} />}
         {showVideo && (
           <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6">
             <div className="bg-black rounded-xl overflow-hidden w-full max-w-3xl">
