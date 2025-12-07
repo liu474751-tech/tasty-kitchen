@@ -13,6 +13,8 @@ import {
 
 // Gemini API 调用函数 (仅用于邪修炼丹炉)
 async function callGeminiAPI(prompt, systemInstruction = "") {
+  // 默认使用 Gemini 3 Pro (Preview)，可通过 VITE_GEMINI_MODEL 覆盖
+  const model = import.meta.env.VITE_GEMINI_MODEL || 'gemini-3.0-pro';
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
   const USE_PROXY = import.meta.env.PROD || !apiKey;
   const PROXY_URL = import.meta.env.VITE_API_PROXY_URL || 'http://localhost:3001';
@@ -41,7 +43,7 @@ async function callGeminiAPI(prompt, systemInstruction = "") {
       requestBody.systemInstruction = { parts: [{ text: systemInstruction }] };
     }
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
