@@ -2,13 +2,11 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
-  CheckCircle, Home, Bookmark, ArrowRight,
-  Trophy, Video, Upload, Lock, Unlock, Zap,
-  RefreshCw, PlayCircle, Crown, Map, Coins, LayoutGrid, X,
-  Skull, AlertTriangle, ThumbsDown, Scroll, Ghost, Biohazard,
-  Film, Loader2, ShieldCheck, User, LogOut,
-  Palette, Sun, Brush, Sliders, Type, Download, Languages, Coffee,
-  Utensils
+  CheckCircle, Home, Bookmark,
+  Trophy, Video, Lock, Unlock, Zap,
+  PlayCircle, Crown, Map, Coins, LayoutGrid, X,
+  Skull, ThumbsDown, Scroll, Ghost, Biohazard,
+  Loader2, Sparkles
 } from 'lucide-react';
 
 // Gemini API 调用函数 (仅用于邪修炼丹炉)
@@ -94,7 +92,7 @@ async function hashPassword(pw) {
 }
 
 const RECIPES = [
-  { id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0, time: '10 分钟', difficulty: '入门', calories: '180 千卡', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800', description: '国民家常菜。', ingredients: [{name: '鸡蛋', amount: 3, unit: '个'}], steps: ['炒鸡蛋', '炒番茄', '混合'] },
+  { id: 1, title: '番茄炒蛋', category: 'chinese', cuisine: 'lu', level: 0, time: '10 分钟', difficulty: '入门', calories: '180 千卡', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800', description: '国民家常菜。', ingredients: [{name: '鸡蛋', amount: 3, unit: '个'}], steps: ['炒鸡蛋', '炒番茄', '混合'] },
   { id: 2, title: '酸辣土豆丝', category: 'chinese', cuisine: 'chuan', level: 0, time: '15 分钟', difficulty: '入门', calories: '120 千卡', image: 'https://images.unsplash.com/photo-1652545288254-23128040494b?auto=format&fit=crop&q=80&w=800', description: '清脆爽口。', ingredients: [{name: '土豆', amount: 2, unit: '个'}], steps: ['切丝', '爆香', '快炒'] },
   { id: 3, title: '拍黄瓜', category: 'chinese', cuisine: 'xiang', level: 0, time: '5 分钟', difficulty: '入门', calories: '40 千卡', image: 'https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&q=80&w=800', description: '经典凉菜。', ingredients: [{name: '黄瓜', amount: 2, unit: '根'}], steps: ['拍碎', '调汁', '拌匀'] },
   { id: 4, title: '田园蔬菜沙拉', category: 'western', cuisine: 'french', level: 0, time: '8 分钟', difficulty: '入门', calories: '110 千卡', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800', description: '轻食首选。', ingredients: [{name: '生菜', amount: 100, unit: '克'}], steps: ['洗净', '调汁', '拌匀'] },
@@ -430,6 +428,28 @@ const SocialTab = () => {
   );
 };
 
+// 简易收藏页，复用已解锁食谱以避免空白
+const FavoritesTab = ({ recipes, onRecipeClick }) => (
+  <div className="px-5 pt-6 max-w-5xl mx-auto w-full">
+    <h3 className="font-bold text-xl text-gray-800 mb-4">我的收藏</h3>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-24">
+      {recipes.map(r => (
+        <div key={r.id} onClick={() => onRecipeClick(r)} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group border border-gray-100 flex flex-col">
+          <div className="h-40 relative overflow-hidden">
+            <img src={r.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+          </div>
+          <div className="p-4 flex-1 flex flex-col">
+            <h4 className="font-bold text-gray-800 text-base mb-2">{r.title}</h4>
+            <div className="mt-auto text-[10px] px-2 py-1 rounded-md font-bold bg-orange-50 text-orange-500 w-fit">Lv.{r.level}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+
 // --- RecipeDetail component (added/used by App) ---
 const RecipeDetail = ({ recipe, onBack, onComplete }) => {
   const [showVideo, setShowVideo] = useState(false);
@@ -632,7 +652,6 @@ export default function App() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [navigationHistory, setNavigationHistory] = useState([]);
   
   // user store (username -> password) persisted to localStorage (demo)
   const [users, setUsers] = useState(() => {
@@ -695,6 +714,8 @@ export default function App() {
   const [unlockedRecipes, setUnlockedRecipes] = useState(() => RECIPES.filter(r => r.level === 0));
   const [unlockModal, setUnlockModal] = useState({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
 
+  const decoratedUnlocked = unlockedRecipes;
+
   const handleStartLevel = (recipe) => setSelectedRecipe(recipe);
   const handleComplete = (recipe) => {
     setSelectedRecipe(null);
@@ -705,6 +726,8 @@ export default function App() {
     }
     if (!unlockedRecipes.find(r => r.id === recipe.id)) setUnlockedRecipes([...unlockedRecipes, recipe]);
   };
+
+  const handleRecipeClick = (recipe) => setSelectedRecipe(recipe);
 
   const onUnlockLevelClick = (cuisineId, level, title) => setUnlockModal({ isOpen: true, cuisine: cuisineId, level: level, cost: 300 * (userProfile.monthlyUnlocks + 1), title: title });
 
@@ -717,9 +740,10 @@ export default function App() {
   };
 
   const renderContent = () => {
-    if (activeTab === 'home') return <HomeTab unlockedRecipes={unlockedRecipes} onRecipeClick={setSelectedRecipe} userProfile={userProfile} />;
+    if (activeTab === 'home') return <HomeTab unlockedRecipes={decoratedUnlocked} onRecipeClick={handleRecipeClick} userProfile={userProfile} />;
     if (activeTab === 'challenge') return <ChallengeTab userProfile={userProfile} onStartLevel={handleStartLevel} onUnlockLevel={onUnlockLevelClick} />;
     if (activeTab === 'social') return <SocialTab />;
+    if (activeTab === 'favorites') return <FavoritesTab recipes={decoratedUnlocked} onRecipeClick={handleRecipeClick} />;
     return null;
   };
   if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
@@ -862,6 +886,8 @@ export default function App() {
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </div>
   );
