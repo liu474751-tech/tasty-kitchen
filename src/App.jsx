@@ -622,7 +622,6 @@ export default function App() {
     if (activeTab === 'favorites') return <FavoritesTab recipes={decoratedUnlocked} onRecipeClick={handleRecipeClick} />;
     return null;
   };
-  if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} />;
 
   // login handler
   const onLogin = async (username, password) => {
@@ -672,6 +671,10 @@ export default function App() {
 
   if (!isLoggedIn) {
     return <LoginCard defaultUsername="liu474751-tech" defaultPassword="200283" onLogin={onLogin} onRegisterClick={() => setShowRegister(true)} />;
+  }
+
+  if (selectedRecipe) {
+    return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} />;
   }
 
   return (
