@@ -1,12 +1,9 @@
-﻿// Build: 2025-12-06 验证组件完整性
+﻿// Build: 2025-12-08 专业食谱工具版
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
-  ChefHat, Clock, Flame, Heart, ChevronLeft, Users, 
-  CheckCircle, Home, Bookmark,
-  Trophy, Video, Lock, Unlock, Zap,
-  PlayCircle, Crown, Map, Coins, LayoutGrid, X,
-  Skull, ThumbsDown, Scroll, Ghost, Biohazard,
-  Loader2, Sparkles
+  ChefHat, Clock, Flame, Heart, ChevronLeft, Users,
+  Home, Bookmark, X, PlayCircle, Skull, Sparkles,
+  Video, ThumbsDown, Scroll, Ghost, Biohazard, Loader2, Crown, Zap
 } from 'lucide-react';
 
 // Gemini API 调用函数 (仅用于邪修炼丹炉)
@@ -121,32 +118,9 @@ const SOCIAL_POSTS = [
   { id: 17, type: "homemade", user: "实验员01", avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Exp", image: "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&q=80&w=800", title: "水泥封心馒头", views: 40000, likes: 5000, timestamp: "1周前", tags: ["难吃", "硬"] },
 ];
 
-const RANKING = [
-  { rank: 1, name: "味蕾魔术师", title: "厨圣", score: 9999, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=King" },
-  { rank: 2, name: "炒勺狂魔", title: "厨神", score: 8888, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Queen" },
-  { rank: 3, name: "刀工第一人", title: "厨王", score: 7777, avatar: "https://api.dicebear.com/7.x/notionists/svg?seed=Jack" },
-];
 
-// 菜系配置
-const CUISINE_CONFIG = {
-  chinese: [
-    { id: 'lu', name: '鲁菜', icon: '🏔️', desc: '北方代表，咸鲜为主', color: 'from-blue-500 to-cyan-600', range: [1, 10] },
-    { id: 'chuan', name: '川菜', icon: '🌶️', desc: '麻辣鲜香，百菜百味', color: 'from-red-500 to-orange-600', range: [1, 10] },
-    { id: 'yue', name: '粤菜', icon: '🦐', desc: '清淡鲜美，注重原味', color: 'from-green-500 to-emerald-600', range: [1, 10] },
-    { id: 'su', name: '苏菜', icon: '🐟', desc: '鲜甜细腻，刀工精细', color: 'from-purple-500 to-pink-600', range: [1, 10] },
-    { id: 'min', name: '闽菜', icon: '🦀', desc: '海鲜为主，清鲜淡爽', color: 'from-blue-400 to-teal-500', range: [1, 10] },
-    { id: 'zhe', name: '浙菜', icon: '🦆', desc: '鲜嫩软滑，清香爽口', color: 'from-yellow-500 to-orange-500', range: [1, 10] },
-    { id: 'xiang', name: '湘菜', icon: '🔥', desc: '香辣浓鲜，油重色浓', color: 'from-red-600 to-rose-700', range: [1, 10] },
-    { id: 'hui', name: '徽菜', icon: '🥘', desc: '重油重色，咸鲜微甜', color: 'from-amber-600 to-brown-700', range: [1, 10] }
-  ],
-  western: [
-    { id: 'french', name: '法式料理', icon: '🥖', desc: '精致优雅，讲究酱汁', color: 'from-indigo-500 to-purple-600', range: [1, 10] },
-    { id: 'italian', name: '意大利菜', icon: '🍝', desc: '简单美味，橄榄油香', color: 'from-green-600 to-lime-700', range: [1, 10] },
-    { id: 'spanish', name: '西班牙菜', icon: '🥘', desc: '热情奔放，香料丰富', color: 'from-yellow-600 to-red-600', range: [1, 10] },
-    { id: 'central', name: '中欧料理', icon: '🥨', desc: '扎实丰盛，烹调多样', color: 'from-gray-600 to-slate-700', range: [1, 10] },
-    { id: 'nordic', name: '北欧料理', icon: '🐟', desc: '清新自然，注重本味', color: 'from-sky-500 to-blue-600', range: [1, 10] }
-  ]
-};
+
+
 
 // ----- Helper / Components -----
 const PostCard = ({ post, isHomemade, isLaoba }) => {
@@ -205,15 +179,7 @@ const EvilGuideModal = ({ onClose }) => {
   );
 };
 
-const UnlockModal = ({ isOpen, onClose, onConfirm, cost, monthlyLeft, title, userPoints }) => {
-  if (!isOpen) return null;
-  const canAfford = userPoints >= cost;
-  return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-5 backdrop-blur-sm animate-fade-in"><div className="bg-white rounded-2xl w-full max-w-sm p-6 relative"><button onClick={onClose} className="absolute top-4 right-4 text-gray-400"><X size={20} /></button><div className="text-center mb-4"><div className="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3"><Lock size={24} /></div><h2 className="text-xl font-bold text-gray-800">解锁菜谱</h2><p className="text-indigo-600 font-medium mt-1">{title}</p></div><div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-3"><div className="flex justify-between items-center text-sm"><span className="text-gray-500">所需积分</span><span className="font-bold text-gray-800 flex items-center gap-1"><Coins size={14} className="text-yellow-500" /> -{cost}</span></div></div>{!canAfford ? (<button disabled className="w-full py-3 bg-gray-200 text-gray-400 font-bold rounded-xl cursor-not-allowed">积分不足</button>) : (<button onClick={onConfirm} className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 active:scale-95 transition-transform flex items-center justify-center gap-2"><Unlock size={18} /> 确认兑换</button>)}</div></div>
-  );
-};
-
-// --- Tab components (HomeTab, ChallengeTab, SocialTab) ---
+// --- Tab components (HomeTab, SocialTab) ---
 const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
   <div className="animate-fade-in">
     <header className="relative bg-orange-50 overflow-hidden mb-8">
@@ -257,22 +223,18 @@ const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
         <h3 className="font-bold text-2xl text-gray-800 mb-6">已获得食谱 ({unlockedRecipes.length})</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-24">
           {unlockedRecipes.map(recipe => (
-            <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group">
-              <div className="h-48 overflow-hidden relative">
-                <img src={recipe.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={recipe.title} />
-                <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-orange-600 text-xs font-bold px-3 py-1 rounded-full">
-                  {recipe.time}
-                </span>
+            <div key={recipe.id} onClick={() => onRecipeClick(recipe)} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border border-gray-100">
+              <div className="h-32 bg-gradient-to-r from-orange-100 to-orange-50 flex items-center justify-between px-4">
+                <div>
+                  <div className="text-xs text-orange-500 font-bold mb-1">{recipe.time}</div>
+                  <h3 className="text-lg font-bold text-gray-800 group-hover:text-orange-500 transition-colors line-clamp-1">{recipe.title}</h3>
+                </div>
+                <div className="text-xs px-3 py-1 rounded-full bg-white text-orange-500 font-bold border border-orange-100">{recipe.difficulty}</div>
               </div>
               <div className="p-4">
-                <h3 className="text-base font-bold text-gray-800 mb-2 group-hover:text-orange-500 transition-colors line-clamp-1">
-                  {recipe.title}
-                </h3>
-                <p className="text-gray-500 text-sm line-clamp-2 mb-3">
-                  {recipe.description}
-                </p>
+                <p className="text-gray-500 text-sm line-clamp-2 mb-3">{recipe.description}</p>
                 <div className="flex items-center justify-between text-sm text-gray-400">
-                  <span className="flex items-center">🔥 {recipe.difficulty}</span>
+                  <span className="flex items-center">🔥 {recipe.category === 'chinese' ? '中餐' : '西餐'}</span>
                   <span className="flex items-center">⭐ 4.9</span>
                 </div>
               </div>
@@ -284,53 +246,7 @@ const HomeTab = ({ unlockedRecipes, onRecipeClick, userProfile }) => (
   </div>
 );
 
-const ChallengeTab = ({ userProfile, onStartLevel, onUnlockLevel }) => {
-  const [mode, setMode] = useState('chinese');
-  const [selectedChapterId, setSelectedChapterId] = useState(null);
-  const config = CUISINE_CONFIG[mode];
-  const currentChapter = selectedChapterId ? config.find(c => c.id === selectedChapterId) : null;
-  const currentChapterProgress = currentChapter ? (userProfile.completedLevels[currentChapter.id] || 0) : 0;
-
-  if (!selectedChapterId) {
-    return (
-      <div className="flex flex-col h-full bg-slate-50">
-        <div className="max-w-6xl mx-auto w-full px-6 pt-6">
-          <div className="bg-white rounded-2xl shadow-sm p-2 mb-6 flex gap-2">
-            <button onClick={() => setMode('chinese')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'chinese' ? 'bg-red-500 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>
-              <LayoutGrid size={18} /> 神州八膳雅集
-            </button>
-            <button onClick={() => setMode('western')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${mode === 'western' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'}`}>
-              <Map size={18} /> 欧罗巴盛宴
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-24">
-            {config.map(chapter => {
-              const progress = userProfile.completedLevels[chapter.id] || 0;
-              const total = chapter.range[1] - chapter.range[0] + 1;
-              return (
-                <div key={chapter.id} onClick={() => setSelectedChapterId(chapter.id)} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md active:scale-95 transition-all cursor-pointer group relative overflow-hidden">
-                  <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${chapter.color}`}></div>
-                  <div className="text-3xl mb-3">{chapter.icon}</div>
-                  <h3 className="font-bold text-lg text-gray-800 mb-1 group-hover:text-orange-600 transition-colors">{chapter.name}</h3>
-                  <p className="text-xs text-gray-500 mb-3">{chapter.desc}</p>
-                  <div className="flex items-center gap-1 text-xs text-orange-500 font-bold bg-orange-50 w-fit px-3 py-1.5 rounded-full">
-                    <Trophy size={14} /><span>Lv.{progress} / {total}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="flex flex-col h-full bg-slate-50">
-       <div className={`px-5 pt-12 pb-6 shadow-sm z-10 sticky top-0 bg-gradient-to-r ${currentChapter.color} text-white`}><button onClick={() => setSelectedChapterId(null)} className="absolute top-12 left-4 p-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"><ChevronLeft size={24} /></button><div className="mt-8"><div className="flex items-center gap-2 mb-1"><span className="text-3xl">{currentChapter.icon}</span><h2 className="text-2xl font-bold">{currentChapter.name}</h2></div></div></div>
-       <div className="flex-1 overflow-y-auto p-5 pb-24"><div className="space-y-4 relative"><div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 z-0"></div>{Array.from({ length: 10 }).map((_, idx) => { const levelNum = idx + 1; const relativeLevel = levelNum; const isCompleted = relativeLevel <= currentChapterProgress; const isCurrent = relativeLevel === currentChapterProgress + 1; const isLocked = relativeLevel > currentChapterProgress + 1; const realRecipe = RECIPES.find(r => r.cuisine === currentChapter.id && r.level === relativeLevel); const canUnlock = isLocked && realRecipe; return (<div key={levelNum} className="relative z-10 flex gap-4"><div className={`w-9 h-9 rounded-full flex items-center justify-center border-2 flex-shrink-0 ${isCompleted ? 'bg-green-100 border-green-500 text-green-600' : isCurrent ? 'bg-orange-500 border-orange-200 text-white ring-4 ring-orange-100' : 'bg-gray-100 border-gray-300 text-gray-400'}`}>{isCompleted ? <CheckCircle size={16} /> : <span>{levelNum}</span>}</div><div className={`flex-1 rounded-xl p-4 border transition-all ${isLocked ? 'bg-white border-gray-100' : 'bg-white border-gray-200 shadow-sm'}`}><div className="flex justify-between items-start mb-1"><h4 className={`font-bold ${isLocked ? 'text-gray-400' : 'text-gray-800'}`}>{realRecipe ? realRecipe.title : `基本功练习 ${levelNum}`}</h4>{isLocked && <Lock size={14} className="text-gray-300" />}</div>{isCurrent && (<button onClick={() => realRecipe && onStartLevel(realRecipe)} className="mt-3 w-full py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg shadow-md shadow-orange-200 active:scale-95 transition-transform">开始挑战</button>)}{canUnlock && (<div className="mt-3 bg-gray-50 rounded-lg p-2 flex items-center justify-between"><div className="text-xs text-gray-500">此关包含食谱<br/>可消耗积分提前解锁</div><button onClick={() => onUnlockLevel(currentChapter.id, relativeLevel, realRecipe.title)} className="px-3 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-md border border-indigo-100 flex items-center gap-1 active:scale-95"><Zap size={12} fill="currentColor" />兑换</button></div>)}</div></div>); })}</div></div>
-    </div>
-  );
-};
+// Challenge/leveling模式已移除
 
 const SocialTab = () => {
   const [tab, setTab] = useState('feed');
@@ -349,9 +265,6 @@ const SocialTab = () => {
           </button>
           <button onClick={() => setTab('homemade')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${tab === 'homemade' ? 'bg-purple-50 text-purple-700' : 'text-gray-500 hover:bg-gray-50'}`}>
             {tab === 'homemade' && <Skull size={16} className="animate-pulse"/>} 自制美食栏
-          </button>
-          <button onClick={() => setTab('ranking')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${tab === 'ranking' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
-            本周榜单
           </button>
         </div>
 
@@ -413,14 +326,6 @@ const SocialTab = () => {
               </div>
             </div>
           )}
-          {tab === 'ranking' && (
-            <div className="max-w-2xl mx-auto space-y-4">
-              <div className="bg-orange-100 text-orange-800 text-sm p-4 rounded-xl mb-6 text-center border border-orange-200 font-medium">
-                🔥 每7天刷新榜单，距离下一次刷新还有 2 天
-              </div>
-              {RANKING.map((user, idx) => <RankingCard key={idx} user={user} idx={idx} />)}
-            </div>
-          )}
         </div>
       </div>
       {showEvilGuide && <EvilGuideModal onClose={() => setShowEvilGuide(false)} />}
@@ -435,13 +340,16 @@ const FavoritesTab = ({ recipes, onRecipeClick }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-24">
       {recipes.map(r => (
         <div key={r.id} onClick={() => onRecipeClick(r)} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer group border border-gray-100 flex flex-col">
-          <div className="h-40 relative overflow-hidden">
-            <img src={r.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+          <div className="h-28 bg-gradient-to-r from-orange-100 to-orange-50 flex items-center justify-between px-4">
+            <div>
+              <div className="text-xs text-orange-500 font-bold mb-1">{r.time}</div>
+              <h4 className="font-bold text-gray-800 text-base group-hover:text-orange-500 transition-colors line-clamp-1">{r.title}</h4>
+            </div>
+            <div className="text-[10px] px-2 py-1 rounded-md font-bold bg-white text-orange-500 border border-orange-100">Lv.{r.level}</div>
           </div>
           <div className="p-4 flex-1 flex flex-col">
-            <h4 className="font-bold text-gray-800 text-base mb-2">{r.title}</h4>
-            <div className="mt-auto text-[10px] px-2 py-1 rounded-md font-bold bg-orange-50 text-orange-500 w-fit">Lv.{r.level}</div>
+            <p className="text-gray-500 text-sm line-clamp-2 mb-3">{r.description}</p>
+            <div className="mt-auto text-[11px] text-gray-400">{r.category === 'chinese' ? '中餐' : '西餐'}</div>
           </div>
         </div>
       ))}
@@ -451,20 +359,16 @@ const FavoritesTab = ({ recipes, onRecipeClick }) => (
 
 
 // --- RecipeDetail component (added/used by App) ---
-const RecipeDetail = ({ recipe, onBack, onComplete }) => {
+const RecipeDetail = ({ recipe, onBack }) => {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center md:py-10">
       <div className="bg-white w-full max-w-3xl md:rounded-3xl shadow-2xl overflow-hidden">
-        <div className="relative h-72">
-          <img src={recipe.image} className="w-full h-full object-cover" alt={recipe.title} />
-          <button onClick={onBack} className="absolute top-6 left-6 p-2 bg-black/30 hover:bg-black/50 rounded-full text-white backdrop-blur-md transition-colors">
-            <ChevronLeft size={28} />
+        <div className="px-6 md:px-12 pt-8 pb-4">
+          <button onClick={onBack} className="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800">
+            <ChevronLeft size={24} /> 返回
           </button>
-        </div>
-
-        <div className="px-6 md:px-12 py-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
             <h1 className="text-3xl font-bold text-gray-900">{recipe.title}</h1>
             <span className="text-orange-500 font-bold bg-orange-50 px-4 py-1.5 rounded-full text-sm w-fit">{recipe.calories}</span>
@@ -521,11 +425,10 @@ const RecipeDetail = ({ recipe, onBack, onComplete }) => {
             <button onClick={() => setShowVideo(true)} className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-colors shadow-md">
               查看示范视频
             </button>
+            <button onClick={onBack} className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-bold transition-colors border border-gray-200">
+              返回
+            </button>
           </div>
-
-          <button onClick={() => onComplete(recipe)} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition-transform">
-            ✅ 完成烹饪并返回
-          </button>
         </div>
         {showVideo && (
           <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6">
@@ -712,41 +615,18 @@ export default function App() {
   });
 
   const [unlockedRecipes, setUnlockedRecipes] = useState(() => RECIPES.filter(r => r.level === 0));
-  const [unlockModal, setUnlockModal] = useState({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
 
   const decoratedUnlocked = unlockedRecipes;
 
-  const handleStartLevel = (recipe) => setSelectedRecipe(recipe);
-  const handleComplete = (recipe) => {
-    setSelectedRecipe(null);
-    setActiveTab('home');
-    const currentProgress = userProfile.completedLevels?.[recipe.cuisine] || 0;
-    if (recipe.level === currentProgress + 1) {
-      setUserProfile(prev => ({ ...prev, points: prev.points + 100, completedLevels: { ...prev.completedLevels, [recipe.cuisine]: (prev.completedLevels?.[recipe.cuisine] || 0) + 1 } }));
-    }
-    if (!unlockedRecipes.find(r => r.id === recipe.id)) setUnlockedRecipes([...unlockedRecipes, recipe]);
-  };
-
   const handleRecipeClick = (recipe) => setSelectedRecipe(recipe);
-
-  const onUnlockLevelClick = (cuisineId, level, title) => setUnlockModal({ isOpen: true, cuisine: cuisineId, level: level, cost: 300 * (userProfile.monthlyUnlocks + 1), title: title });
-
-  const confirmUnlock = () => {
-    const { cuisine, level, cost } = unlockModal;
-    setUserProfile(prev => ({ ...prev, points: prev.points - cost, monthlyUnlocks: prev.monthlyUnlocks + 1, completedLevels: { ...prev.completedLevels, [cuisine]: Math.max(prev.completedLevels?.[cuisine] ?? 0, level) } }));
-    const recipe = RECIPES.find(r => r.cuisine === cuisine && r.level === level);
-    if (recipe && !unlockedRecipes.find(r => r.id === recipe.id)) setUnlockedRecipes(prev => [...prev, recipe]);
-    setUnlockModal({ isOpen: false, cuisine: null, level: null, cost: 0, title: '' });
-  };
 
   const renderContent = () => {
     if (activeTab === 'home') return <HomeTab unlockedRecipes={decoratedUnlocked} onRecipeClick={handleRecipeClick} userProfile={userProfile} />;
-    if (activeTab === 'challenge') return <ChallengeTab userProfile={userProfile} onStartLevel={handleStartLevel} onUnlockLevel={onUnlockLevelClick} />;
     if (activeTab === 'social') return <SocialTab />;
     if (activeTab === 'favorites') return <FavoritesTab recipes={decoratedUnlocked} onRecipeClick={handleRecipeClick} />;
     return null;
   };
-  if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} onComplete={handleComplete} />;
+  if (selectedRecipe) return <RecipeDetail recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)} />;
 
   // login handler
   const onLogin = async (username, password) => {
@@ -809,9 +689,6 @@ export default function App() {
           <button onClick={() => setActiveTab('home')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'home' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Home size={20} /> 首页大厅
           </button>
-          <button onClick={() => setActiveTab('challenge')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'challenge' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
-            <Map size={20} /> 厨艺征途
-          </button>
           <button onClick={() => setActiveTab('social')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${activeTab === 'social' ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50'}`}>
             <Users size={20} /> 美食圈
           </button>
@@ -837,7 +714,7 @@ export default function App() {
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
           <h1 className="text-xl font-extrabold text-gray-800 flex items-center gap-2">
-            {selectedRecipe ? '菜谱详情' : activeTab === 'challenge' ? '厨艺征途' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
+            {selectedRecipe ? '菜谱详情' : activeTab === 'social' ? '美食圈' : activeTab === 'favorites' ? '我的收藏' : '美味厨房'}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -858,9 +735,6 @@ export default function App() {
         <button onClick={() => setActiveTab('home')} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Home size={24} /><span className="text-[10px]">首页</span>
         </button>
-        <button onClick={() => setActiveTab('challenge')} className={`flex flex-col items-center gap-1 ${activeTab === 'challenge' ? 'text-orange-500' : 'text-gray-400'}`}>
-          <Map size={24} /><span className="text-[10px]">征途</span>
-        </button>
         <button onClick={() => setActiveTab('social')} className={`flex flex-col items-center gap-1 ${activeTab === 'social' ? 'text-orange-500' : 'text-gray-400'}`}>
           <Users size={24} /><span className="text-[10px]">美食圈</span>
         </button>
@@ -868,8 +742,6 @@ export default function App() {
           <Bookmark size={24} /><span className="text-[10px]">收藏</span>
         </button>
       </div>
-
-      <UnlockModal isOpen={unlockModal.isOpen} onClose={() => setUnlockModal({ ...unlockModal, isOpen: false })} onConfirm={confirmUnlock} cost={unlockModal.cost} title={unlockModal.title} monthlyLeft={3 - userProfile.monthlyUnlocks} userPoints={userProfile.points} />
       {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={onRegister} />}
       
       {/* Global Floating Back Button (Desktop - always visible) */}
