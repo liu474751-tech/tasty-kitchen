@@ -128,17 +128,29 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* 卡片 2：Coming Soon */}
-            <div className="relative block h-full opacity-60 hover:opacity-100 transition-opacity">
-              <div className="h-full bg-gray-900/40 border-2 border-dashed border-gray-700 rounded-2xl p-8 flex flex-col justify-center">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-300">神秘新企划</h3>
-                  <span className="text-4xl grayscale">🚀</span>
-                </div>
-                <p className="text-gray-500 mb-8">在这个赛博世界的某个角落，新的想法正在孕育中...</p>
-                <div className="inline-block px-4 py-2 bg-gray-800 rounded text-gray-500 text-sm">
-                   开发中 / Loading...
-                </div>
+            {/* 卡片 2：三角洲战术终端 */}
+            <div className="group h-full bg-gray-900/80 backdrop-blur-md border border-amber-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.2)] hover:-translate-y-2 flex flex-col">
+              
+              {/* 顶部标题栏 */}
+              <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center bg-black/40">
+                <h3 className="text-xl font-bold text-amber-300">Delta Tactical Terminal</h3>
+                <span className="text-2xl">🚀</span>
+              </div>
+
+              {/* Iframe 区域 */}
+              <div className="flex-1 relative" style={{ minHeight: '500px' }}>
+                <iframe
+                  src="https://delta-tool-fe3emrkp2gxagxpdeuuwcd.streamlit.app/?embed=true"
+                  title="三角洲战术终端"
+                  width="100%"
+                  height="100%"
+                  style={{ 
+                    border: 'none', 
+                    backgroundColor: '#ffffff',
+                  }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  loading="lazy"
+                ></iframe>
               </div>
             </div>
 
