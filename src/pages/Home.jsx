@@ -112,7 +112,7 @@ export default function Home() {
             </span>
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
             
             {/* 卡片 1：Tasty Kitchen */}
             <Link to="/app" className="group relative block h-full">
@@ -128,31 +128,25 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* 卡片 2：三角洲战术终端 */}
-            <div className="group h-full bg-gray-900/80 backdrop-blur-md border border-amber-500/30 rounded-2xl overflow-hidden transition-all duration-300 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.2)] hover:-translate-y-2 flex flex-col">
-              
-              {/* 顶部标题栏 */}
-              <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center bg-black/40">
-                <h3 className="text-xl font-bold text-amber-300">Delta Tactical Terminal</h3>
-                <span className="text-2xl">🚀</span>
+            {/* 卡片 2：新鲜市场（蔬菜+水果+展示+外卖） */}
+            <Link to="/market" className="group relative block h-full">
+              <div className="h-full bg-gray-900/80 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 transition-all duration-300 group-hover:border-emerald-400 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] group-hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-emerald-300 group-hover:text-white transition-colors">新鲜市场</h3>
+                  <span className="text-4xl">🛒</span>
+                </div>
+                <p className="text-gray-400 mb-4">蔬菜水果一站购齐，展示精品套餐，外卖快速配送！</p>
+                <div className="flex gap-2 mb-6 flex-wrap">
+                  <span className="px-2 py-1 bg-green-900/50 text-green-300 text-xs rounded-full">🥬 蔬菜</span>
+                  <span className="px-2 py-1 bg-orange-900/50 text-orange-300 text-xs rounded-full">🍎 水果</span>
+                  <span className="px-2 py-1 bg-purple-900/50 text-purple-300 text-xs rounded-full">🏪 展示</span>
+                  <span className="px-2 py-1 bg-red-900/50 text-red-300 text-xs rounded-full">🛵 外卖</span>
+                </div>
+                <div className="inline-flex items-center text-emerald-400 font-bold group-hover:text-emerald-200 transition-colors">
+                   进入市场 <span className="ml-2 text-xl transition-transform group-hover:translate-x-2">→</span>
+                </div>
               </div>
-
-              {/* Iframe 区域 */}
-              <div className="flex-1 relative" style={{ minHeight: '500px' }}>
-                <iframe
-                  src="https://delta-tool-fe3emrkp2gxagxpdeuuwcd.streamlit.app/?embed=true"
-                  title="三角洲战术终端"
-                  width="100%"
-                  height="100%"
-                  style={{ 
-                    border: 'none', 
-                    backgroundColor: '#ffffff',
-                  }}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  loading="lazy"
-                ></iframe>
-              </div>
-            </div>
+            </Link>
 
           </div>
         </div>
