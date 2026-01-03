@@ -118,6 +118,7 @@ ProductInfo.propTypes = {
 
 // ============ ProductCard 主组件 ============
 // 状态机: normal -> loading -> normal/soldOut
+// React.memo 浅比较优化：购物车变化时不会重新渲染已有卡片
 
 const ProductCard = memo(function ProductCard({ 
   item, 
@@ -233,6 +234,13 @@ const ProductCard = memo(function ProductCard({
         </Button>
       </div>
     </article>
+  );
+// React.memo 自定义比较函数：只在 item.id 或 stock 变化时重新渲染
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.stock === nextProps.stock &&
+    prevProps.color === nextProps.color
   );
 });
 

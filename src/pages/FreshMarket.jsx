@@ -1,8 +1,9 @@
 // src/pages/FreshMarket.jsx
 import { Link, useSearchParams } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
+import SearchBox from '../components/SearchBox';
 
 // 从数据层导入完整数据（支持上百种商品）
 import {
@@ -23,6 +24,7 @@ const tabConfig = {
     subtitle: '凌晨4点产地直发，锁住每一份鲜嫩',
     data: allVegetables,
     gridCols: 'lg:grid-cols-4',
+    searchPlaceholder: '搜索西兰花、菠菜、胡萝卜...',
   },
   fruits: {
     id: 'fruits',
@@ -32,6 +34,7 @@ const tabConfig = {
     subtitle: '24小时从枝头到餐桌，新鲜看得见',
     data: allFruits,
     gridCols: 'lg:grid-cols-4',
+    searchPlaceholder: '搜索苹果、橙子、草莓...',
   },
   showcase: {
     id: 'showcase',
@@ -41,6 +44,7 @@ const tabConfig = {
     subtitle: '省心搭配，一键下单享超值',
     data: allShowcaseItems,
     gridCols: 'lg:grid-cols-3',
+    searchPlaceholder: '搜索套餐、礼盒...',
   },
   delivery: {
     id: 'delivery',
@@ -50,6 +54,7 @@ const tabConfig = {
     subtitle: '30分钟极速送达，迟到必赔',
     data: allMenuItems,
     gridCols: 'lg:grid-cols-4',
+    searchPlaceholder: '搜索沙拉、果汁...',
   },
 };
 
@@ -60,18 +65,37 @@ export default function FreshMarket() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('category') || 'vegetables';
   
+  // 搜索关键词状态
+  const [searchQuery, setSearchQuery] = useState('');
+  
   // 使用自定义 Hook 管理购物车（带 localStorage 持久化）
   const { cartItems, addToCart, totalPrice, totalItems, clearCart } = useCart();
 
   // 当前 Tab 配置（useMemo 缓存，避免重复计算）
   const currentTab = useMemo(() => tabConfig[activeTab] || tabConfig.vegetables, [activeTab]);
   
-  // 当前展示的商品列表
-  const displayItems = useMemo(() => currentTab.data || [], [currentTab]);
+  // 当前展示的商品列表（支持搜索过滤）
+  const displayItems = useMemo(() => {
+    const items = currentTab.data || [];
+    if (!searchQuery.trim()) return items;
+    
+    const query = searchQuery.toLowerCase();
+    return items.filter(item => 
+      item.name.toLowerCase().includes(query) ||
+      (item.desc && item.desc.toLowerCase().includes(query)) ||
+      (item.emoji && item.emoji.includes(query))
+    );
+  }, [currentTab, searchQuery]);
 
-  // 切换 Tab 时更新 URL
+  // 搜索处理（防抖优化）
+  const handleSearch = useCallback((query) => {
+    setSearchQuery(query);
+  }, []);
+
+  // 切换 Tab 时清空搜索
   const handleTabChange = (tabId) => {
     setSearchParams({ category: tabId });
+    setSearchQuery('');
   };
 
   // JSON-LD 结构化数据（SEO 优化）
@@ -134,6 +158,23 @@ export default function FreshMarket() {
 
       {/* 主内容区 - 数据映射驱动渲染 */}
       <main className="container mx-auto px-6 py-8">
+        
+        {/* 搜索框 - SEO 优化 */}
+        <SearchBox 
+          onSearch={handleSearch}
+          placeholder={currentTab.searchPlaceholder}
+          color={currentTab.color}
+        />
+        
+        {/* 搜索结果提示 */}
+        {searchQuery && (
+          <p className="text-center text-gray-400 mb-4">
+            找到 <span className="text-white font-bold">{displayItems.length}</span> 个相关商品
+            {displayItems.length === 0 && (
+              <span className="block mt-2 text-gray-500">换个关键词试试？</span>
+            )}
+          </p>
+        )}
         
         {/* 通用商品区（蔬菜/水果）*/}
         {(activeTab === 'vegetables' || activeTab === 'fruits') && (
