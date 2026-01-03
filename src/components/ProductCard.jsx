@@ -132,10 +132,18 @@ const ProductCard = memo(function ProductCard({
   
   // 边框颜色映射 - hover 时显示发光效果
   const borderColorMap = {
-    green: 'border-green-500/30 hover:border-green-400 hover:shadow-neon-green',
-    orange: 'border-orange-500/30 hover:border-orange-400 hover:shadow-neon-orange',
-    purple: 'border-purple-500/30 hover:border-purple-400 hover:shadow-neon-purple',
-    red: 'border-red-500/30 hover:border-red-400 hover:shadow-neon-red',
+    green: 'border-green-500/30 hover:border-green-500/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)]',
+    orange: 'border-orange-500/30 hover:border-orange-500/50 hover:shadow-[0_0_25px_rgba(249,115,22,0.2)]',
+    purple: 'border-purple-500/30 hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]',
+    red: 'border-red-500/30 hover:border-red-500/50 hover:shadow-[0_0_25px_rgba(239,68,68,0.2)]',
+  };
+
+  // 装饰性光晕渐变映射
+  const glowGradientMap = {
+    green: 'from-green-500/5 to-transparent',
+    orange: 'from-orange-500/5 to-transparent',
+    purple: 'from-purple-500/5 to-transparent',
+    red: 'from-red-500/5 to-transparent',
   };
 
   // 处理加入购物车 - 带 Loading 状态防抖
@@ -167,37 +175,63 @@ const ProductCard = memo(function ProductCard({
   return (
     <article 
       className={`
-        bg-gray-900/80 backdrop-blur-md border ${borderColorMap[color]} 
+        group relative bg-[#111827] backdrop-blur-md border ${borderColorMap[color]} 
         rounded-2xl p-6 transition-all duration-300 cursor-pointer
         hover:-translate-y-2
         ${isOutOfStock ? 'opacity-60 grayscale' : ''}
       `}
     >
-      {/* Emoji 带无障碍标签 */}
-      <div className="text-5xl text-center mb-3">
-        <span role="img" aria-label={item.name}>{item.emoji}</span>
+      {/* 装饰性背景光晕 - hover 时显示 */}
+      <div 
+        className={`
+          absolute inset-0 bg-gradient-to-br ${glowGradientMap[color]} 
+          opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300 pointer-events-none
+        `} 
+        aria-hidden="true"
+      />
+      
+      {/* 内容区 - 相对定位确保在光晕之上 */}
+      <div className="relative z-10">
+        {/* Emoji 带放大动画 */}
+        <div className="text-5xl text-center mb-4 transform group-hover:scale-110 transition-transform duration-300">
+          <span role="img" aria-label={item.name}>{item.emoji}</span>
+        </div>
+        
+        <ProductInfo name={item.name} desc={item.desc} color={color} />
+        
+        {/* 库存显示 */}
+        {stock < 10 && stock > 0 && (
+          <p className="text-xs text-center mb-2 text-red-400 animate-pulse">
+            仅剩 {stock} {item.unit || '份'}
+          </p>
+        )}
+        
+        {/* 价格区块 */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span className={`text-sm ${color === 'green' ? 'text-green-400' : color === 'orange' ? 'text-orange-400' : color === 'purple' ? 'text-purple-400' : 'text-red-400'}`}>
+            ￥
+          </span>
+          <span className="text-2xl font-bold text-white">{item.price}</span>
+          {item.unit && <span className="text-gray-500 text-sm">/{item.unit}</span>}
+        </div>
+
+        {/* 原价显示（如有） */}
+        {item.originalPrice && item.originalPrice > item.price && (
+          <p className="text-center text-sm text-gray-500 line-through mb-2">
+            原价 ¥{item.originalPrice}
+          </p>
+        )}
+        
+        <Button 
+          onClick={handleAddToCart} 
+          color={color} 
+          disabled={isOutOfStock || state === 'soldOut'}
+          loading={state === 'loading'}
+          className="w-full"
+        >
+          {getButtonText()}
+        </Button>
       </div>
-      
-      <ProductInfo name={item.name} desc={item.desc} color={color} />
-      
-      {/* 库存显示 */}
-      {stock < 10 && stock > 0 && (
-        <p className="text-xs text-center mb-2 text-red-400 animate-pulse">
-          仅剩 {stock} {item.unit || '份'}
-        </p>
-      )}
-      
-      <Price price={item.price} originalPrice={item.originalPrice} unit={item.unit} />
-      
-      <Button 
-        onClick={handleAddToCart} 
-        color={color} 
-        disabled={isOutOfStock || state === 'soldOut'}
-        loading={state === 'loading'}
-        className="w-full mt-4"
-      >
-        {getButtonText()}
-      </Button>
     </article>
   );
 });
