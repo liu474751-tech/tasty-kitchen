@@ -4,20 +4,20 @@ import { useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
 
-// 蔬菜数据
+// 蔬菜数据 - 高转化文案
 const vegetables = [
-  { id: 'v1', name: '有机西兰花', price: 12.99, unit: '斤', emoji: '🥦', desc: '富含维生素C，口感脆嫩' },
-  { id: 'v2', name: '新鲜菠菜', price: 8.50, unit: '斤', emoji: '🥬', desc: '铁元素丰富，营养健康' },
-  { id: 'v3', name: '红萝卜', price: 6.80, unit: '斤', emoji: '🥕', desc: '胡萝卜素含量高，护眼佳品' },
-  { id: 'v4', name: '西红柿', price: 7.20, unit: '斤', emoji: '🍅', desc: '自然成熟，酸甜可口' },
+  { id: 'v1', name: '有机西兰花', price: 12.99, unit: '斤', emoji: '🥦', desc: '脆嫩如初：富含维C的健康选择' },
+  { id: 'v2', name: '新鲜菠菜', price: 8.50, unit: '斤', emoji: '🥬', desc: '补铁首选：清晨采摘的营养担当' },
+  { id: 'v3', name: '红萝卜', price: 6.80, unit: '斤', emoji: '🥕', desc: '护眼明星：胡萝卜素满满' },
+  { id: 'v4', name: '西红柿', price: 7.20, unit: '斤', emoji: '🍅', desc: '阳光甜蜜：自然熟透的酸甜滋味' },
 ];
 
-// 水果数据
+// 水果数据 - 高转化文案
 const fruits = [
-  { id: 'f1', name: '红富士苹果', price: 15.99, unit: '斤', emoji: '🍎', desc: '脆甜多汁，新鲜采摘' },
-  { id: 'f2', name: '阳光橙子', price: 12.50, unit: '斤', emoji: '🍊', desc: '维C爆棚，酸甜可口' },
-  { id: 'f3', name: '水晶葡萄', price: 25.00, unit: '斤', emoji: '🍇', desc: '粒粒饱满，甜蜜无籽' },
-  { id: 'f4', name: '草莓', price: 35.00, unit: '斤', emoji: '🍓', desc: '酸甜诱人，颜值担当' },
+  { id: 'f1', name: '红富士苹果', price: 15.99, unit: '斤', emoji: '🍎', desc: '咬一口爆汁：今晨果园直达' },
+  { id: 'f2', name: '阳光橙子', price: 12.50, unit: '斤', emoji: '🍊', desc: '维C小太阳：每日元气补给站' },
+  { id: 'f3', name: '水晶葡萄', price: 25.00, unit: '斤', emoji: '🍇', desc: '无籽甜心：粒粒爆浆的幸福感' },
+  { id: 'f4', name: '草莓', price: 35.00, unit: '斤', emoji: '🍓', desc: '冬日限定：颜值与美味并存' },
 ];
 
 // 套餐展示
@@ -117,14 +117,14 @@ export default function FreshMarket() {
       {/* 主内容区 */}
       <main className="container mx-auto px-6 py-8">
         
-        {/* 蔬菜区 */}
+        {/* 蔬菜区 - 语义化HTML + SEO优化 */}
         {activeTab === 'vegetables' && (
-          <section role="tabpanel" className="animate-fadeIn">
+          <section role="tabpanel" aria-labelledby="vegetables-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-green-400 mb-2">🥬 新鲜蔬菜专区</h2>
-              <p className="text-gray-400">精选有机蔬菜，每日新鲜直达</p>
+              <h2 id="vegetables-title" className="text-3xl font-bold text-green-400 mb-2">🥬 今日清晨采摘：新鲜蔬菜</h2>
+              <p className="text-gray-400">凌晨4点产地直发，锁住每一份鲜嫩</p>
             </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" role="list">
               {vegetables.map((item) => (
                 <ProductCard
                   key={item.id}
@@ -137,14 +137,14 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 水果区 */}
+        {/* 水果区 - 语义化HTML + SEO优化 */}
         {activeTab === 'fruits' && (
-          <section role="tabpanel" className="animate-fadeIn">
+          <section role="tabpanel" aria-labelledby="fruits-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-orange-400 mb-2">🍎 新鲜水果专区</h2>
-              <p className="text-gray-400">当季鲜果，产地直供</p>
+              <h2 id="fruits-title" className="text-3xl font-bold text-orange-400 mb-2">🍎 果园直达：当季鲜果</h2>
+              <p className="text-gray-400">24小时从枝头到餐桌，新鲜看得见</p>
             </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" role="list">
               {fruits.map((item) => (
                 <ProductCard
                   key={item.id}
@@ -157,12 +157,12 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 展示区 */}
+        {/* 展示区 - 语义化HTML + SEO优化 */}
         {activeTab === 'showcase' && (
-          <section role="tabpanel" className="animate-fadeIn">
+          <section role="tabpanel" aria-labelledby="showcase-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-purple-400 mb-2">🏪 精品展示窗口</h2>
-              <p className="text-gray-400">精选套餐，超值优惠</p>
+              <h2 id="showcase-title" className="text-3xl font-bold text-purple-400 mb-2">🏪 爆款精选：限时特惠</h2>
+              <p className="text-gray-400">省心搭配，一键下单享超值</p>
             </header>
             {/* Banner */}
             <div className="mb-8 bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-2xl p-6 border border-purple-500/30">
@@ -198,12 +198,12 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 外卖区 */}
+        {/* 外卖区 - 语义化HTML + SEO优化 */}
         {activeTab === 'delivery' && (
-          <section role="tabpanel" className="animate-fadeIn">
+          <section role="tabpanel" aria-labelledby="delivery-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-red-400 mb-2">🛵 外卖点餐窗口</h2>
-              <p className="text-gray-400">快速配送，新鲜到家</p>
+              <h2 id="delivery-title" className="text-3xl font-bold text-red-400 mb-2">🛵 即点即送：新鲜到家</h2>
+              <p className="text-gray-400">30分钟极速送达，迟到必赔</p>
             </header>
             {/* 配送信息 */}
             <div className="mb-6 bg-gradient-to-r from-red-900/30 to-orange-900/30 rounded-xl p-4 border border-red-500/30">
