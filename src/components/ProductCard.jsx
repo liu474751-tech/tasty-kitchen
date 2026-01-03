@@ -1,5 +1,9 @@
 // src/components/ProductCard.jsx
-// 原子化封装的商品卡片组件
+// 原子化封装的商品卡片组件 - 带状态机、React.memo、PropTypes
+import { memo, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+
+// ============ Atoms 原子组件 ============
 
 export function Badge({ children, color = 'amber' }) {
   const colorMap = {
@@ -16,35 +20,79 @@ export function Badge({ children, color = 'amber' }) {
   );
 }
 
-export function Button({ children, onClick, color = 'amber', disabled = false, className = '' }) {
+Badge.propTypes = {
+  children: PropTypes.node.isRequired,
+  color: PropTypes.oneOf(['amber', 'green', 'orange', 'purple', 'red']),
+};
+
+export function Button({ children, onClick, color = 'amber', disabled = false, loading = false, className = '' }) {
   const colorMap = {
-    amber: 'bg-amber-600 hover:bg-amber-500',
-    green: 'bg-green-600 hover:bg-green-500',
-    orange: 'bg-orange-600 hover:bg-orange-500',
-    purple: 'bg-purple-600 hover:bg-purple-500',
-    red: 'bg-red-600 hover:bg-red-500',
+    amber: 'bg-amber-600 hover:bg-amber-500 shadow-neon-amber',
+    green: 'bg-green-600 hover:bg-green-500 shadow-neon-green',
+    orange: 'bg-orange-600 hover:bg-orange-500 shadow-neon-orange',
+    purple: 'bg-purple-600 hover:bg-purple-500 shadow-neon-purple',
+    red: 'bg-red-600 hover:bg-red-500 shadow-neon-red',
   };
   
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
-      className={`py-2 px-4 ${colorMap[color]} rounded-lg font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      disabled={disabled || loading}
+      className={`py-2 px-4 ${colorMap[color]} rounded-lg font-bold transition-all duration-300 
+        disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none
+        hover:shadow-lg active:scale-95 ${className}`}
       aria-label={typeof children === 'string' ? children : undefined}
+      aria-busy={loading}
     >
-      {children}
+      {loading ? (
+        <span className="flex items-center gap-2">
+          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          处理中...
+        </span>
+      ) : children}
     </button>
   );
 }
 
-export function PriceSection({ price, unit }) {
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func,
+  color: PropTypes.oneOf(['amber', 'green', 'orange', 'purple', 'red']),
+  disabled: PropTypes.bool,
+  loading: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+// Price 组件 - 支持涨跌颜色显示
+export function Price({ price, originalPrice, unit }) {
+  const hasDiscount = originalPrice && originalPrice > price;
+  const priceChange = originalPrice ? ((price - originalPrice) / originalPrice * 100).toFixed(0) : 0;
+  
   return (
     <div className="flex items-center justify-between">
-      <span className="text-xl font-bold text-white">¥{price}</span>
+      <div className="flex items-center gap-2">
+        <span className={`text-xl font-bold ${hasDiscount ? 'text-green-400' : 'text-white'}`}>
+          ¥{price}
+        </span>
+        {hasDiscount && (
+          <>
+            <span className="text-sm text-gray-500 line-through">¥{originalPrice}</span>
+            <span className="text-xs px-1.5 py-0.5 bg-green-600/30 text-green-400 rounded">
+              {priceChange}%
+            </span>
+          </>
+        )}
+      </div>
       {unit && <span className="text-gray-500">/{unit}</span>}
     </div>
   );
 }
+
+Price.propTypes = {
+  price: PropTypes.number.isRequired,
+  originalPrice: PropTypes.number,
+  unit: PropTypes.string,
+};
 
 export function ProductInfo({ name, desc, color = 'green' }) {
   const colorMap = {
@@ -62,26 +110,68 @@ export function ProductInfo({ name, desc, color = 'green' }) {
   );
 }
 
-export default function ProductCard({ 
+ProductInfo.propTypes = {
+  name: PropTypes.string.isRequired,
+  desc: PropTypes.string,
+  color: PropTypes.oneOf(['green', 'orange', 'purple', 'red']),
+};
+
+// ============ ProductCard 主组件 ============
+// 状态机: normal -> loading -> normal/soldOut
+
+const ProductCard = memo(function ProductCard({ 
   item, 
   color = 'green', 
   onAddToCart, 
-  disabled = false,
-  showStock = false,
-  stock = 99 
+  stock = 99,
+  minQuantity = 1,  // 起购量
 }) {
+  const [state, setState] = useState('normal'); // normal | loading | soldOut
+  
+  const isOutOfStock = stock <= 0;
+  
+  // 边框颜色映射 - hover 时显示发光效果
   const borderColorMap = {
-    green: 'border-green-500/30 hover:border-green-400 hover:shadow-[0_0_30px_rgba(34,197,94,0.2)]',
-    orange: 'border-orange-500/30 hover:border-orange-400 hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]',
-    purple: 'border-purple-500/30 hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]',
-    red: 'border-red-500/30 hover:border-red-400 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)]',
+    green: 'border-green-500/30 hover:border-green-400 hover:shadow-neon-green',
+    orange: 'border-orange-500/30 hover:border-orange-400 hover:shadow-neon-orange',
+    purple: 'border-purple-500/30 hover:border-purple-400 hover:shadow-neon-purple',
+    red: 'border-red-500/30 hover:border-red-400 hover:shadow-neon-red',
   };
 
-  const isOutOfStock = showStock && stock <= 0;
+  // 处理加入购物车 - 带 Loading 状态防抖
+  const handleAddToCart = useCallback(async () => {
+    if (state === 'loading' || isOutOfStock) return;
+    
+    setState('loading');
+    
+    // 模拟网络延迟（实际项目中这里是 API 调用）
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    onAddToCart({ ...item, quantity: minQuantity });
+    
+    // 检查库存
+    if (stock <= minQuantity) {
+      setState('soldOut');
+    } else {
+      setState('normal');
+    }
+  }, [item, onAddToCart, state, isOutOfStock, stock, minQuantity]);
+
+  // 获取按钮文字
+  const getButtonText = () => {
+    if (isOutOfStock || state === 'soldOut') return '补货中';
+    if (minQuantity > 1) return `${minQuantity}${item.unit || '份'}起购`;
+    return '加入购物车';
+  };
 
   return (
     <article 
-      className={`bg-gray-900/80 border ${borderColorMap[color]} rounded-2xl p-6 hover:-translate-y-2 transition-all cursor-pointer ${isOutOfStock ? 'opacity-60' : ''}`}
+      className={`
+        bg-gray-900/80 backdrop-blur-md border ${borderColorMap[color]} 
+        rounded-2xl p-6 transition-all duration-300 cursor-pointer
+        hover:-translate-y-2
+        ${isOutOfStock ? 'opacity-60 grayscale' : ''}
+      `}
     >
       {/* Emoji 带无障碍标签 */}
       <div className="text-5xl text-center mb-3">
@@ -90,22 +180,42 @@ export default function ProductCard({
       
       <ProductInfo name={item.name} desc={item.desc} color={color} />
       
-      {showStock && (
-        <p className={`text-xs text-center mb-2 ${stock <= 5 ? 'text-red-400' : 'text-gray-500'}`}>
-          {isOutOfStock ? '已售罄' : `库存: ${stock}`}
+      {/* 库存显示 */}
+      {stock < 10 && stock > 0 && (
+        <p className="text-xs text-center mb-2 text-red-400 animate-pulse">
+          仅剩 {stock} {item.unit || '份'}
         </p>
       )}
       
-      <PriceSection price={item.price} unit={item.unit} />
+      <Price price={item.price} originalPrice={item.originalPrice} unit={item.unit} />
       
       <Button 
-        onClick={() => onAddToCart(item)} 
+        onClick={handleAddToCart} 
         color={color} 
-        disabled={disabled || isOutOfStock}
+        disabled={isOutOfStock || state === 'soldOut'}
+        loading={state === 'loading'}
         className="w-full mt-4"
       >
-        {isOutOfStock ? '已售罄' : '加入购物车'}
+        {getButtonText()}
       </Button>
     </article>
   );
-}
+});
+
+ProductCard.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    originalPrice: PropTypes.number,
+    unit: PropTypes.string,
+    emoji: PropTypes.string,
+    desc: PropTypes.string,
+  }).isRequired,
+  color: PropTypes.oneOf(['green', 'orange', 'purple', 'red']),
+  onAddToCart: PropTypes.func.isRequired,
+  stock: PropTypes.number,
+  minQuantity: PropTypes.number,
+};
+
+export default ProductCard;

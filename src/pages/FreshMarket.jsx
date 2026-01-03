@@ -244,12 +244,12 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 购物车浮窗 */}
+        {/* 购物车浮窗 - 毛玻璃效果 + 发光边框 */}
         {cartItems.length > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/95 backdrop-blur-md border border-amber-500/50 rounded-2xl p-4 shadow-2xl z-40 max-w-md w-full mx-4">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/70 backdrop-blur-xl border border-amber-400/60 rounded-2xl p-5 shadow-neon-amber z-40 max-w-md w-full mx-4 animate-float hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] transition-shadow duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-3xl" role="img" aria-label="购物车">🛒</span>
+                <span className="text-3xl animate-pulse-slow" role="img" aria-label="购物车">🛒</span>
                 <div>
                   <p className="text-white font-bold">{totalItems} 件商品</p>
                   <p className="text-amber-400 text-xl font-bold">¥{totalPrice}</p>
@@ -258,12 +258,12 @@ export default function FreshMarket() {
               <div className="flex gap-2">
                 <button 
                   onClick={clearCart}
-                  className="px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl font-bold transition-colors text-sm"
+                  className="px-4 py-3 bg-gray-700/80 hover:bg-gray-600 rounded-xl font-bold transition-all text-sm hover:shadow-lg"
                   aria-label="清空购物车"
                 >
                   清空
                 </button>
-                <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-xl font-bold transition-colors">
+                <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-xl font-bold transition-all hover:shadow-neon-orange hover:scale-105">
                   去结算 →
                 </button>
               </div>
