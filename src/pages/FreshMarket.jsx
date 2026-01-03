@@ -4,36 +4,13 @@ import { useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
 
-// 蔬菜数据 - 高转化文案
-const vegetables = [
-  { id: 'v1', name: '有机西兰花', price: 12.99, unit: '斤', emoji: '🥦', desc: '脆嫩如初：富含维C的健康选择' },
-  { id: 'v2', name: '新鲜菠菜', price: 8.50, unit: '斤', emoji: '🥬', desc: '补铁首选：清晨采摘的营养担当' },
-  { id: 'v3', name: '红萝卜', price: 6.80, unit: '斤', emoji: '🥕', desc: '护眼明星：胡萝卜素满满' },
-  { id: 'v4', name: '西红柿', price: 7.20, unit: '斤', emoji: '🍅', desc: '阳光甜蜜：自然熟透的酸甜滋味' },
-];
-
-// 水果数据 - 高转化文案
-const fruits = [
-  { id: 'f1', name: '红富士苹果', price: 15.99, unit: '斤', emoji: '🍎', desc: '咬一口爆汁：今晨果园直达' },
-  { id: 'f2', name: '阳光橙子', price: 12.50, unit: '斤', emoji: '🍊', desc: '维C小太阳：每日元气补给站' },
-  { id: 'f3', name: '水晶葡萄', price: 25.00, unit: '斤', emoji: '🍇', desc: '无籽甜心：粒粒爆浆的幸福感' },
-  { id: 'f4', name: '草莓', price: 35.00, unit: '斤', emoji: '🍓', desc: '冬日限定：颜值与美味并存' },
-];
-
-// 套餐展示
-const showcaseItems = [
-  { id: 's1', name: '精选礼盒套装', price: 199.00, emoji: '🎁', desc: '水果蔬菜精美组合', tag: '热卖', tagColor: 'bg-red-500' },
-  { id: 's2', name: '有机蔬菜周套餐', price: 128.00, emoji: '📦', desc: '一周所需蔬菜', tag: '推荐', tagColor: 'bg-green-500' },
-  { id: 's3', name: '家庭蔬果大礼包', price: 168.00, emoji: '🏠', desc: '满足全家一周所需', tag: '超值', tagColor: 'bg-amber-500' },
-];
-
-// 外卖菜单
-const menuItems = [
-  { id: 'm1', name: '健康蔬菜沙拉', price: 28.00, emoji: '🥗', desc: '新鲜时蔬，低卡健康' },
-  { id: 'm2', name: '鲜果拼盘', price: 38.00, emoji: '🍇', desc: '多种时令水果' },
-  { id: 'm3', name: '鲜榨果汁', price: 18.00, emoji: '🧃', desc: '现榨无添加' },
-  { id: 'm4', name: '水果捞', price: 32.00, emoji: '🍨', desc: '酸奶配鲜果' },
-];
+// 从数据层导入（数据抽离，便于扩展维护）
+import {
+  vegetables,
+  fruits,
+  showcaseItems,
+  menuItems,
+} from '../data';
 
 // Tab 配置
 const tabs = [
