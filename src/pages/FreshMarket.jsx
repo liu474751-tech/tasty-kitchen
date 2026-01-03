@@ -1,24 +1,59 @@
 // src/pages/FreshMarket.jsx
 import { Link, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
 
-// 从数据层导入（数据抽离，便于扩展维护）
+// 从数据层导入完整数据（支持上百种商品）
 import {
-  vegetables,
-  fruits,
-  showcaseItems,
-  menuItems,
+  allVegetables,
+  allFruits,
+  allShowcaseItems,
+  allMenuItems,
+  getDiscountPercent,
 } from '../data';
 
-// Tab 配置
-const tabs = [
-  { id: 'vegetables', name: '🥬 蔬菜', color: 'green' },
-  { id: 'fruits', name: '🍎 水果', color: 'orange' },
-  { id: 'showcase', name: '🏪 展示', color: 'purple' },
-  { id: 'delivery', name: '🛵 外卖', color: 'red' },
-];
+// Tab 配置 - 数据映射驱动渲染
+const tabConfig = {
+  vegetables: {
+    id: 'vegetables',
+    name: '🥬 蔬菜',
+    color: 'green',
+    title: '🥬 今日清晨采摘：新鲜蔬菜',
+    subtitle: '凌晨4点产地直发，锁住每一份鲜嫩',
+    data: allVegetables,
+    gridCols: 'lg:grid-cols-4',
+  },
+  fruits: {
+    id: 'fruits',
+    name: '🍎 水果',
+    color: 'orange',
+    title: '🍎 果园直达：当季鲜果',
+    subtitle: '24小时从枝头到餐桌，新鲜看得见',
+    data: allFruits,
+    gridCols: 'lg:grid-cols-4',
+  },
+  showcase: {
+    id: 'showcase',
+    name: '🏪 展示',
+    color: 'purple',
+    title: '🏪 爆款精选：限时特惠',
+    subtitle: '省心搭配，一键下单享超值',
+    data: allShowcaseItems,
+    gridCols: 'lg:grid-cols-3',
+  },
+  delivery: {
+    id: 'delivery',
+    name: '🛵 外卖',
+    color: 'red',
+    title: '🛵 即点即送：新鲜到家',
+    subtitle: '30分钟极速送达，迟到必赔',
+    data: allMenuItems,
+    gridCols: 'lg:grid-cols-4',
+  },
+};
+
+const tabs = Object.values(tabConfig);
 
 export default function FreshMarket() {
   // 使用 URL Query Params 实现路由闭环（可分享链接直达分类）
@@ -27,6 +62,12 @@ export default function FreshMarket() {
   
   // 使用自定义 Hook 管理购物车（带 localStorage 持久化）
   const { cartItems, addToCart, totalPrice, totalItems, clearCart } = useCart();
+
+  // 当前 Tab 配置（useMemo 缓存，避免重复计算）
+  const currentTab = useMemo(() => tabConfig[activeTab] || tabConfig.vegetables, [activeTab]);
+  
+  // 当前展示的商品列表
+  const displayItems = useMemo(() => currentTab.data || [], [currentTab]);
 
   // 切换 Tab 时更新 URL
   const handleTabChange = (tabId) => {
@@ -91,22 +132,25 @@ export default function FreshMarket() {
         </div>
       </nav>
 
-      {/* 主内容区 */}
+      {/* 主内容区 - 数据映射驱动渲染 */}
       <main className="container mx-auto px-6 py-8">
         
-        {/* 蔬菜区 - 语义化HTML + SEO优化 */}
-        {activeTab === 'vegetables' && (
-          <section role="tabpanel" aria-labelledby="vegetables-title" className="animate-fadeIn">
+        {/* 通用商品区（蔬菜/水果）*/}
+        {(activeTab === 'vegetables' || activeTab === 'fruits') && (
+          <section role="tabpanel" aria-labelledby={`${activeTab}-title`} className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 id="vegetables-title" className="text-3xl font-bold text-green-400 mb-2">🥬 今日清晨采摘：新鲜蔬菜</h2>
-              <p className="text-gray-400">凌晨4点产地直发，锁住每一份鲜嫩</p>
+              <h2 id={`${activeTab}-title`} className={`text-3xl font-bold text-${currentTab.color}-400 mb-2`}>
+                {currentTab.title}
+              </h2>
+              <p className="text-gray-400">{currentTab.subtitle}</p>
+              <p className="text-gray-500 text-sm mt-2">共 {displayItems.length} 种商品</p>
             </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" role="list">
-              {vegetables.map((item) => (
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${currentTab.gridCols} gap-6`} role="list">
+              {displayItems.map((item) => (
                 <ProductCard
                   key={item.id}
                   item={item}
-                  color="green"
+                  color={currentTab.color}
                   onAddToCart={addToCart}
                 />
               ))}
@@ -114,32 +158,13 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 水果区 - 语义化HTML + SEO优化 */}
-        {activeTab === 'fruits' && (
-          <section role="tabpanel" aria-labelledby="fruits-title" className="animate-fadeIn">
-            <header className="text-center mb-8">
-              <h2 id="fruits-title" className="text-3xl font-bold text-orange-400 mb-2">🍎 果园直达：当季鲜果</h2>
-              <p className="text-gray-400">24小时从枝头到餐桌，新鲜看得见</p>
-            </header>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" role="list">
-              {fruits.map((item) => (
-                <ProductCard
-                  key={item.id}
-                  item={item}
-                  color="orange"
-                  onAddToCart={addToCart}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 展示区 - 语义化HTML + SEO优化 */}
+        {/* 展示区 - 套餐卡片特殊布局 */}
         {activeTab === 'showcase' && (
           <section role="tabpanel" aria-labelledby="showcase-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 id="showcase-title" className="text-3xl font-bold text-purple-400 mb-2">🏪 爆款精选：限时特惠</h2>
-              <p className="text-gray-400">省心搭配，一键下单享超值</p>
+              <h2 id="showcase-title" className="text-3xl font-bold text-purple-400 mb-2">{currentTab.title}</h2>
+              <p className="text-gray-400">{currentTab.subtitle}</p>
+              <p className="text-gray-500 text-sm mt-2">共 {displayItems.length} 款套餐</p>
             </header>
             {/* Banner */}
             <div className="mb-8 bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-2xl p-6 border border-purple-500/30">
@@ -152,18 +177,31 @@ export default function FreshMarket() {
                 <div className="text-6xl" role="img" aria-label="礼物">🎁</div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {showcaseItems.map((item) => (
-                <article key={item.id} className="bg-gray-900/80 border border-purple-500/30 rounded-2xl overflow-hidden hover:border-purple-400 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] hover:-translate-y-2 transition-all cursor-pointer">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${currentTab.gridCols} gap-6`}>
+              {displayItems.map((item) => (
+                <article key={item.id} className="bg-gray-900/80 backdrop-blur-sm border border-purple-500/30 rounded-2xl overflow-hidden hover:border-purple-400 hover:shadow-neon-purple hover:-translate-y-2 transition-all cursor-pointer">
                   <div className="relative h-32 bg-gradient-to-br from-purple-900/50 to-gray-900 flex items-center justify-center">
                     <span className="text-6xl" role="img" aria-label={item.name}>{item.emoji}</span>
                     <span className={`absolute top-3 right-3 px-3 py-1 ${item.tagColor} text-white text-xs rounded-full font-bold`}>{item.tag}</span>
+                    {item.originalPrice && (
+                      <span className="absolute top-3 left-3 px-2 py-1 bg-red-500 text-white text-xs rounded-full font-bold">
+                        -{getDiscountPercent(item)}%
+                      </span>
+                    )}
                   </div>
                   <div className="p-5">
                     <h3 className="text-lg font-bold text-purple-300 mb-1">{item.name}</h3>
-                    <p className="text-gray-400 text-sm mb-3">{item.desc}</p>
+                    <p className="text-gray-400 text-sm mb-2">{item.desc}</p>
+                    {item.items && (
+                      <p className="text-gray-500 text-xs mb-3">包含: {item.items.slice(0, 3).join('、')}{item.items.length > 3 ? '...' : ''}</p>
+                    )}
                     <div className="flex items-center justify-between">
-                      <span className="text-xl font-bold text-white">¥{item.price}</span>
+                      <div>
+                        <span className="text-xl font-bold text-white">¥{item.price}</span>
+                        {item.originalPrice && (
+                          <span className="text-gray-500 text-sm line-through ml-2">¥{item.originalPrice}</span>
+                        )}
+                      </div>
                       <Button onClick={() => addToCart(item)} color="purple">
                         立即抢购
                       </Button>
@@ -175,12 +213,13 @@ export default function FreshMarket() {
           </section>
         )}
 
-        {/* 外卖区 - 语义化HTML + SEO优化 */}
+        {/* 外卖区 - 紧凑卡片布局 */}
         {activeTab === 'delivery' && (
           <section role="tabpanel" aria-labelledby="delivery-title" className="animate-fadeIn">
             <header className="text-center mb-8">
-              <h2 id="delivery-title" className="text-3xl font-bold text-red-400 mb-2">🛵 即点即送：新鲜到家</h2>
-              <p className="text-gray-400">30分钟极速送达，迟到必赔</p>
+              <h2 id="delivery-title" className="text-3xl font-bold text-red-400 mb-2">{currentTab.title}</h2>
+              <p className="text-gray-400">{currentTab.subtitle}</p>
+              <p className="text-gray-500 text-sm mt-2">共 {displayItems.length} 道菜品</p>
             </header>
             {/* 配送信息 */}
             <div className="mb-6 bg-gradient-to-r from-red-900/30 to-orange-900/30 rounded-xl p-4 border border-red-500/30">
@@ -199,16 +238,26 @@ export default function FreshMarket() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {menuItems.map((item) => (
-                <article key={item.id} className="bg-gray-900/80 border border-red-500/30 rounded-xl p-4 hover:border-red-400 transition-all">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${currentTab.gridCols} gap-4`}>
+              {displayItems.map((item) => (
+                <article key={item.id} className="bg-gray-900/80 backdrop-blur-sm border border-red-500/30 rounded-xl p-4 hover:border-red-400 hover:shadow-neon-red transition-all">
                   <div className="flex items-center gap-3">
                     <div className="text-4xl" role="img" aria-label={item.name}>{item.emoji}</div>
                     <div className="flex-1">
-                      <h3 className="text-base font-bold text-red-300">{item.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-bold text-red-300">{item.name}</h3>
+                        {item.calories && (
+                          <span className="text-xs text-gray-500">{item.calories}kcal</span>
+                        )}
+                      </div>
                       <p className="text-gray-400 text-xs mb-2">{item.desc}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-white">¥{item.price}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-white">¥{item.price}</span>
+                          {item.prepTime && (
+                            <span className="text-xs text-gray-500">约{item.prepTime}min</span>
+                          )}
+                        </div>
                         <Button onClick={() => addToCart(item)} color="red" className="!py-1 !px-3 text-xs">
                           + 加入
                         </Button>
