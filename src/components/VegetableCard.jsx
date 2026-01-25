@@ -1,5 +1,5 @@
 // src/components/VegetableCard.jsx
-// 蔬菜灵魂卡片组件
+// 蔬菜灵魂卡片组件 - 液态玻璃质感 (Liquid Glass Cards)
 // 集成形态学算法 (Morphology.js) 和呼吸动画
 
 import React, { useState } from 'react';
@@ -7,7 +7,7 @@ import { getVegetableMorphology, getMorphologyHoverStyle } from '../utils/Morpho
 import { FEATURES } from '../config/features';
 
 /**
- * 蔬菜灵魂卡片
+ * 蔬菜灵魂卡片 - 2026 液态玻璃设计
  * @param {Object} veg - 蔬菜数据对象（来自 vegetableSoulList）
  * @param {Function} onClick - 点击回调
  * @param {boolean} isCyberMode - 是否为赛博模式（霓虹风格）
@@ -16,21 +16,22 @@ import { FEATURES } from '../config/features';
 export const VegetableCard = ({ veg, onClick, isCyberMode = false, showLastWords = false }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  // 根据模式调整样式
-  const borderColor = isCyberMode ? 'border-white/10' : 'border-green-800/10';
-  const bgColor = isCyberMode ? 'bg-[#111827]' : 'bg-white';
-  const textColor = isCyberMode ? 'text-gray-300' : 'text-gray-600';
-  const nameColor = isCyberMode ? 'text-white' : 'text-green-900';
-  const mbtiColor = isCyberMode ? 'bg-cyan-500/20 text-cyan-400' : 'bg-green-500/20 text-green-600';
+  // 苹果风格的"微光边框"和"深度阴影" - 液态玻璃质感
+  const cardBase = isCyberMode
+    ? "bg-gray-800/40 border-white/5 hover:bg-gray-800/60 hover:border-green-500/30 text-white shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+    : "bg-white/60 border-white/60 hover:bg-white/80 hover:border-green-500/30 text-gray-800 shadow-[0_8px_32px_rgba(100,100,111,0.1)]";
 
   // 获取形态学样式
   const morphologyStyle = getVegetableMorphology(veg.type, veg.latin);
   const hoverStyle = isHovered ? getMorphologyHoverStyle(veg.type) : {};
 
-  // 合并样式
+  // 合并样式 + 悬浮投影
   const imageContainerStyle = {
     ...morphologyStyle,
-    ...hoverStyle
+    ...hoverStyle,
+    filter: isCyberMode 
+      ? 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' 
+      : 'drop-shadow(0 10px 20px rgba(0,0,0,0.15))'
   };
 
   return (
@@ -39,18 +40,23 @@ export const VegetableCard = ({ veg, onClick, isCyberMode = false, showLastWords
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`
-        ${bgColor} rounded-3xl p-4 border ${borderColor} 
-        shadow-xl cursor-pointer 
-        transition-all duration-300 
-        hover:shadow-2xl hover:-translate-y-1
-        active:scale-95
-        ${isCyberMode ? 'hover:border-cyan-500/30' : 'hover:border-green-500/30'}
+        relative group rounded-[2rem] p-5 border backdrop-blur-xl 
+        transition-all duration-500 ease-out 
+        hover:-translate-y-2 hover:shadow-2xl 
+        cursor-pointer overflow-hidden 
+        ${cardBase}
       `}
     >
-      {/* 核心：形态学样式 + 呼吸动画 */}
+      {/* 内部高光流光特效 (Shimmer Effect) */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none transform -translate-x-full group-hover:translate-x-full"
+        style={{ transitionDuration: '1.5s' }}
+      />
+
+      {/* 蔬菜形态容器 */}
       <div 
         className={`
-          w-full aspect-square mb-4 
+          w-full aspect-square mb-5 relative z-10 
           ${FEATURES.BREATHING_EFFECT ? 'animate-breathe' : ''}
         `}
         style={imageContainerStyle}
@@ -68,45 +74,42 @@ export const VegetableCard = ({ veg, onClick, isCyberMode = false, showLastWords
         )}
       </div>
 
-      {/* 蔬菜信息 */}
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className={`font-black text-lg ${nameColor}`}>
-            {veg.name}
-          </h3>
-          <span className="text-xs text-gray-400">{veg.zodiac}</span>
-        </div>
-        
-        {/* 性格描述 */}
-        <p className={`text-xs ${textColor} line-clamp-1 mb-2`}>
-          {veg.personality}
+      {/* 蔬菜信息 - 居中布局 */}
+      <div className="relative z-10 text-center">
+        <h3 className="font-bold text-lg tracking-tight mb-1">
+          {veg.name}
+        </h3>
+        <p className="text-[10px] font-medium uppercase tracking-widest opacity-60 mb-3">
+          {veg.mbti} · {veg.zodiac}
         </p>
         
-        {/* 遗言预览（可选显示） */}
-        {showLastWords && veg.lastWords && (
-          <p className={`text-[10px] ${textColor} opacity-60 line-clamp-2 mb-2 italic`}>
-            "{veg.lastWords}"
+        {/* 性格描述 */}
+        {showLastWords && veg.personality && (
+          <p className="text-xs opacity-70 line-clamp-1 mb-3">
+            {veg.personality}
           </p>
         )}
 
-        {/* 底部标签栏 */}
-        <div className="mt-3 flex justify-between items-center">
-          <div className="flex gap-1">
-            {/* MBTI 标签 */}
-            <span className={`text-[10px] font-mono ${mbtiColor} px-2 py-1 rounded`}>
-              {veg.mbti}
-            </span>
-            {/* 形态标签 */}
-            <span className={`text-[10px] font-mono ${isCyberMode ? 'bg-purple-500/20 text-purple-400' : 'bg-amber-500/20 text-amber-600'} px-2 py-1 rounded capitalize`}>
-              {veg.type}
-            </span>
-          </div>
-          
-          {/* 价格（示意） */}
-          <span className={`font-bold text-sm ${isCyberMode ? 'text-cyan-400' : 'text-green-600'}`}>
-            ￥5.00
-          </span>
-        </div>
+        {/* 仿 Samsung One UI 的药丸按钮 */}
+        <button 
+          className={`
+            w-full py-3 rounded-xl text-xs font-bold 
+            transition-all active:scale-95 
+            flex items-center justify-center gap-2
+            ${isCyberMode 
+              ? 'bg-white/5 hover:bg-green-500 hover:text-black border border-white/10' 
+              : 'bg-black/5 hover:bg-green-500 hover:text-white border border-black/5'
+            }
+          `}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick?.();
+          }}
+        >
+          <span>¥5.00</span>
+          <span className="opacity-50">|</span>
+          <span>领养</span>
+        </button>
       </div>
 
       {/* 赛博模式下的底部霓虹线 */}
