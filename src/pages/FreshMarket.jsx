@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
 import SearchBox from '../components/SearchBox';
+import { SpatialModal } from '../components/SpatialModal';
 import { FEATURES } from '../config/features';
 
 // 从数据层导入完整数据（支持上百种商品）
@@ -95,6 +96,15 @@ export default function FreshMarket() {
   // 创意4：跑马灯索引
   const [tickerIndex, setTickerIndex] = useState(0);
   
+  // 空间态模态框状态（替代 window.confirm）
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    title: '',
+    content: '',
+    pendingItem: null,
+    type: 'lastWords' // 'lastWords' | 'absurdTerm' | 'veggieMatch'
+  });
+  
   // 使用自定义 Hook 管理购物车（带 localStorage 持久化）
   const { cartItems, addToCart, totalPrice, totalItems, clearCart } = useCart();
 
@@ -117,26 +127,62 @@ export default function FreshMarket() {
     // 尝试匹配蔬菜灵魂数据
     const soul = findVegSoul(item.name);
     
-    // 创意5：遗言确认弹窗
+    // 创意5：遗言确认弹窗（使用 SpatialModal）
     if (FEATURES.LAST_WORDS && soul && soul.lastWords) {
-      const confirmed = window.confirm(
-        `💀 来自 ${item.name} 的灵魂拷问：\n\n"${soul.lastWords}"\n\n确定要把它加入购物车吗？`
-      );
-      if (!confirmed) return;
+      setModalState({
+        isOpen: true,
+        title: `💀 ${item.name} 的遗言`,
+        content: `"${soul.lastWords}"`,
+        pendingItem: item,
+        pendingSoul: soul,
+        type: 'lastWords'
+      });
+      return; // 等待用户确认
     }
     
-    // 添加到购物车
+    // 如果没有遗言，直接添加
+    completeAddToCart(item, soul);
+  };
+
+  // 完成添加到购物车（遗言确认后调用）
+  const completeAddToCart = (item, soul) => {
     addToCart(item);
     
-    // 创意6：奇葩契约条款
+    // 创意6：奇葩契约条款（使用 SpatialModal）
     if (FEATURES.ABSURD_TERMS && soul && soul.absurdTerm) {
       setTimeout(() => {
-        alert(`🎉 ${item.name} 已加入购物车！\n\n📋 契约条款：\n${soul.absurdTerm}`);
+        setModalState({
+          isOpen: true,
+          title: `🎉 领养成功`,
+          content: `${item.name} 已加入购物车！\n\n📋 契约条款：\n${soul.absurdTerm}`,
+          pendingItem: null,
+          type: 'absurdTerm'
+        });
       }, 100);
     }
   };
 
-  // 创意7：本命蔬菜配对
+  // 模态框确认回调
+  const handleModalConfirm = () => {
+    const { type, pendingItem, pendingSoul } = modalState;
+    
+    if (type === 'lastWords' && pendingItem) {
+      // 触感反馈
+      if (FEATURES.HAPTIC_FEEDBACK && navigator.vibrate) {
+        navigator.vibrate([100]);
+      }
+      completeAddToCart(pendingItem, pendingSoul);
+    }
+    
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
+
+  // 模态框取消回调
+  const handleModalCancel = () => {
+    setModalState(prev => ({ ...prev, isOpen: false, pendingItem: null }));
+  };
+
+  // 创意7：本命蔬菜配对（使用 SpatialModal）
   const handleVeggieMatch = () => {
     const randomVeg = vegetableSoulList[Math.floor(Math.random() * vegetableSoulList.length)];
     const compatibility = Math.floor(Math.random() * 30) + 70;
@@ -151,7 +197,13 @@ export default function FreshMarket() {
     ];
     const randomReason = reasons[Math.floor(Math.random() * reasons.length)];
 
-    alert(`🔮 正在扫描你的灵魂...\n\n匹配结果：\n你和【${randomVeg.name}】的契合度为 ${compatibility}%！\n\n📝 理由：${randomReason}\n\n💚 它想对你说：\n"${randomVeg.lastWords}"`);
+    setModalState({
+      isOpen: true,
+      title: `🔮 灵魂匹配结果`,
+      content: `你和【${randomVeg.name}】的契合度为 ${compatibility}%！\n\n📝 理由：${randomReason}\n\n💚 它想对你说：\n"${randomVeg.lastWords}"`,
+      pendingItem: null,
+      type: 'veggieMatch'
+    });
   };
 
   // 当前 Tab 配置（useMemo 缓存，避免重复计算）
@@ -473,9 +525,21 @@ export default function FreshMarket() {
         )}
       </main>
 
-      <footer className="py-10 text-center text-gray-600 bg-black text-sm mt-20">
+      <footer className={`py-10 text-center text-sm mt-20 ${isCyberMode ? 'text-gray-600 bg-black' : 'text-green-600 bg-green-50'}`}>
         <p>© 2026 Fresh Market. 新鲜每一天。</p>
       </footer>
+
+      {/* 空间态模态框 - 替代 window.confirm/alert */}
+      <SpatialModal
+        isOpen={modalState.isOpen}
+        title={modalState.title}
+        content={modalState.content}
+        isCyberMode={isCyberMode}
+        onConfirm={handleModalConfirm}
+        onCancel={handleModalCancel}
+        confirmText={modalState.type === 'lastWords' ? '确认领养' : '好的'}
+        cancelText={modalState.type === 'lastWords' ? '再想想' : '关闭'}
+      />
     </div>
   );
 }
