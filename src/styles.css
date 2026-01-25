@@ -1,8 +1,12 @@
-/* 全局字体和背景 */
+/* ==================== 苹果风格全局样式 ==================== */
+
+/* 全局字体：SF Pro 系统字体栈 + 抗锯齿 */
 body {
-  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "M PLUS Rounded 1c", sans-serif;
   background-color: #111827;
   margin: 0;
+  -webkit-font-smoothing: antialiased; /* iOS 字体平滑 */
+  -moz-osx-font-smoothing: grayscale;  /* Firefox 字体平滑 */
 }
 
 /* Minimal styling and utility helpers */
@@ -16,6 +20,12 @@ html, body, #root { height: 100%; }
 .animate-fade-in { animation: fade-in 0.2s ease-out forwards }
 @keyframes slide-up { from { transform: translateY(100%) } to { transform: translateY(0) } }
 .animate-slide-up { animation: slide-up 0.25s ease-out forwards }
+
+/* 隐藏滚动条但保留功能 (像手机 App 一样) */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
 
 /* hide scrollbar on webkit browsers */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
