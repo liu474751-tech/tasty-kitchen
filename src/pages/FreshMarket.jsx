@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import useCart from '../hooks/useCart';
 import ProductCard, { Badge, Button } from '../components/ProductCard';
 import SearchBox from '../components/SearchBox';
+import { FEATURES } from '../config/features';
 
 // 从数据层导入完整数据（支持上百种商品）
 import {
@@ -13,6 +14,26 @@ import {
   allMenuItems,
   getDiscountPercent,
 } from '../data';
+
+// 导入蔬菜灵魂数据（用于遗言和条款）
+import { vegetableSoulList } from '../data/vegetableSoul';
+
+// 创意4：伪弹幕数据
+const FAKE_NEWS = [
+  "用户 [Cyber_Punk] 刚刚领养了 [孤独的补铁者]",
+  "系统公告：[西红柿] 情感溢价指数上涨 5%",
+  "用户 [王二狗] 签署了《不把洋葱剥哭条款》",
+  "有人刚刚因为买到了 [MBTI为INTJ的苦瓜] 而感动落泪",
+  "用户 [素食主义者] 与 [大白菜] 达成灵魂契约",
+  "紧急通知：[土豆] 因过于佛系被取消今日上架资格",
+  "用户 [健身达人] 正在与 [西蓝花] 进行深度交流",
+  "系统检测到 [大蒜] 附近1.5米内用户数量为0"
+];
+
+// 根据商品名匹配蔬菜灵魂数据
+const findVegSoul = (itemName) => {
+  return vegetableSoulList.find(v => itemName.includes(v.name) || v.name.includes(itemName));
+};
 
 // Tab 配置 - 数据映射驱动渲染
 const tabConfig = {
@@ -68,8 +89,70 @@ export default function FreshMarket() {
   // 搜索关键词状态
   const [searchQuery, setSearchQuery] = useState('');
   
+  // 创意2：赛博/田园模式切换
+  const [isCyberMode, setIsCyberMode] = useState(true);
+  
+  // 创意4：跑马灯索引
+  const [tickerIndex, setTickerIndex] = useState(0);
+  
   // 使用自定义 Hook 管理购物车（带 localStorage 持久化）
   const { cartItems, addToCart, totalPrice, totalItems, clearCart } = useCart();
+
+  // 创意4：跑马灯定时器
+  useEffect(() => {
+    if (!FEATURES.LIVE_TICKER) return;
+    const interval = setInterval(() => {
+      setTickerIndex((prev) => (prev + 1) % FAKE_NEWS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // 创意5+6：带遗言和条款的加入购物车
+  const handleAddToCartWithSoul = (item) => {
+    // 创意3：触感反馈
+    if (FEATURES.HAPTIC_FEEDBACK && navigator.vibrate) {
+      navigator.vibrate([50, 50, 200]);
+    }
+    
+    // 尝试匹配蔬菜灵魂数据
+    const soul = findVegSoul(item.name);
+    
+    // 创意5：遗言确认弹窗
+    if (FEATURES.LAST_WORDS && soul && soul.lastWords) {
+      const confirmed = window.confirm(
+        `💀 来自 ${item.name} 的灵魂拷问：\n\n"${soul.lastWords}"\n\n确定要把它加入购物车吗？`
+      );
+      if (!confirmed) return;
+    }
+    
+    // 添加到购物车
+    addToCart(item);
+    
+    // 创意6：奇葩契约条款
+    if (FEATURES.ABSURD_TERMS && soul && soul.absurdTerm) {
+      setTimeout(() => {
+        alert(`🎉 ${item.name} 已加入购物车！\n\n📋 契约条款：\n${soul.absurdTerm}`);
+      }, 100);
+    }
+  };
+
+  // 创意7：本命蔬菜配对
+  const handleVeggieMatch = () => {
+    const randomVeg = vegetableSoulList[Math.floor(Math.random() * vegetableSoulList.length)];
+    const compatibility = Math.floor(Math.random() * 30) + 70;
+    
+    const reasons = [
+      "你们都喜欢躺着。",
+      "你们的MBTI高度相似。",
+      "你们都在深夜emo过。",
+      "你们都有被误解的灵魂。",
+      "你们都是表面坚强内心柔软。",
+      "你们都是派对上的显眼包。"
+    ];
+    const randomReason = reasons[Math.floor(Math.random() * reasons.length)];
+
+    alert(`🔮 正在扫描你的灵魂...\n\n匹配结果：\n你和【${randomVeg.name}】的契合度为 ${compatibility}%！\n\n📝 理由：${randomReason}\n\n💚 它想对你说：\n"${randomVeg.lastWords}"`);
+  };
 
   // 当前 Tab 配置（useMemo 缓存，避免重复计算）
   const currentTab = useMemo(() => tabConfig[activeTab] || tabConfig.vegetables, [activeTab]);
@@ -120,18 +203,43 @@ export default function FreshMarket() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className={`min-h-screen transition-colors duration-500 ${isCyberMode ? 'bg-gray-950 text-white' : 'bg-[#f0fdf4] text-green-900'}`}>
+      
+      {/* 创意4：伪弹幕跑马灯 */}
+      {FEATURES.LIVE_TICKER && (
+        <div className={`${isCyberMode ? 'bg-cyan-500' : 'bg-green-500'} text-black text-[10px] py-1.5 font-bold font-mono overflow-hidden`}>
+          <div className="animate-marquee whitespace-nowrap">
+            🚨 BREAKING: {FAKE_NEWS[tickerIndex]} 🚨
+          </div>
+        </div>
+      )}
+
       {/* 顶部导航 */}
-      <nav className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+      <nav className={`sticky top-0 z-50 backdrop-blur-md border-b ${isCyberMode ? 'bg-gray-900/95 border-gray-800' : 'bg-white/95 border-green-200'}`}>
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-4">
-            <Link to="/" className="text-2xl font-bold text-amber-400 hover:text-amber-300 transition-colors">
+            <Link to="/" className={`text-2xl font-bold transition-colors ${isCyberMode ? 'text-amber-400 hover:text-amber-300' : 'text-green-600 hover:text-green-500'}`}>
               ← 返回首页
             </Link>
-            <h1 className="text-xl font-bold text-white">🛒 新鲜市场</h1>
-            <div className="flex items-center gap-2 bg-amber-600/20 px-4 py-2 rounded-full border border-amber-500/30">
-              <span className="text-xl">🛒</span>
-              <span className="text-amber-300 font-bold">{totalItems} 件 | ¥{totalPrice}</span>
+            <h1 className={`text-xl font-bold ${isCyberMode ? 'text-white' : 'text-green-800'}`}>🛒 新鲜市场</h1>
+            <div className="flex items-center gap-3">
+              {/* 创意2：模式切换按钮 */}
+              {FEATURES.THEME_TOGGLE && (
+                <button 
+                  onClick={() => setIsCyberMode(!isCyberMode)}
+                  className={`text-xs font-bold px-3 py-2 rounded-full border transition-all ${
+                    isCyberMode 
+                      ? 'border-cyan-500 text-cyan-400 hover:bg-cyan-500/10' 
+                      : 'border-green-600 text-green-700 bg-green-100 hover:bg-green-200'
+                  }`}
+                >
+                  {isCyberMode ? '🌙 赛博' : '☀️ 田园'}
+                </button>
+              )}
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full border ${isCyberMode ? 'bg-amber-600/20 border-amber-500/30' : 'bg-green-100 border-green-300'}`}>
+                <span className="text-xl">🛒</span>
+                <span className={`font-bold ${isCyberMode ? 'text-amber-300' : 'text-green-700'}`}>{totalItems} 件 | ¥{totalPrice}</span>
+              </div>
             </div>
           </div>
           
@@ -183,8 +291,8 @@ export default function FreshMarket() {
               <h2 id={`${activeTab}-title`} className={`text-3xl font-bold text-${currentTab.color}-400 mb-2`}>
                 {currentTab.title}
               </h2>
-              <p className="text-gray-400">{currentTab.subtitle}</p>
-              <p className="text-gray-500 text-sm mt-2">共 {displayItems.length} 种商品</p>
+              <p className={isCyberMode ? 'text-gray-400' : 'text-green-600'}>{currentTab.subtitle}</p>
+              <p className={`text-sm mt-2 ${isCyberMode ? 'text-gray-500' : 'text-green-500'}`}>共 {displayItems.length} 种商品</p>
             </header>
             <div className={`grid grid-cols-1 sm:grid-cols-2 ${currentTab.gridCols} gap-6`} role="list">
               {displayItems.map((item) => (
@@ -192,7 +300,8 @@ export default function FreshMarket() {
                   key={item.id}
                   item={item}
                   color={currentTab.color}
-                  onAddToCart={addToCart}
+                  onAddToCart={activeTab === 'vegetables' ? handleAddToCartWithSoul : addToCart}
+                  isCyberMode={isCyberMode}
                 />
               ))}
             </div>
@@ -313,29 +422,54 @@ export default function FreshMarket() {
 
         {/* 购物车浮窗 - 毛玻璃效果 + 发光边框 */}
         {cartItems.length > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/70 backdrop-blur-xl border border-amber-400/60 rounded-2xl p-5 shadow-neon-amber z-40 max-w-md w-full mx-4 animate-float hover:shadow-[0_0_40px_rgba(251,191,36,0.4)] transition-shadow duration-300">
+          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 backdrop-blur-xl border rounded-2xl p-5 z-40 max-w-md w-full mx-4 animate-float transition-all duration-300 ${
+            isCyberMode 
+              ? 'bg-gray-900/70 border-amber-400/60 shadow-neon-amber hover:shadow-[0_0_40px_rgba(251,191,36,0.4)]' 
+              : 'bg-white/90 border-green-400 shadow-lg hover:shadow-xl'
+          }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-3xl animate-pulse-slow" role="img" aria-label="购物车">🛒</span>
                 <div>
-                  <p className="text-white font-bold">{totalItems} 件商品</p>
-                  <p className="text-amber-400 text-xl font-bold">¥{totalPrice}</p>
+                  <p className={`font-bold ${isCyberMode ? 'text-white' : 'text-green-800'}`}>{totalItems} 件商品</p>
+                  <p className={`text-xl font-bold ${isCyberMode ? 'text-amber-400' : 'text-green-600'}`}>¥{totalPrice}</p>
                 </div>
               </div>
               <div className="flex gap-2">
                 <button 
                   onClick={clearCart}
-                  className="px-4 py-3 bg-gray-700/80 hover:bg-gray-600 rounded-xl font-bold transition-all text-sm hover:shadow-lg"
+                  className={`px-4 py-3 rounded-xl font-bold transition-all text-sm hover:shadow-lg ${
+                    isCyberMode ? 'bg-gray-700/80 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                  }`}
                   aria-label="清空购物车"
                 >
                   清空
                 </button>
-                <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-xl font-bold transition-all hover:shadow-neon-orange hover:scale-105">
+                <button className={`px-6 py-3 rounded-xl font-bold transition-all hover:scale-105 ${
+                  isCyberMode 
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white hover:shadow-neon-orange' 
+                    : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white'
+                }`}>
                   去结算 →
                 </button>
               </div>
             </div>
           </div>
+        )}
+
+        {/* 创意7：悬浮本命蔬菜配对按钮 */}
+        {FEATURES.VEGGIE_MATCH && (
+          <button 
+            onClick={handleVeggieMatch}
+            className={`fixed bottom-8 right-6 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl animate-bounce z-40 border-2 border-white transition-all ${
+              isCyberMode 
+                ? 'bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500' 
+                : 'bg-gradient-to-r from-pink-500 to-green-500 hover:from-pink-400 hover:to-green-400'
+            }`}
+            title="测试你的本命蔬菜"
+          >
+            🔮
+          </button>
         )}
       </main>
 

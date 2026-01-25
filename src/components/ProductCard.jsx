@@ -94,18 +94,25 @@ Price.propTypes = {
   unit: PropTypes.string,
 };
 
-export function ProductInfo({ name, desc, color = 'green' }) {
+export function ProductInfo({ name, desc, color = 'green', isCyberMode = true }) {
   const colorMap = {
     green: 'text-green-300',
     orange: 'text-orange-300',
     purple: 'text-purple-300',
     red: 'text-red-300',
   };
+
+  const pastoralColorMap = {
+    green: 'text-green-700',
+    orange: 'text-orange-700',
+    purple: 'text-purple-700',
+    red: 'text-red-700',
+  };
   
   return (
     <>
-      <h3 className={`text-lg font-bold ${colorMap[color]} text-center mb-1`}>{name}</h3>
-      <p className="text-gray-400 text-sm text-center mb-3">{desc}</p>
+      <h3 className={`text-lg font-bold ${isCyberMode ? colorMap[color] : pastoralColorMap[color]} text-center mb-1`}>{name}</h3>
+      <p className={`text-sm text-center mb-3 ${isCyberMode ? 'text-gray-400' : 'text-gray-600'}`}>{desc}</p>
     </>
   );
 }
@@ -114,6 +121,7 @@ ProductInfo.propTypes = {
   name: PropTypes.string.isRequired,
   desc: PropTypes.string,
   color: PropTypes.oneOf(['green', 'orange', 'purple', 'red']),
+  isCyberMode: PropTypes.bool,
 };
 
 // ============ ProductCard 主组件 ============
@@ -126,6 +134,7 @@ const ProductCard = memo(function ProductCard({
   onAddToCart, 
   stock = 99,
   minQuantity = 1,  // 起购量
+  isCyberMode = true, // 创意2：赛博/田园模式
 }) {
   const [state, setState] = useState('normal'); // normal | loading | soldOut
   
@@ -137,6 +146,14 @@ const ProductCard = memo(function ProductCard({
     orange: 'border-orange-500/30 hover:border-orange-500/50 hover:shadow-[0_0_25px_rgba(249,115,22,0.2)]',
     purple: 'border-purple-500/30 hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]',
     red: 'border-red-500/30 hover:border-red-500/50 hover:shadow-[0_0_25px_rgba(239,68,68,0.2)]',
+  };
+
+  // 田园模式边框
+  const pastoralBorderMap = {
+    green: 'border-green-300 hover:border-green-400 hover:shadow-lg',
+    orange: 'border-orange-300 hover:border-orange-400 hover:shadow-lg',
+    purple: 'border-purple-300 hover:border-purple-400 hover:shadow-lg',
+    red: 'border-red-300 hover:border-red-400 hover:shadow-lg',
   };
 
   // 装饰性光晕渐变映射
@@ -176,7 +193,8 @@ const ProductCard = memo(function ProductCard({
   return (
     <article 
       className={`
-        group relative bg-[#111827] backdrop-blur-md border ${borderColorMap[color]} 
+        group relative backdrop-blur-md border 
+        ${isCyberMode ? `bg-[#111827] ${borderColorMap[color]}` : `bg-white ${pastoralBorderMap[color]}`}
         rounded-2xl p-6 transition-all duration-300 cursor-pointer
         hover:-translate-y-2
         ${isOutOfStock ? 'opacity-60 grayscale' : ''}
@@ -193,12 +211,12 @@ const ProductCard = memo(function ProductCard({
       
       {/* 内容区 - 相对定位确保在光晕之上 */}
       <div className="relative z-10">
-        {/* Emoji 带放大动画 */}
-        <div className="text-5xl text-center mb-4 transform group-hover:scale-110 transition-transform duration-300">
+        {/* Emoji 带放大动画 + 创意1：呼吸动画 */}
+        <div className="text-5xl text-center mb-4 transform group-hover:scale-110 transition-transform duration-300 animate-breathe">
           <span role="img" aria-label={item.name}>{item.emoji}</span>
         </div>
         
-        <ProductInfo name={item.name} desc={item.desc} color={color} />
+        <ProductInfo name={item.name} desc={item.desc} color={color} isCyberMode={isCyberMode} />
         
         {/* 库存显示 */}
         {stock < 10 && stock > 0 && (
@@ -258,6 +276,7 @@ ProductCard.propTypes = {
   onAddToCart: PropTypes.func.isRequired,
   stock: PropTypes.number,
   minQuantity: PropTypes.number,
+  isCyberMode: PropTypes.bool,
 };
 
 export default ProductCard;

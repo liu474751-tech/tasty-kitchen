@@ -37,3 +37,13 @@ export {
   getLowCalorieItems,
   getQuickItems,
 } from './menu';
+
+// 蔬菜灵魂数据（基于维基百科植物形态学）
+export {
+  default as vegetableSoulList,
+  vegetableTypes,
+  getVegetablesByType,
+  getVegetablesByMbti,
+  getVegetablesByZodiac,
+  getRandomVegetableSoul,
+} from './vegetableSoul';

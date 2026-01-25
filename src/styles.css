@@ -41,3 +41,112 @@ html, body, #root { height: 100%; }
 .animation-delay-2000 {
   animation-delay: 2s;
 }
+
+/* ==================== 创意动画系统 ==================== */
+
+/* 创意1：蔬菜呼吸动画 - 让卡片像在呼吸一样微微浮动 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.03); filter: brightness(1.1); }
+}
+
+.animate-breathe {
+  animation: breathe 5s infinite ease-in-out;
+}
+
+/* 呼吸动画变体：更快节奏 */
+.animate-breathe-fast {
+  animation: breathe 3s infinite ease-in-out;
+}
+
+/* 呼吸动画变体：更慢节奏（适合背景元素） */
+.animate-breathe-slow {
+  animation: breathe 8s infinite ease-in-out;
+}
+
+/* 创意4：跑马灯动画 - 伪弹幕滚动效果 */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+
+/* 跑马灯变体：更快（用于紧急信息） */
+.animate-marquee-fast {
+  animation: marquee 8s linear infinite;
+  white-space: nowrap;
+}
+
+/* 跑马灯变体：反向滚动 */
+@keyframes marquee-reverse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 15s linear infinite;
+  white-space: nowrap;
+}
+
+/* 创意3：触感反馈 - 模拟点击震动 */
+@keyframes haptic {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.animate-haptic {
+  animation: haptic 0.1s ease-in-out;
+}
+
+/* 创意5：遗言弹窗淡入 */
+@keyframes dramatic-enter {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.8) translateY(20px);
+    filter: blur(10px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-dramatic-enter {
+  animation: dramatic-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* 脉冲发光效果（用于高亮元素） */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(74, 222, 128, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.6), 0 0 30px rgba(74, 222, 128, 0.4); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+/* 赛博霓虹闪烁 */
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 
+      0 0 4px #fff,
+      0 0 11px #fff,
+      0 0 19px #fff,
+      0 0 40px #0fa,
+      0 0 80px #0fa;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 1.5s infinite alternate;
+}
+
